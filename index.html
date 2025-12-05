@@ -1,323 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Clay’s Home Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <title>Home Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Auto-refresh every 30 minutes -->
+  <meta http-equiv="refresh" content="1800">
+
   <style>
     :root {
-      --bg: #05060a;
-      --card: #111319;
-      --accent: #4ea8de;
-      --accent-soft: rgba(78, 168, 222, 0.15);
-      --text-main: #f5f7ff;
-      --text-muted: #a3b0cf;
-      --danger: #f97373;
-      --radius: 16px;
-      --gap: 12px;
+      --bg: #f7f2e9;
+      --card: #ffffff;
+      --accent: #c8905b;
+      --accent-soft: #f1d4b8;
+      --text-main: #3b2c22;
+      --text-muted: #7b6a5b;
+      --good: #3c8c5a;
+      --danger: #c54b4b;
+      --family-1: #fbe4e4;
+      --family-2: #e9f3ff;
+      --family-3: #e9f8ee;
+      --family-4: #fdf2d6;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #202538 0, #05060a 55%);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   system-ui, sans-serif;
+      background: var(--bg);
       color: var(--text-main);
-      padding: 10px;
-      min-height: 100vh;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
     }
 
-    .grid {
+    .frame {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-radius: 24px;
+      background: #fdf8f1;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.08);
+      padding: 24px 32px 16px;
+    }
+
+    /* HEADER */
+
+    .header {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      max-width: 430px;
-      margin: 0 auto;
-    }
-
-    @media (min-width: 768px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 1000px;
-      }
-    }
-
-    .panel {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .panel-header {
-      display: flex;
+      grid-template-columns: 2fr 1fr;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
+      margin-bottom: 16px;
     }
 
-    .panel-title {
-      font-size: 16px;
+    .time-block {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    .time-main {
+      font-size: 64px;
       font-weight: 600;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      letter-spacing: 4px;
     }
 
-    .panel-subtitle {
-      font-size: 11px;
+    .time-sub {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 18px;
       color: var(--text-muted);
     }
 
-    .pill {
-      font-size: 11px;
-      padding: 2px 8px;
+    .weather-block {
+      text-align: right;
+    }
+
+    .weather-temp {
+      font-size: 42px;
+      font-weight: 500;
+    }
+
+    .weather-line {
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* BODY LAYOUT: 4 columns for chores */
+
+    .content {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .column {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 12px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .column.jon { background: var(--family-1); }
+    .column.arya { background: var(--family-2); }
+    .column.catelyn { background: var(--family-3); }
+    .column.ned { background: var(--family-4); }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .column-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .column-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.75);
+      font-size: 15px;
+    }
+
+    .task-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid var(--accent);
+      background: transparent;
+      flex-shrink: 0;
+    }
+
+    .task.done .task-dot {
+      background: var(--good);
+      border-color: var(--good);
+    }
+
+    .task-text {
+      flex: 1;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      border-top: 1px solid #e0d2c4;
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .verse-ref {
+      font-weight: 600;
+      color: var(--accent);
+      margin-left: 8px;
+    }
+
+    .status-pill {
+      padding: 4px 10px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
-      white-space: nowrap;
-    }
-
-    /* Chores list */
-    #chores-items {
-      margin-top: 4px;
-      list-style: none;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    #chores-items li {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      padding: 4px 0;
-    }
-
-    #chores-items li::before {
-      content: "•";
-      color: var(--accent);
-      margin-top: -1px;
-    }
-
-    #chores-empty {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    /* Calendar events */
-    #calendar-events {
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
       font-size: 13px;
-    }
-
-    .event-card {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .event-strip {
-      width: 4px;
-      border-radius: 999px;
-      background: var(--accent);
-    }
-
-    .event-main-time {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 1px;
-    }
-
-    .event-title {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .event-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 1px;
-    }
-
-    #calendar-empty {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    #status {
-      margin-top: 6px;
-      font-size: 10px;
-      color: var(--text-muted);
-      text-align: right;
     }
   </style>
 </head>
 <body>
-  <div class="grid">
-    <!-- 🧹 Chores Today -->
-    <section class="panel" id="panel-chores">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">🧹 Chores – Today</div>
-          <div class="panel-subtitle">Auto from Reminders</div>
+  <div class="frame">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="time-block">
+        <div class="time-main" id="clock">9:15</div>
+        <div class="time-sub">
+          <span id="date-line">Monday, Nov 30</span>
+          <span id="day-part">Afternoon chores</span>
         </div>
-        <span class="pill">Reminders</span>
       </div>
-      <ul id="chores-items"></ul>
-      <div id="chores-empty" hidden>No chores for today.</div>
-    </section>
+      <div class="weather-block">
+        <div class="weather-temp" id="weather-temp">26°</div>
+        <div class="weather-line" id="weather-line">Feels like 24°  ·  Westfield</div>
+      </div>
+    </header>
 
-    <!-- 📅 Today’s Calendar -->
-    <section class="panel" id="panel-calendar">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">📅 Today’s Calendar</div>
-          <div class="panel-subtitle">From Shortcuts text file</div>
+    <!-- BODY: replace task text with your real chores later -->
+    <main class="content">
+      <section class="column jon">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Clay</div>
+            <div class="column-sub">Today</div>
+          </div>
         </div>
-        <span class="pill">Auto from Shortcuts</span>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Unload dishwasher</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Vacuum living room</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Take out trash</div>
+        </div>
+      </section>
+
+      <section class="column arya">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Brett</div>
+            <div class="column-sub">Today</div>
+          </div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Tidy playroom</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Feed dog & cats</div>
+        </div>
+      </section>
+
+      <section class="column catelyn">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Ellie</div>
+            <div class="column-sub">Today</div>
+          </div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Pick up bedroom</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Put dirty clothes in basket</div>
+        </div>
+      </section>
+
+      <section class="column ned">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Shared</div>
+            <div class="column-sub">Whole house</div>
+          </div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Clean kitchen counters</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Reset living room</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div>
+        <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
+        <span class="verse-ref">Psalm 16:11</span>
       </div>
-      <div id="calendar-events"></div>
-      <div id="calendar-empty" hidden>No upcoming events found.</div>
-      <div id="status"></div>
-    </section>
+      <div class="status-pill" id="status-pill">
+        Updated just now
+      </div>
+    </footer>
   </div>
 
   <script>
-    async function loadDashboard() {
-      const choresListEl = document.getElementById("chores-items");
-      const choresEmptyEl = document.getElementById("chores-empty");
-      const calEventsEl = document.getElementById("calendar-events");
-      const calEmptyEl = document.getElementById("calendar-empty");
-      const statusEl = document.getElementById("status");
+    function pad(n) { return n.toString().padStart(2, "0"); }
 
-      try {
-        const res = await fetch("dashboard.txt?cache=" + Date.now());
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const raw = await res.text();
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = pad(now.getMinutes());
+      const clock = document.getElementById("clock");
+      const dateLine = document.getElementById("date-line");
+      const dayPart = document.getElementById("day-part");
+      const status = document.getElementById("status-pill");
 
-        const lines = raw.split(/\r?\n/).map(l => l.trim());
+      clock.textContent = `${hours}:${minutes}`;
 
-        // Locate section headers
-        const choresHeaderIdx = lines.findIndex(l =>
-          /^chores\s*[–-]/i.test(l)
-        );
-        const calendarHeaderIdx = lines.findIndex(l =>
-          /^today[’']s calendar/i.test(l)
-        );
+      const dateOptions = { weekday: "long", month: "short", day: "numeric" };
+      dateLine.textContent = now.toLocaleDateString(undefined, dateOptions);
 
-        let choreLines = [];
-        let eventLines = [];
+      if (hours < 12) dayPart.textContent = "Morning dashboard";
+      else if (hours < 16) dayPart.textContent = "Afternoon chores";
+      else dayPart.textContent = "Evening reset";
 
-        if (choresHeaderIdx !== -1) {
-          const start = choresHeaderIdx + 1;
-          const end = (calendarHeaderIdx !== -1 && calendarHeaderIdx > start)
-            ? calendarHeaderIdx
-            : lines.length;
-          choreLines = lines.slice(start, end).filter(Boolean);
-        }
-
-        if (calendarHeaderIdx !== -1) {
-          eventLines = lines.slice(calendarHeaderIdx + 1).filter(Boolean);
-        }
-
-        // Render chores
-        choresListEl.innerHTML = "";
-        if (choreLines.length) {
-          choreLines.forEach(text => {
-            const li = document.createElement("li");
-            li.textContent = text.replace(/^[-•]\s*/, "");
-            choresListEl.appendChild(li);
-          });
-          choresEmptyEl.hidden = true;
-        } else {
-          choresEmptyEl.hidden = false;
-        }
-
-        // Render events (basic parse: "time – title – meta" if present)
-        calEventsEl.innerHTML = "";
-        if (eventLines.length) {
-          eventLines.forEach((line, idx) => {
-            const parts = line.split("–").map(p => p.trim()).filter(Boolean);
-            let timeText = "";
-            let titleText = "";
-            let metaText = "";
-
-            if (parts.length === 1) {
-              titleText = parts[0];
-            } else if (parts.length === 2) {
-              timeText = parts[0];
-              titleText = parts[1];
-            } else {
-              timeText = parts[0];
-              titleText = parts[1];
-              metaText = parts.slice(2).join(" – ");
-            }
-
-            const card = document.createElement("div");
-            card.className = "event-card";
-
-            const strip = document.createElement("div");
-            strip.className = "event-strip";
-            // simple color variation per event index
-            const colors = ["#4ea8de","#9b5de5","#ffb703","#3bc9a7","#ff6b6b"];
-            strip.style.background = colors[idx % colors.length];
-
-            const body = document.createElement("div");
-            const timeEl = document.createElement("div");
-            timeEl.className = "event-main-time";
-            timeEl.textContent = timeText || "—";
-
-            const titleEl = document.createElement("div");
-            titleEl.className = "event-title";
-            titleEl.textContent = titleText || "(Untitled event)";
-
-            body.appendChild(timeEl);
-            body.appendChild(titleEl);
-
-            if (metaText) {
-              const metaEl = document.createElement("div");
-              metaEl.className = "event-meta";
-              metaEl.textContent = metaText;
-              body.appendChild(metaEl);
-            }
-
-            card.appendChild(strip);
-            card.appendChild(body);
-            calEventsEl.appendChild(card);
-          });
-          calEmptyEl.hidden = true;
-        } else {
-          calEmptyEl.hidden = false;
-        }
-
-        statusEl.textContent = "Updated from dashboard.txt";
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = "Could not load dashboard.txt";
-        choresEmptyEl.hidden = false;
-        calEmptyEl.hidden = false;
-      }
+      status.textContent = "Updated at " +
+        `${pad(now.getHours())}:${pad(now.getMinutes())}`;
     }
 
-    document.addEventListener("DOMContentLoaded", loadDashboard);
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
 </body>
 </html>
