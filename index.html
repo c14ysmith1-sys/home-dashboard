@@ -36,13 +36,14 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: var(--gap);
-      max-width: 900px;
+      max-width: 430px;
       margin: 0 auto;
     }
 
     @media (min-width: 768px) {
       .grid {
         grid-template-columns: repeat(2, 1fr);
+        max-width: 1000px;
       }
     }
 
@@ -84,68 +85,64 @@
       white-space: nowrap;
     }
 
-    /* ---------- Chores panel ---------- */
-    #chores-list {
+    /* Chores list */
+    #chores-items {
       margin-top: 4px;
+      list-style: none;
       font-size: 14px;
       line-height: 1.4;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px dashed rgba(255,255,255,0.1);
-      background: rgba(0,0,0,0.2);
-      min-height: 80px;
-      outline: none;
-      white-space: pre-wrap;
     }
 
-    #chores-list:empty::before {
-      content: "Run \"Chores – Today (Dashboard)\" shortcut, then tap here and Paste.";
-      color: var(--text-muted);
+    #chores-items li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 4px 0;
+    }
+
+    #chores-items li::before {
+      content: "•";
+      color: var(--accent);
+      margin-top: -1px;
+    }
+
+    #chores-empty {
       font-size: 12px;
-    }
-
-    /* ---------- Calendar panel ---------- */
-    #calendar-status {
-      font-size: 11px;
       color: var(--text-muted);
-      margin-top: 2px;
-      margin-bottom: 8px;
+      margin-top: 4px;
     }
 
-    .events-list {
+    /* Calendar events */
+    #calendar-events {
+      margin-top: 6px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      font-size: 13px;
     }
 
-    .event {
+    .event-card {
       display: grid;
-      grid-template-columns: 4px 1fr;
+      grid-template-columns: auto 1fr;
       gap: 8px;
-      padding: 6px 8px;
+      padding: 8px 10px;
       border-radius: 10px;
       background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
     .event-strip {
+      width: 4px;
       border-radius: 999px;
-      background: #4ea8de;
-      margin-top: 2px;
-      margin-bottom: 2px;
+      background: var(--accent);
     }
 
-    .event-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .event-time {
+    .event-main-time {
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       color: var(--text-muted);
+      margin-bottom: 1px;
     }
 
     .event-title {
@@ -156,12 +153,20 @@
     .event-meta {
       font-size: 11px;
       color: var(--text-muted);
+      margin-top: 1px;
     }
 
-    .badge-warning {
-      color: #fbbf24;
-      background: rgba(251,191,36,0.16);
-      border: 1px solid rgba(251,191,36,0.25);
+    #calendar-empty {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    #status {
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: right;
     }
   </style>
 </head>
@@ -172,249 +177,147 @@
       <div class="panel-header">
         <div>
           <div class="panel-title">🧹 Chores – Today</div>
-          <div class="panel-subtitle">Paste from your shortcut here</div>
+          <div class="panel-subtitle">Auto from Reminders</div>
         </div>
         <span class="pill">Reminders</span>
       </div>
-      <div id="chores-list" contenteditable="true"></div>
+      <ul id="chores-items"></ul>
+      <div id="chores-empty" hidden>No chores for today.</div>
     </section>
 
-    <!-- 📅 Calendar (ICS auto) -->
+    <!-- 📅 Today’s Calendar -->
     <section class="panel" id="panel-calendar">
       <div class="panel-header">
         <div>
           <div class="panel-title">📅 Today’s Calendar</div>
-          <div class="panel-subtitle">Next 10 upcoming events</div>
+          <div class="panel-subtitle">From Shortcuts text file</div>
         </div>
-        <span class="pill badge-warning">Auto from calendars</span>
+        <span class="pill">Auto from Shortcuts</span>
       </div>
-      <div id="calendar-status">Loading from calendar feeds…</div>
-      <div id="events" class="events-list"></div>
+      <div id="calendar-events"></div>
+      <div id="calendar-empty" hidden>No upcoming events found.</div>
+      <div id="status"></div>
     </section>
   </div>
 
   <script>
-    // --- Configure your calendar feeds here ---
-    // I converted your webcal:// links to https:// for browser use.
-    const CALENDAR_SOURCES = [
-      {
-        name: "Northview Production",
-        color: "#f97373",
-        url: "https://services.planningcenteronline.com/ical/pnb/PCn1SZowefekZeU3iF2vxiAkma54dCLV16157900.ics"
-      },
-      {
-        name: "Church",
-        color: "#facc15",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q0YaUO1QZDe4gmLOXlLi1TWR-yednb6BNOIaOq9aEtMlT73EDYcHNIoeb51S399ydA"
-      },
-      {
-        name: "Valor",
-        color: "#4ade80",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q1yHGNsKq1g960Ov-Up1IIWJ-XacYp_nfRnoszmlBtzom05C5rrFhdEMs0xWrtyVh8"
-      },
-      {
-        name: "Life Group",
-        color: "#a855f7",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q2zyOMMhsXdo-tzqj-BsPq-Won9AwAkqnzK30HR7e-B1rI6AykIG2Fkgp2djmdD-kA"
-      },
-      {
-        name: "Vacation",
-        color: "#22d3ee",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3ap6bi9RfvGTn_1PokhNA-H12OcB87rek6Zxuc7nbzLmT46iH1Uce-WxmOt5lbjGM"
-      },
-      {
-        name: "Credit Cards",
-        color: "#fb7185",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q22wbpkHvI8CWTzGm7Afqw5JL5EyPhE2oAm2eq9M1-BxHMyPR4Gny12QyrqpY6UMV0"
-      },
-      {
-        name: "Clay",
-        color: "#38bdf8",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q2QlmZXIrLuN0elKNpjgAmDLPn_z0xmfEysJZbBprexEbSw97cbwCQOWZKcSS0aIdA"
-      },
-      {
-        name: "Work",
-        color: "#34d399",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3sANb-uAKQtkE_6Mvi6U7p66LP2Y_L4d9QtoFJJ2Cbqj4Iva4__w7Bm7NPixYz_5Y"
-      },
-      {
-        name: "Victoria",
-        color: "#f472b6",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q1gPsCmegH7AwYgJhF7-zNDXYI-VODwbbkupDse4KapoMYLXGE6c42FLzNduJ1CpR8"
-      },
-      {
-        name: "Family",
-        color: "#eab308",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3hppznxqTF9wqbCzSTfdI90CsV0vaW_09oBEN_ixlbxrVy-342PUtLHlmijA6UDyQ"
-      },
-      {
-        name: "Home",
-        color: "#2dd4bf",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q2apGvbY67irYJvcgjhTsFmcm-0ZQh4TdnE7KzTjuz5VLY07-OvG1APc9OOoh_bbtg"
-      },
-      {
-        name: "Date Night",
-        color: "#f97316",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3ap2Ha5raCerQ0-pVipTMzQAGnEiTelGSAoGxmltCw2bPwVmDcWkx_-LkiSTnkMQo"
-      },
-      {
-        name: "School",
-        color: "#60a5fa",
-        url: "https://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3eAIPJBQOqyJpFWjclmR5SkZ2U8_y3agIRiR8WG5PrufbEK1djhVNPKyP12-2Hafg"
-      }
-    ];
+    async function loadDashboard() {
+      const choresListEl = document.getElementById("chores-items");
+      const choresEmptyEl = document.getElementById("chores-empty");
+      const calEventsEl = document.getElementById("calendar-events");
+      const calEmptyEl = document.getElementById("calendar-empty");
+      const statusEl = document.getElementById("status");
 
-    const MAX_EVENTS = 10;
+      try {
+        const res = await fetch("dashboard.txt?cache=" + Date.now());
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const raw = await res.text();
 
-    function parseICS(text, source) {
-      const lines = text.split(/\r?\n/);
-      const events = [];
-      let current = null;
+        const lines = raw.split(/\r?\n/).map(l => l.trim());
 
-      for (let raw of lines) {
-        const line = raw.trim();
-        if (line === "BEGIN:VEVENT") {
-          current = { calendar: source.name, color: source.color };
-        } else if (line === "END:VEVENT") {
-          if (current && current.start) {
-            events.push(current);
-          }
-          current = null;
-        } else if (!current) {
-          continue;
-        } else if (line.startsWith("SUMMARY:")) {
-          current.title = line.slice(8).trim();
-        } else if (line.startsWith("LOCATION:")) {
-          current.location = line.slice(9).trim();
-        } else if (line.startsWith("DTSTART")) {
-          const value = line.split(":")[1];
-          if (!value) continue;
-          if (value.length === 8) {
-            // DATE only, e.g. 20251205
-            const y = parseInt(value.slice(0, 4), 10);
-            const m = parseInt(value.slice(4, 6), 10) - 1;
-            const d = parseInt(value.slice(6, 8), 10);
-            current.start = new Date(y, m, d);
-            current.allDay = true;
-          } else {
-            current.start = new Date(value);
-            current.allDay = false;
-          }
-        } else if (line.startsWith("DTEND")) {
-          const value = line.split(":")[1];
-          if (!value) continue;
-          if (value.length === 8) {
-            const y = parseInt(value.slice(0, 4), 10);
-            const m = parseInt(value.slice(4, 6), 10) - 1;
-            const d = parseInt(value.slice(6, 8), 10);
-            current.end = new Date(y, m, d);
-          } else {
-            current.end = new Date(value);
-          }
-        }
-      }
+        // Locate section headers
+        const choresHeaderIdx = lines.findIndex(l =>
+          /^chores\s*[–-]/i.test(l)
+        );
+        const calendarHeaderIdx = lines.findIndex(l =>
+          /^today[’']s calendar/i.test(l)
+        );
 
-      return events;
-    }
+        let choreLines = [];
+        let eventLines = [];
 
-    function formatEventTime(date, allDay) {
-      if (!date) return "";
-      if (allDay) return "All-day";
-
-      const opts = { weekday: "short", hour: "numeric", minute: "2-digit" };
-      return date.toLocaleString(undefined, opts);
-    }
-
-    function formatMeta(e) {
-      const parts = [];
-      if (e.location) parts.push(e.location);
-      if (e.calendar) parts.push(e.calendar);
-      return parts.join(" • ");
-    }
-
-    function renderEvents(events) {
-      const statusEl = document.getElementById("calendar-status");
-      const container = document.getElementById("events");
-      container.innerHTML = "";
-
-      if (!events.length) {
-        statusEl.textContent = "No upcoming events found.";
-        return;
-      }
-
-      statusEl.textContent = "";
-      events.forEach(e => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "event";
-
-        const strip = document.createElement("div");
-        strip.className = "event-strip";
-        strip.style.background = e.color || "#4ea8de";
-
-        const main = document.createElement("div");
-        main.className = "event-main";
-
-        const time = document.createElement("div");
-        time.className = "event-time";
-        time.textContent = formatEventTime(e.start, e.allDay);
-
-        const title = document.createElement("div");
-        title.className = "event-title";
-        title.textContent = e.title || "(No title)";
-
-        main.appendChild(time);
-        main.appendChild(title);
-
-        const metaText = formatMeta(e);
-        if (metaText) {
-          const meta = document.createElement("div");
-          meta.className = "event-meta";
-          meta.textContent = metaText;
-          main.appendChild(meta);
+        if (choresHeaderIdx !== -1) {
+          const start = choresHeaderIdx + 1;
+          const end = (calendarHeaderIdx !== -1 && calendarHeaderIdx > start)
+            ? calendarHeaderIdx
+            : lines.length;
+          choreLines = lines.slice(start, end).filter(Boolean);
         }
 
-        wrapper.appendChild(strip);
-        wrapper.appendChild(main);
-        container.appendChild(wrapper);
-      });
-    }
+        if (calendarHeaderIdx !== -1) {
+          eventLines = lines.slice(calendarHeaderIdx + 1).filter(Boolean);
+        }
 
-    async function loadCalendars() {
-      const statusEl = document.getElementById("calendar-status");
-      let allEvents = [];
-
-      const startOfToday = new Date();
-      startOfToday.setHours(0,0,0,0);
-
-      for (const source of CALENDAR_SOURCES) {
-        try {
-          const res = await fetch(source.url);
-          if (!res.ok) {
-            console.warn("Fetch failed", source.name, res.status);
-            continue;
-          }
-          const text = await res.text();
-          const events = parseICS(text, source);
-          events.forEach(e => {
-            if (e.start && e.start >= startOfToday) {
-              allEvents.push(e);
-            }
+        // Render chores
+        choresListEl.innerHTML = "";
+        if (choreLines.length) {
+          choreLines.forEach(text => {
+            const li = document.createElement("li");
+            li.textContent = text.replace(/^[-•]\s*/, "");
+            choresListEl.appendChild(li);
           });
-        } catch (err) {
-          console.warn("Error fetching/parsing calendar", source.name, err);
+          choresEmptyEl.hidden = true;
+        } else {
+          choresEmptyEl.hidden = false;
         }
-      }
 
-      allEvents.sort((a, b) => a.start - b.start);
-      renderEvents(allEvents.slice(0, MAX_EVENTS));
+        // Render events (basic parse: "time – title – meta" if present)
+        calEventsEl.innerHTML = "";
+        if (eventLines.length) {
+          eventLines.forEach((line, idx) => {
+            const parts = line.split("–").map(p => p.trim()).filter(Boolean);
+            let timeText = "";
+            let titleText = "";
+            let metaText = "";
 
-      // If still empty, likely CORS / server restriction
-      if (!allEvents.length) {
-        statusEl.textContent = "Could not load calendars (some servers block web access).";
+            if (parts.length === 1) {
+              titleText = parts[0];
+            } else if (parts.length === 2) {
+              timeText = parts[0];
+              titleText = parts[1];
+            } else {
+              timeText = parts[0];
+              titleText = parts[1];
+              metaText = parts.slice(2).join(" – ");
+            }
+
+            const card = document.createElement("div");
+            card.className = "event-card";
+
+            const strip = document.createElement("div");
+            strip.className = "event-strip";
+            // simple color variation per event index
+            const colors = ["#4ea8de","#9b5de5","#ffb703","#3bc9a7","#ff6b6b"];
+            strip.style.background = colors[idx % colors.length];
+
+            const body = document.createElement("div");
+            const timeEl = document.createElement("div");
+            timeEl.className = "event-main-time";
+            timeEl.textContent = timeText || "—";
+
+            const titleEl = document.createElement("div");
+            titleEl.className = "event-title";
+            titleEl.textContent = titleText || "(Untitled event)";
+
+            body.appendChild(timeEl);
+            body.appendChild(titleEl);
+
+            if (metaText) {
+              const metaEl = document.createElement("div");
+              metaEl.className = "event-meta";
+              metaEl.textContent = metaText;
+              body.appendChild(metaEl);
+            }
+
+            card.appendChild(strip);
+            card.appendChild(body);
+            calEventsEl.appendChild(card);
+          });
+          calEmptyEl.hidden = true;
+        } else {
+          calEmptyEl.hidden = false;
+        }
+
+        statusEl.textContent = "Updated from dashboard.txt";
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "Could not load dashboard.txt";
+        choresEmptyEl.hidden = false;
+        calEmptyEl.hidden = false;
       }
     }
 
-    document.addEventListener("DOMContentLoaded", loadCalendars);
+    document.addEventListener("DOMContentLoaded", loadDashboard);
   </script>
 </body>
 </html>
