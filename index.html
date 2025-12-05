@@ -15,6 +15,21 @@
       --danger: #f97373;
       --radius: 16px;
       --gap: 12px;
+
+      --calendar-badge: #facc6b;
+      --cal-northview: #f97373;
+      --cal-church: #4ade80;
+      --cal-valor: #60a5fa;
+      --cal-lifegroup: #a855f7;
+      --cal-vacation: #fbbf24;
+      --cal-credit: #fb7185;
+      --cal-clay: #38bdf8;
+      --cal-work: #22c55e;
+      --cal-victoria: #ec4899;
+      --cal-family: #f97316;
+      --cal-home: #e5e7eb;
+      --cal-datenight: #f472b6;
+      --cal-school: #2dd4bf;
     }
 
     * {
@@ -79,9 +94,11 @@
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
+      white-space: nowrap;
     }
 
-    /* Chores panel */
+    /* ---------- Chores panel ---------- */
+
     #chores-list {
       margin-top: 4px;
       font-size: 14px;
@@ -101,15 +118,104 @@
       font-size: 12px;
     }
 
-    /* Placeholder calendar panel */
-    .calendar-placeholder {
-      font-size: 13px;
+    /* ---------- Calendar panel ---------- */
+
+    #calendar-status {
+      font-size: 12px;
       color: var(--text-muted);
-      padding-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    #calendar-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 70vh;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .event-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 4px 1fr;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .event-color-bar {
+      border-radius: 999px;
+      background: var(--accent);
+      width: 4px;
+    }
+
+    .event-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .event-time {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .event-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .event-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .event-calendar-pill {
+      font-size: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 2px;
+      max-width: 100%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      opacity: 0.9;
+    }
+
+    .event-calendar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
     }
 
     .badge-warning {
-      color: var(--danger);
+      color: var(--calendar-badge);
+      background: rgba(250, 204, 21, 0.09);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
   </style>
 </head>
@@ -127,19 +233,332 @@
       <div id="chores-list" contenteditable="true"></div>
     </section>
 
-    <!-- 📅 Calendar placeholder (for later ICS work) -->
-    <section class="panel">
+    <!-- 📅 Calendar (ICS-fed) -->
+    <section class="panel" id="panel-calendar">
       <div class="panel-header">
         <div>
           <div class="panel-title">📅 Today’s Calendar</div>
-          <div class="panel-subtitle">Family / Work / Church view</div>
+          <div class="panel-subtitle">Next 10 upcoming events</div>
         </div>
-        <span class="pill badge-warning">Coming soon</span>
+        <span class="pill badge-warning">Auto from calendars</span>
       </div>
-      <div class="calendar-placeholder">
-        We’ll wire this up next using your iCloud calendar feeds (Family, Work, Northview, etc.) so your events show here with the right colors.
-      </div>
+
+      <div id="calendar-status">Loading events…</div>
+      <ul id="calendar-list" aria-live="polite"></ul>
     </section>
   </div>
+
+  <script>
+    // -------- CONFIG --------
+    const MAX_EVENTS = 10;
+
+    const CAL_FEEDS = [
+      {
+        name: "Northview Production",
+        key: "northview",
+        url: "https://services.planningcenteronline.com/ical/pnb/PCn1SZowefekZeU3iF2vxiAkma54dCLV16157900.ics"
+      },
+      {
+        name: "Church",
+        key: "church",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q0YaUO1QZDe4gmLOXlLi1TWR-yednb6BNOIaOq9aEtMlT73EDYcHNIoeb51S399ydA"
+      },
+      {
+        name: "Valor",
+        key: "valor",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q1yHGNsKq1g960Ov-Up1IIWJ-XacYp_nfRnoszmlBtzom05C5rrFhdEMs0xWrtyVh8"
+      },
+      {
+        name: "Life Group",
+        key: "lifegroup",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q2zyOMMhsXdo-tzqj-BsPq-Won9AwAkqnzK30HR7e-B1rI6AykIG2Fkgp2djmdD-kA"
+      },
+      {
+        name: "Vacation",
+        key: "vacation",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3ap6bi9RfvGTn_1PokhNA-H12OcB87rek6Zxuc7nbzLmT46iH1Uce-WxmOt5lbjGM"
+      },
+      {
+        name: "Credit Cards",
+        key: "credit",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q22wbpkHvI8CWTzGm7Afqw5JL5EyPhE2oAm2eq9M1-BxHMyPR4Gny12QyrqpY6UMV0"
+      },
+      {
+        name: "Clay",
+        key: "clay",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q2QlmZXIrLuN0elKNpjgAmDLPn_z0xmfEysJZbBprexEbSw97cbwCQOWZKcSS0aIdA"
+      },
+      {
+        name: "Work",
+        key: "work",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3sANb-uAKQtkE_6Mvi6U7p66LP2Y_L4d9QtoFJJ2Cbqj4Iva4__w7Bm7NPixYz_5Y"
+      },
+      {
+        name: "Victoria",
+        key: "victoria",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q1gPsCmegH7AwYgJhF7-zNDXYI-VODwbbkupDse4KapoMYLXGE6c42FLzNduJ1CpR8"
+      },
+      {
+        name: "Family",
+        key: "family",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3hppznxqTF9wqbCzSTfdI90CsV0vaW_09oBEN_ixlbxrVy-342PUtLHlmijA6UDyQ"
+      },
+      {
+        name: "Home",
+        key: "home",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q2apGvbY67irYJvcgjhTsFmcm-0ZQh4TdnE7KzTjuz5VLY07-OvG1APc9OOoh_bbtg"
+      },
+      {
+        name: "Date Night",
+        key: "datenight",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3ap2Ha5raCerQ0-pVipTMzQAGnEiTelGSAoGxmltCw2bPwVmDcWkx_-LkiSTnkMQo"
+      },
+      {
+        name: "School",
+        key: "school",
+        url: "webcal://p49-caldav.icloud.com/published/2/MTYxMjgyNzQxNjE2MTI4MuNg0XwuMB_4juczyi2z5Q3eAIPJBQOqyJpFWjclmR5SkZ2U8_y3agIRiR8WG5PrufbEK1djhVNPKyP12-2Hafg"
+      }
+    ];
+
+    const CAL_COLORS = {
+      northview: getComputedStyle(document.documentElement).getPropertyValue("--cal-northview"),
+      church: getComputedStyle(document.documentElement).getPropertyValue("--cal-church"),
+      valor: getComputedStyle(document.documentElement).getPropertyValue("--cal-valor"),
+      lifegroup: getComputedStyle(document.documentElement).getPropertyValue("--cal-lifegroup"),
+      vacation: getComputedStyle(document.documentElement).getPropertyValue("--cal-vacation"),
+      credit: getComputedStyle(document.documentElement).getPropertyValue("--cal-credit"),
+      clay: getComputedStyle(document.documentElement).getPropertyValue("--cal-clay"),
+      work: getComputedStyle(document.documentElement).getPropertyValue("--cal-work"),
+      victoria: getComputedStyle(document.documentElement).getPropertyValue("--cal-victoria"),
+      family: getComputedStyle(document.documentElement).getPropertyValue("--cal-family"),
+      home: getComputedStyle(document.documentElement).getPropertyValue("--cal-home"),
+      datenight: getComputedStyle(document.documentElement).getPropertyValue("--cal-datenight"),
+      school: getComputedStyle(document.documentElement).getPropertyValue("--cal-school")
+    };
+
+    // -------- UTILITIES --------
+
+    function toHttps(url) {
+      if (url.startsWith("webcal://")) {
+        return "https://" + url.slice("webcal://".length);
+      }
+      return url;
+    }
+
+    function parseICSDate(value) {
+      if (!value) return null;
+      // Strip parameters like ;TZID=...
+      const parts = value.split(":");
+      const dt = parts[parts.length - 1].trim();
+
+      const match = dt.match(
+        /^(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2})Z?)?$/
+      );
+      if (!match) return null;
+
+      const year = Number(match[1]);
+      const month = Number(match[2]) - 1;
+      const day = Number(match[3]);
+      const hasTime = !!match[4];
+
+      if (!hasTime) {
+        return new Date(year, month, day);
+      }
+
+      const hour = Number(match[5] || "0");
+      const min = Number(match[6] || "0");
+      const sec = Number(match[7] || "0");
+
+      // Treat as local time; good enough for your use.
+      return new Date(year, month, day, hour, min, sec);
+    }
+
+    function formatTime(date) {
+      if (!date) return "";
+      return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    }
+
+    function formatDay(date) {
+      if (!date) return "";
+      return date.toLocaleDateString([], {
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function parseICS(text, calendarMeta) {
+      const events = [];
+      const blocks = text.split("BEGIN:VEVENT").slice(1);
+
+      for (const blockRaw of blocks) {
+        const block = blockRaw.split("END:VEVENT")[0];
+
+        const lines = block
+          .split(/\r?\n/)
+          // Handle folded lines
+          .reduce((acc, line) => {
+            if (/^[ \t]/.test(line) && acc.length) {
+              acc[acc.length - 1] += line.trim();
+            } else if (line.trim()) {
+              acc.push(line.trim());
+            }
+            return acc;
+          }, []);
+
+        const getField = (name) => {
+          const prefix = name.toUpperCase();
+          const found = lines.find((l) => l.toUpperCase().startsWith(prefix));
+          if (!found) return "";
+          const idx = found.indexOf(":");
+          return idx >= 0 ? found.slice(idx + 1).trim() : "";
+        };
+
+        const dtStart = parseICSDate(getField("DTSTART"));
+        const dtEnd = parseICSDate(getField("DTEND"));
+        const summary = getField("SUMMARY") || "(No title)";
+        const location = getField("LOCATION");
+        const description = getField("DESCRIPTION");
+
+        if (!dtStart) continue;
+
+        events.push({
+          calendarName: calendarMeta.name,
+          calendarKey: calendarMeta.key,
+          start: dtStart,
+          end: dtEnd,
+          summary,
+          location,
+          description
+        });
+      }
+
+      return events;
+    }
+
+    // -------- RENDERING --------
+
+    function renderEvents(events) {
+      const statusEl = document.getElementById("calendar-status");
+      const listEl = document.getElementById("calendar-list");
+
+      if (!events.length) {
+        statusEl.textContent = "No upcoming events found.";
+        listEl.innerHTML = "";
+        return;
+      }
+
+      statusEl.textContent = "";
+      listEl.innerHTML = "";
+
+      events.forEach((ev) => {
+        const li = document.createElement("li");
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "event-card";
+
+        const colorBar = document.createElement("div");
+        colorBar.className = "event-color-bar";
+        colorBar.style.backgroundColor =
+          CAL_COLORS[ev.calendarKey] || getComputedStyle(document.documentElement).getPropertyValue("--accent");
+
+        const main = document.createElement("div");
+        main.className = "event-main";
+
+        const time = document.createElement("div");
+        time.className = "event-time";
+        const dayStr = formatDay(ev.start);
+        const timeStr = formatTime(ev.start);
+        time.textContent = timeStr ? `${dayStr} • ${timeStr}` : dayStr;
+
+        const title = document.createElement("div");
+        title.className = "event-title";
+        title.textContent = ev.summary;
+
+        const meta = document.createElement("div");
+        meta.className = "event-meta";
+        const pieces = [];
+        if (ev.location) pieces.push(ev.location);
+        if (ev.description) {
+          // Keep description short.
+          const clean = ev.description.replace(/\\n/gi, " ").slice(0, 80);
+          pieces.push(clean);
+        }
+        meta.textContent = pieces.join(" • ");
+
+        const calPill = document.createElement("div");
+        calPill.className = "event-calendar-pill";
+
+        const dot = document.createElement("span");
+        dot.className = "event-calendar-dot";
+        dot.style.backgroundColor = colorBar.style.backgroundColor;
+
+        const label = document.createElement("span");
+        label.textContent = ev.calendarName;
+
+        calPill.appendChild(dot);
+        calPill.appendChild(label);
+
+        main.appendChild(time);
+        main.appendChild(title);
+        if (pieces.length) main.appendChild(meta);
+        main.appendChild(calPill);
+
+        wrapper.appendChild(colorBar);
+        wrapper.appendChild(main);
+        li.appendChild(wrapper);
+        listEl.appendChild(li);
+      });
+    }
+
+    // -------- MAIN LOAD --------
+
+    async function loadCalendars() {
+      const statusEl = document.getElementById("calendar-status");
+      try {
+        const now = new Date();
+        const startOfToday = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
+        );
+
+        const allEvents = [];
+
+        for (const feed of CAL_FEEDS) {
+          const url = toHttps(feed.url);
+
+          try {
+            const res = await fetch(url);
+            if (!res.ok) {
+              console.warn("Failed to fetch", feed.name, res.status);
+              continue;
+            }
+            const text = await res.text();
+            const events = parseICS(text, feed);
+
+            events.forEach((e) => {
+              // Only keep events starting today or later
+              if (e.start >= startOfToday) {
+                allEvents.push(e);
+              }
+            });
+          } catch (err) {
+            console.warn("Error fetching/parsing feed", feed.name, err);
+          }
+        }
+
+        allEvents.sort((a, b) => a.start - b.start);
+
+        renderEvents(allEvents.slice(0, MAX_EVENTS));
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent =
+          "Could not load calendars (might be a CORS restriction on iCloud feeds).";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadCalendars);
+  </script>
 </body>
 </html>
