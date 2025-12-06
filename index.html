@@ -5,26 +5,20 @@
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Auto-refresh every 30 minutes -->
+  <!-- Auto-refresh the whole page every 30 minutes -->
   <meta http-equiv="refresh" content="1800">
 
   <style>
     :root {
       --bg: #f7f2e9;
+      --frame: #fdf8f1;
       --card: #ffffff;
+      --border-soft: #eadfce;
       --accent: #c8905b;
       --accent-soft: #f1d4b8;
       --text-main: #3b2c22;
       --text-muted: #7b6a5b;
-      --good: #3c8c5a;
-      --danger: #c54b4b;
-      --family-1: #fbe4e4;
-      --family-2: #e9f3ff;
-      --family-3: #e9f8ee;
-      --family-4: #fdf2d6;
-      --morning-bg: #fdf8f1;
-      --afternoon-bg: #2a1f0f;
-      --afternoon-frame: #4a3414;
+      --bullet: #c8905b;
     }
 
     * {
@@ -38,21 +32,20 @@
                    system-ui, sans-serif;
       background: var(--bg);
       color: var(--text-main);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
       padding: 24px;
     }
 
     .frame {
       flex: 1;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 16px;
       border-radius: 24px;
-      background: var(--morning-bg);
+      background: var(--frame);
       box-shadow: 0 16px 60px rgba(0,0,0,0.08);
       padding: 24px 32px 16px;
-      transition: background 0.4s ease;
     }
 
     /* HEADER */
@@ -61,7 +54,6 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       align-items: center;
-      margin-bottom: 16px;
     }
 
     .time-block {
@@ -79,12 +71,12 @@
     .time-sub {
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      font-size: 18px;
+      gap: 4px;
+      font-size: 20px;
       color: var(--text-muted);
     }
 
-    .weather-block {
+    .weather-main {
       text-align: right;
     }
 
@@ -98,176 +90,138 @@
       color: var(--text-muted);
     }
 
-    /* MORNING VIEW (calendar + tasks + photo) */
+    /* FORECAST ROW */
 
-    .content-morning {
-      flex: 1;
+    .forecast-row {
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 12px 0;
       display: grid;
-      grid-template-columns: 1.8fr 1.2fr;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .forecast-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .forecast-name {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .forecast-icon {
+      font-size: 22px;
+    }
+
+    .forecast-temp {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .forecast-extra {
+      font-size: 13px;
+    }
+
+    /* MAIN CONTENT: calendar + tasks + photo */
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
       gap: 24px;
-      margin-top: 12px;
-      margin-bottom: 16px;
     }
 
     .card {
       background: var(--card);
-      border-radius: 20px;
-      padding: 16px 18px 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
     }
 
-    .section-title {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .section-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .calendar-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .calendar-item {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding-left: 10px;
-      border-left: 3px solid var(--accent-soft);
-    }
-
-    .calendar-item-title {
-      font-size: 15px;
-    }
-
-    .calendar-item-time {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .calendar-empty,
-    .tasks-empty {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-style: italic;
-      margin-top: 4px;
-    }
-
-    .tasks-list {
-      list-style: disc;
-      margin-left: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 15px;
-    }
-
-    .photo-card {
-      margin-top: 8px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #ddd;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* AFTERNOON CHORES VIEW */
-
-    .content-chores {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
-
-    .column {
-      background: rgba(0,0,0,0.18);
-      border-radius: 20px;
-      padding: 12px 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .column.jon     { background: #4b1010; }
-    .column.arya    { background: #15202b; }
-    .column.catelyn { background: #103024; }
-    .column.ned     { background: #3b3002; }
-
-    .column-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 4px;
-    }
-
-    .column-title {
+    .card-header {
       font-size: 18px;
       font-weight: 600;
-      color: #f9f3ea;
+      margin-bottom: 8px;
     }
 
-    .column-sub {
-      font-size: 13px;
-      color: rgba(255,255,255,0.75);
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
-    .task {
+    .events-list,
+    .tasks-list {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 8px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: rgba(0,0,0,0.55);
-      font-size: 15px;
-      color: #fef7ee;
+      margin-top: 4px;
     }
 
-    .task-dot {
-      width: 16px;
-      height: 16px;
+    .event-item,
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+    }
+
+    .event-bar {
+      width: 3px;
       border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.85);
-      background: transparent;
+      background: var(--accent);
+      margin-top: 2px;
       flex-shrink: 0;
     }
 
-    .task.done .task-dot {
-      background: var(--good);
-      border-color: var(--good);
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      border: 2px solid var(--bullet);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .event-text {
+      flex: 1;
+    }
+
+    .event-title {
+      font-weight: 500;
+    }
+
+    .event-time {
+      font-size: 13px;
+      color: var(--text-muted);
     }
 
     .task-text {
       flex: 1;
     }
 
+    .photo-card {
+      margin-top: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ddd;
+      height: 210px;
+      background-image: url("https://images.pexels.com/photos/3770585/pexels-photo-3770585.jpeg?auto=compress&cs=tinysrgb&w=800");
+      background-size: cover;
+      background-position: center center;
+    }
+
     /* FOOTER */
 
     .footer {
-      border-top: 1px solid #e0d2c4;
-      padding-top: 8px;
+      border-top: 1px solid var(--border-soft);
+      padding-top: 10px;
       display: flex;
       justify-content: space-between;
       align-items: baseline;
@@ -289,35 +243,22 @@
       font-size: 13px;
     }
 
-    /* HIDE/SHOW HELPERS */
-
-    #view-morning,
-    #view-chores {
-      display: none; /* JS will decide */
-    }
-
-    /* Slightly darker frame in afternoon */
-    .frame.afternoon {
-      background: var(--afternoon-frame);
-      color: #fef7ee;
-    }
-    .frame.afternoon .time-sub,
-    .frame.afternoon .weather-line,
-    .frame.afternoon .footer {
-      color: rgba(255,255,255,0.78);
-      border-color: rgba(255,255,255,0.22);
-    }
-    .frame.afternoon .verse-ref {
-      color: #ffd79a;
-    }
-    .frame.afternoon .status-pill {
-      background: rgba(0,0,0,0.45);
-      color: #ffe0b6;
+    /* Simple responsive tweak for narrower screens */
+    @media (max-width: 900px) {
+      .frame {
+        padding: 16px;
+      }
+      .time-main {
+        font-size: 40px;
+      }
+      .main {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="frame" id="frame">
+  <div class="frame">
     <!-- HEADER -->
     <header class="header">
       <div class="time-block">
@@ -327,117 +268,79 @@
           <span id="day-part">Morning dashboard</span>
         </div>
       </div>
-      <div class="weather-block">
+      <div class="weather-main">
         <div class="weather-temp" id="weather-temp">26°</div>
-        <div class="weather-line" id="weather-line">Feels like 24° · Westfield</div>
+        <div class="weather-line" id="weather-line">
+          Feels like 24° · Westfield
+        </div>
       </div>
     </header>
 
-    <!-- MORNING VIEW -->
-    <main class="content-morning" id="view-morning">
-      <!-- Left: Today's calendar -->
+    <!-- FORECAST ROW (placeholder data for now) -->
+    <section class="forecast-row" id="forecast-row">
+      <div class="forecast-day">
+        <div class="forecast-name">Tue</div>
+        <div class="forecast-icon">🌤️</div>
+        <div class="forecast-temp">31°</div>
+        <div class="forecast-extra">30%</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-name">Wed</div>
+        <div class="forecast-icon">⛅</div>
+        <div class="forecast-temp">29°</div>
+        <div class="forecast-extra">25%</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-name">Thu</div>
+        <div class="forecast-icon">☁️</div>
+        <div class="forecast-temp">27°</div>
+        <div class="forecast-extra">20%</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-name">Fri</div>
+        <div class="forecast-icon">🌧️</div>
+        <div class="forecast-temp">24°</div>
+        <div class="forecast-extra">40%</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-name">Sat</div>
+        <div class="forecast-icon">☁️</div>
+        <div class="forecast-temp">22°</div>
+        <div class="forecast-extra">35%</div>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <!-- Left: Upcoming events -->
+      <section class="card" id="events-card">
+        <div class="card-header">Upcoming Events</div>
+        <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
+        <div class="events-list" id="events-list">
+          <!-- Filled from calendar.txt -->
+          <div class="event-item">
+            <div class="event-bar"></div>
+            <div class="event-text">
+              <div class="event-title">Add events to calendar.txt</div>
+              <div class="event-time">One event per line</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Today’s tasks + photo -->
       <section class="card">
-        <div class="section-title">Today</div>
-        <div class="section-sub">Family schedule</div>
-        <ul class="calendar-list" id="calendar-list">
-          <!-- Filled by JS from calendar.txt -->
-        </ul>
-        <div class="calendar-empty" id="calendar-empty" style="display:none;">
-          No events today.
-        </div>
-      </section>
-
-      <!-- Right: Tasks + photo -->
-      <section class="card">
-        <div>
-          <div class="section-title">Today’s Tasks</div>
-          <div class="section-sub">From your chore list</div>
-          <ul class="tasks-list" id="tasks-list">
-            <!-- Filled by JS from dashboard.txt -->
-          </ul>
-          <div class="tasks-empty" id="tasks-empty" style="display:none;">
-            No tasks listed for today.
+        <div class="card-header">Today’s Tasks</div>
+        <div class="card-subtitle">Family checklist</div>
+        <div class="tasks-list" id="tasks-list">
+          <!-- Filled from dashboard.txt -->
+          <div class="task-item">
+            <div class="dot"></div>
+            <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
           </div>
         </div>
-        <div class="photo-card">
-          <!-- Replace src with your own family photo URL if you like -->
-          <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=80" alt="Family">
-        </div>
-      </section>
-    </main>
 
-    <!-- AFTERNOON CHORES VIEW -->
-    <main class="content-chores" id="view-chores">
-      <section class="column jon">
-        <div class="column-header">
-          <div>
-            <div class="column-title">Clay</div>
-            <div class="column-sub">Today</div>
-          </div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Unload dishwasher</div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Vacuum living room</div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Take out trash</div>
-        </div>
-      </section>
-
-      <section class="column arya">
-        <div class="column-header">
-          <div>
-            <div class="column-title">Brett</div>
-            <div class="column-sub">Today</div>
-          </div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Tidy playroom</div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Feed dog &amp; cats</div>
-        </div>
-      </section>
-
-      <section class="column catelyn">
-        <div class="column-header">
-          <div>
-            <div class="column-title">Ellie</div>
-            <div class="column-sub">Today</div>
-          </div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Pick up bedroom</div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Put dirty clothes in basket</div>
-        </div>
-      </section>
-
-      <section class="column ned">
-        <div class="column-header">
-          <div>
-            <div class="column-title">Shared</div>
-            <div class="column-sub">Whole house</div>
-          </div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Clean kitchen counters</div>
-        </div>
-        <div class="task">
-          <div class="task-dot"></div>
-          <div class="task-text">Reset living room</div>
-        </div>
+        <div class="photo-card"></div>
       </section>
     </main>
 
@@ -447,125 +350,120 @@
         <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
         <span class="verse-ref">Psalm 16:11</span>
       </div>
-      <div class="status-pill" id="status-pill">
-        Updated just now
-      </div>
+      <div class="status-pill" id="status-pill">Updated just now</div>
     </footer>
   </div>
 
   <script>
     function pad(n) { return n.toString().padStart(2, "0"); }
 
-    function switchView(now) {
-      const hour = now.getHours();
-      const morning = document.getElementById("view-morning");
-      const chores = document.getElementById("view-chores");
-      const frame = document.getElementById("frame");
-      const dayPart = document.getElementById("day-part");
-
-      if (hour < 12) {
-        morning.style.display = "grid";
-        chores.style.display = "none";
-        frame.classList.remove("afternoon");
-        dayPart.textContent = "Morning dashboard";
-      } else {
-        morning.style.display = "none";
-        chores.style.display = "grid";
-        frame.classList.add("afternoon");
-        if (hour < 16) {
-          dayPart.textContent = "Afternoon chores";
-        } else {
-          dayPart.textContent = "Evening reset";
-        }
-      }
-    }
-
     function updateClock() {
       const now = new Date();
+      const hours = pad(now.getHours());
+      const minutes = pad(now.getMinutes());
+
       const clock = document.getElementById("clock");
       const dateLine = document.getElementById("date-line");
+      const dayPart = document.getElementById("day-part");
       const status = document.getElementById("status-pill");
 
-      clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      clock.textContent = `${hours}:${minutes}`;
 
       const dateOptions = { weekday: "long", month: "short", day: "numeric" };
       dateLine.textContent = now.toLocaleDateString(undefined, dateOptions);
 
-      status.textContent = "Updated at " +
-        `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      const h = now.getHours();
+      if (h < 12) dayPart.textContent = "Morning dashboard";
+      else if (h < 16) dayPart.textContent = "Afternoon chores";
+      else dayPart.textContent = "Evening reset";
 
-      switchView(now);
-    }
-
-    async function loadTextFile(name) {
-      const url = `https://raw.githubusercontent.com/c14ysmith1-sys/home-dashboard/main/${name}`;
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) return "";
-        return await res.text();
-      } catch (e) {
-        console.error("Error loading", name, e);
-        return "";
-      }
-    }
-
-    async function loadCalendar() {
-      const text = await loadTextFile("calendar.txt");
-      const listEl = document.getElementById("calendar-list");
-      const emptyEl = document.getElementById("calendar-empty");
-
-      listEl.innerHTML = "";
-      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-
-      if (!lines.length) {
-        emptyEl.style.display = "block";
-        return;
-      }
-      emptyEl.style.display = "none";
-
-      // For now, treat each line as a full item, like "12/6/25, 6:00AM Pay Amazon"
-      lines.forEach(line => {
-        const li = document.createElement("li");
-        li.className = "calendar-item";
-
-        const titleSpan = document.createElement("span");
-        titleSpan.className = "calendar-item-title";
-        titleSpan.textContent = line;
-
-        li.appendChild(titleSpan);
-        listEl.appendChild(li);
-      });
+      status.textContent = "Updated at " + `${hours}:${minutes}`;
     }
 
     async function loadTasks() {
-      const text = await loadTextFile("dashboard.txt");
-      const listEl = document.getElementById("tasks-list");
-      const emptyEl = document.getElementById("tasks-empty");
+      try {
+        const res = await fetch("dashboard.txt");
+        if (!res.ok) return;
+        const text = await res.text();
 
-      listEl.innerHTML = "";
-      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        const container = document.getElementById("tasks-list");
+        container.innerHTML = "";
 
-      if (!lines.length) {
-        emptyEl.style.display = "block";
-        return;
+        const lines = text
+          .split("\n")
+          .map(l => l.trim())
+          .filter(l => l.length > 0);
+
+        if (lines.length === 0) {
+          container.innerHTML = `
+            <div class="task-item">
+              <div class="dot"></div>
+              <div class="task-text">No tasks for today.</div>
+            </div>`;
+          return;
+        }
+
+        for (const line of lines) {
+          const div = document.createElement("div");
+          div.className = "task-item";
+          div.innerHTML = `
+            <div class="dot"></div>
+            <div class="task-text">${line}</div>
+          `;
+          container.appendChild(div);
+        }
+      } catch (e) {
+        console.error("Error loading tasks:", e);
       }
-      emptyEl.style.display = "none";
-
-      // Simple approach: every non-empty line becomes one bullet.
-      lines.forEach(line => {
-        const li = document.createElement("li");
-        li.textContent = line;
-        listEl.appendChild(li);
-      });
     }
 
-    async function initDashboard() {
-      updateClock();
-      await Promise.all([loadCalendar(), loadTasks()]);
-      setInterval(updateClock, 1000);
+    async function loadEvents() {
+      try {
+        const res = await fetch("calendar.txt");
+        if (!res.ok) return;
+        const text = await res.text();
+
+        const container = document.getElementById("events-list");
+        container.innerHTML = "";
+
+        const lines = text
+          .split("\n")
+          .map(l => l.trim())
+          .filter(l => l.length > 0);
+
+        if (lines.length === 0) {
+          container.innerHTML = `
+            <div class="event-item">
+              <div class="event-bar"></div>
+              <div class="event-text">
+                <div class="event-title">No events scheduled.</div>
+                <div class="event-time">Enjoy the day.</div>
+              </div>
+            </div>`;
+          return;
+        }
+
+        for (const line of lines) {
+          const item = document.createElement("div");
+          item.className = "event-item";
+          item.innerHTML = `
+            <div class="event-bar"></div>
+            <div class="event-text">
+              <div class="event-title">${line}</div>
+            </div>
+          `;
+          container.appendChild(item);
+        }
+      } catch (e) {
+        console.error("Error loading events:", e);
+      }
     }
 
-    initDashboard();
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    loadTasks();
+    loadEvents();
   </script>
 </body>
 </html>
