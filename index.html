@@ -5,7 +5,7 @@
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Auto-refresh every 30 minutes -->
+  <!-- Auto-refresh every 30 minutes so TV updates itself -->
   <meta http-equiv="refresh" content="1800">
 
   <style>
@@ -14,13 +14,15 @@
       --card: #ffffff;
       --accent: #c8905b;
       --accent-soft: #f1d4b8;
-      --text-main: #3b2c22;
-      --text-muted: #7b6a5b;
+      --text-main: #f5ece0;
+      --text-muted: #c0aa8f;
       --good: #3c8c5a;
-      --family-1: #fbe4e4;
-      --family-2: #e9f3ff;
-      --family-3: #e9f8ee;
-      --family-4: #fdf2d6;
+      --danger: #c54b4b;
+      --family-1: #3b0909;
+      --family-2: #131820;
+      --family-3: #041f1c;
+      --family-4: #2a2202;
+      --frame-bg: #4a3203;
     }
 
     * {
@@ -32,7 +34,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
                    system-ui, sans-serif;
-      background: var(--bg);
+      background: #1a1206;
       color: var(--text-main);
       height: 100vh;
       display: flex;
@@ -45,8 +47,8 @@
       display: flex;
       flex-direction: column;
       border-radius: 24px;
-      background: #fdf8f1;
-      box-shadow: 0 16px 60px rgba(0,0,0,0.08);
+      background: var(--frame-bg);
+      box-shadow: 0 16px 60px rgba(0,0,0,0.65);
       padding: 24px 32px 16px;
     }
 
@@ -56,7 +58,7 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .time-block {
@@ -93,70 +95,65 @@
       color: var(--text-muted);
     }
 
-    /* MAIN LAYOUT */
-
-    .main-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
-
     /* CALENDAR STRIP */
 
     .calendar-strip {
-      background: var(--card);
-      border-radius: 16px;
+      margin-top: 4px;
+      margin-bottom: 12px;
       padding: 10px 16px;
+      border-radius: 16px;
+      background: #15151a;
+      color: #f7f2e9;
       display: flex;
-      gap: 24px;
-      align-items: flex-start;
-      border: 1px solid rgba(0,0,0,0.03);
+      align-items: center;
+      gap: 16px;
     }
 
-    .calendar-title-block {
-      min-width: 120px;
+    .calendar-strip-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-right: 24px;
+      flex-shrink: 0;
     }
 
     .calendar-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 4px;
     }
 
-    .calendar-subtitle {
+    .calendar-sub {
       font-size: 13px;
-      color: var(--text-muted);
+      color: #a8a1a0;
     }
 
-    .calendar-list {
-      list-style: none;
+    .calendar-events {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px 24px;
+      gap: 8px;
       font-size: 14px;
-      color: var(--text-muted);
     }
 
-    .calendar-item-time {
-      font-weight: 600;
-      margin-right: 4px;
-      color: var(--text-main);
+    .calendar-item {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.16);
+      white-space: nowrap;
     }
 
-    /* CHORES GRID: 4 columns */
+    /* BODY LAYOUT: 4 columns for chores */
 
     .content {
       flex: 1;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
+      margin-top: 4px;
+      margin-bottom: 12px;
     }
 
     .column {
-      background: var(--card);
       border-radius: 20px;
       padding: 12px 12px 16px;
       display: flex;
@@ -164,9 +161,9 @@
       gap: 8px;
     }
 
-    .column.clay { background: var(--family-1); }
-    .column.brett { background: var(--family-2); }
-    .column.ellie { background: var(--family-3); }
+    .column.clay   { background: var(--family-1); }
+    .column.brett  { background: var(--family-2); }
+    .column.ellie  { background: var(--family-3); }
     .column.shared { background: var(--family-4); }
 
     .column-header {
@@ -186,19 +183,13 @@
       color: var(--text-muted);
     }
 
-    .tasks {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
     .task {
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 8px 10px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.75);
+      background: rgba(0,0,0,0.45);
       font-size: 15px;
     }
 
@@ -206,9 +197,14 @@
       width: 16px;
       height: 16px;
       border-radius: 999px;
-      border: 2px solid var(--accent);
+      border: 2px solid var(--accent-soft);
       background: transparent;
       flex-shrink: 0;
+    }
+
+    .task.done .task-dot {
+      background: var(--good);
+      border-color: var(--good);
     }
 
     .task-text {
@@ -218,7 +214,7 @@
     /* FOOTER */
 
     .footer {
-      border-top: 1px solid #e0d2c4;
+      border-top: 1px solid rgba(255,255,255,0.12);
       padding-top: 8px;
       display: flex;
       justify-content: space-between;
@@ -229,15 +225,15 @@
 
     .verse-ref {
       font-weight: 600;
-      color: var(--accent);
+      color: var(--accent-soft);
       margin-left: 8px;
     }
 
     .status-pill {
       padding: 4px 10px;
       border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
+      background: rgba(0,0,0,0.45);
+      color: var(--text-muted);
       font-size: 13px;
     }
   </style>
@@ -249,7 +245,7 @@
       <div class="time-block">
         <div class="time-main" id="clock">9:15</div>
         <div class="time-sub">
-          <span id="date-line">Monday, Nov 30</span>
+          <span id="date-line">Friday, Dec 5</span>
           <span id="day-part">Afternoon chores</span>
         </div>
       </div>
@@ -259,59 +255,89 @@
       </div>
     </header>
 
-    <main class="main-area">
-      <!-- CALENDAR STRIP -->
-      <section class="calendar-strip">
-        <div class="calendar-title-block">
-          <div class="calendar-title" id="calendar-title">Today</div>
-          <div class="calendar-subtitle">Family schedule</div>
+    <!-- CALENDAR STRIP (auto-filled from calendar.txt) -->
+    <section class="calendar-strip">
+      <div class="calendar-strip-left">
+        <div class="calendar-title">Today</div>
+        <div class="calendar-sub">Family schedule</div>
+      </div>
+      <div class="calendar-events" id="calendar-events">
+        <!-- Events from calendar.txt will be injected here -->
+      </div>
+    </section>
+
+    <!-- BODY: chore columns -->
+    <main class="content">
+      <section class="column clay">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Clay</div>
+            <div class="column-sub">Today</div>
+          </div>
         </div>
-        <ul class="calendar-list" id="calendar-list">
-          <!-- Filled by JS -->
-        </ul>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Unload dishwasher</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Vacuum living room</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Take out trash</div>
+        </div>
       </section>
 
-      <!-- CHORES GRID -->
-      <section class="content">
-        <section class="column clay">
-          <div class="column-header">
-            <div>
-              <div class="column-title">Clay</div>
-              <div class="column-sub">Today</div>
-            </div>
+      <section class="column brett">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Brett</div>
+            <div class="column-sub">Today</div>
           </div>
-          <div class="tasks" id="tasks-clay"></div>
-        </section>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Tidy playroom</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Feed dog & cats</div>
+        </div>
+      </section>
 
-        <section class="column brett">
-          <div class="column-header">
-            <div>
-              <div class="column-title">Brett</div>
-              <div class="column-sub">Today</div>
-            </div>
+      <section class="column ellie">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Ellie</div>
+            <div class="column-sub">Today</div>
           </div>
-          <div class="tasks" id="tasks-brett"></div>
-        </section>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Pick up bedroom</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Put dirty clothes in basket</div>
+        </div>
+      </section>
 
-        <section class="column ellie">
-          <div class="column-header">
-            <div>
-              <div class="column-title">Ellie</div>
-              <div class="column-sub">Today</div>
-            </div>
+      <section class="column shared">
+        <div class="column-header">
+          <div>
+            <div class="column-title">Shared</div>
+            <div class="column-sub">Whole house</div>
           </div>
-          <div class="tasks" id="tasks-ellie"></div>
-        </section>
-
-        <section class="column shared">
-          <div class="column-header">
-            <div>
-              <div class="column-title">Shared</div>
-              <div class="column-sub">Whole house</div>
-            </div>
-          </div>
-          <div class="tasks" id="tasks-shared"></div>
-        </section>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Clean kitchen counters</div>
+        </div>
+        <div class="task">
+          <div class="task-dot"></div>
+          <div class="task-text">Reset living room</div>
+        </div>
       </section>
     </main>
 
@@ -328,127 +354,72 @@
   </div>
 
   <script>
-    const CHORES_URL = "https://raw.githubusercontent.com/c14ysmith1-sys/home-dashboard/main/dashboard.txt";
-    const CAL_URL = "https://raw.githubusercontent.com/c14ysmith1-sys/home-dashboard/main/calendar.txt";
-
     function pad(n) { return n.toString().padStart(2, "0"); }
 
     function updateClock() {
       const now = new Date();
+      const hours = now.getHours();
       const minutes = pad(now.getMinutes());
       const clock = document.getElementById("clock");
       const dateLine = document.getElementById("date-line");
       const dayPart = document.getElementById("day-part");
       const status = document.getElementById("status-pill");
 
-      clock.textContent = `${now.getHours()}:${minutes}`;
+      clock.textContent = `${hours}:${minutes}`;
 
       const dateOptions = { weekday: "long", month: "short", day: "numeric" };
       dateLine.textContent = now.toLocaleDateString(undefined, dateOptions);
 
-      const h = now.getHours();
-      if (h < 12) dayPart.textContent = "Morning dashboard";
-      else if (h < 16) dayPart.textContent = "Afternoon chores";
+      if (hours < 12) dayPart.textContent = "Morning dashboard";
+      else if (hours < 16) dayPart.textContent = "Afternoon chores";
       else dayPart.textContent = "Evening reset";
 
       status.textContent = "Updated at " +
         `${pad(now.getHours())}:${pad(now.getMinutes())}`;
     }
 
-    async function fetchText(url) {
-      const res = await fetch(url, { cache: "no-cache" });
-      if (!res.ok) throw new Error("Failed to load " + url);
-      return res.text();
-    }
-
-    function renderCalendar(text) {
-      const titleEl = document.getElementById("calendar-title");
-      const listEl = document.getElementById("calendar-list");
-      if (!titleEl || !listEl) return;
-
-      listEl.innerHTML = "";
-
-      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-      if (!lines.length) {
-        titleEl.textContent = "Today";
-        return;
-      }
-
-      titleEl.textContent = lines.shift();
-
-      lines.forEach(line => {
-        const li = document.createElement("li");
-
-        const match = line.match(/^(\S+)\s+(.*)$/);
-        if (match) {
-          const timeSpan = document.createElement("span");
-          timeSpan.className = "calendar-item-time";
-          timeSpan.textContent = match[1];
-
-          const textSpan = document.createElement("span");
-          textSpan.textContent = match[2];
-
-          li.appendChild(timeSpan);
-          li.appendChild(textSpan);
-        } else {
-          li.textContent = line;
+    async function loadCalendar() {
+      try {
+        // cache-buster so GitHub Pages gives us the fresh file
+        const res = await fetch("calendar.txt?cb=" + Date.now());
+        if (!res.ok) {
+          console.warn("calendar.txt not found or error", res.status);
+          return;
         }
 
-        listEl.appendChild(li);
-      });
-    }
+        const text = await res.text();
+        const lines = text
+          .split("\n")
+          .map(l => l.trim())
+          .filter(l => l.length > 0);
 
-    function renderChores(text) {
-      const blocks = text.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
-      const map = {};
-
-      blocks.forEach(block => {
-        const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
-        if (!lines.length) return;
-        const name = lines.shift().toLowerCase();
-        map[name] = lines;
-      });
-
-      ["clay", "brett", "ellie", "shared"].forEach(name => {
-        const container = document.getElementById("tasks-" + name);
+        const container = document.getElementById("calendar-events");
         if (!container) return;
+
         container.innerHTML = "";
 
-        const tasks = map[name] || [];
-        tasks.forEach(t => {
-          const taskDiv = document.createElement("div");
-          taskDiv.className = "task";
+        if (lines.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "calendar-item";
+          empty.textContent = "No events for today";
+          container.appendChild(empty);
+          return;
+        }
 
-          const dot = document.createElement("div");
-          dot.className = "task-dot";
-
-          const textDiv = document.createElement("div");
-          textDiv.className = "task-text";
-          textDiv.textContent = t.replace(/^-\s*/, "");
-
-          taskDiv.appendChild(dot);
-          taskDiv.appendChild(textDiv);
-          container.appendChild(taskDiv);
-        });
-      });
-    }
-
-    async function loadData() {
-      try {
-        const [choresText, calendarText] = await Promise.all([
-          fetchText(CHORES_URL),
-          fetchText(CAL_URL)
-        ]);
-        renderChores(choresText);
-        renderCalendar(calendarText);
+        for (const line of lines) {
+          const div = document.createElement("div");
+          div.className = "calendar-item";
+          div.textContent = line;
+          container.appendChild(div);
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load calendar:", err);
       }
     }
 
     updateClock();
     setInterval(updateClock, 1000);
-    loadData();
+    loadCalendar();
   </script>
 </body>
 </html>
