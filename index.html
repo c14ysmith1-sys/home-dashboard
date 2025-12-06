@@ -5,7 +5,7 @@
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Auto-refresh every 30 minutes so TV updates itself -->
+  <!-- Auto-refresh every 30 minutes -->
   <meta http-equiv="refresh" content="1800">
 
   <style>
@@ -14,15 +14,17 @@
       --card: #ffffff;
       --accent: #c8905b;
       --accent-soft: #f1d4b8;
-      --text-main: #f5ece0;
-      --text-muted: #c0aa8f;
+      --text-main: #3b2c22;
+      --text-muted: #7b6a5b;
       --good: #3c8c5a;
       --danger: #c54b4b;
-      --family-1: #3b0909;
-      --family-2: #131820;
-      --family-3: #041f1c;
-      --family-4: #2a2202;
-      --frame-bg: #4a3203;
+      --family-1: #fbe4e4;
+      --family-2: #e9f3ff;
+      --family-3: #e9f8ee;
+      --family-4: #fdf2d6;
+      --morning-bg: #fdf8f1;
+      --afternoon-bg: #2a1f0f;
+      --afternoon-frame: #4a3414;
     }
 
     * {
@@ -34,7 +36,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
                    system-ui, sans-serif;
-      background: #1a1206;
+      background: var(--bg);
       color: var(--text-main);
       height: 100vh;
       display: flex;
@@ -47,9 +49,10 @@
       display: flex;
       flex-direction: column;
       border-radius: 24px;
-      background: var(--frame-bg);
-      box-shadow: 0 16px 60px rgba(0,0,0,0.65);
+      background: var(--morning-bg);
+      box-shadow: 0 16px 60px rgba(0,0,0,0.08);
       padding: 24px 32px 16px;
+      transition: background 0.4s ease;
     }
 
     /* HEADER */
@@ -58,7 +61,7 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .time-block {
@@ -95,65 +98,112 @@
       color: var(--text-muted);
     }
 
-    /* CALENDAR STRIP */
+    /* MORNING VIEW (calendar + tasks + photo) */
 
-    .calendar-strip {
-      margin-top: 4px;
-      margin-bottom: 12px;
-      padding: 10px 16px;
-      border-radius: 16px;
-      background: #15151a;
-      color: #f7f2e9;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    .content-morning {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.8fr 1.2fr;
+      gap: 24px;
+      margin-top: 12px;
+      margin-bottom: 16px;
     }
 
-    .calendar-strip-left {
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 16px 18px 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      margin-right: 24px;
-      flex-shrink: 0;
+      gap: 12px;
     }
 
-    .calendar-title {
-      font-size: 16px;
+    .section-title {
+      font-size: 17px;
       font-weight: 600;
+      margin-bottom: 4px;
     }
 
-    .calendar-sub {
+    .section-sub {
       font-size: 13px;
-      color: #a8a1a0;
+      color: var(--text-muted);
+      margin-bottom: 6px;
     }
 
-    .calendar-events {
+    .calendar-list {
+      list-style: none;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 8px;
-      font-size: 14px;
+      margin-top: 4px;
     }
 
     .calendar-item {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.16);
-      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-left: 10px;
+      border-left: 3px solid var(--accent-soft);
     }
 
-    /* BODY LAYOUT: 4 columns for chores */
+    .calendar-item-title {
+      font-size: 15px;
+    }
 
-    .content {
+    .calendar-item-time {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .calendar-empty,
+    .tasks-empty {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .tasks-list {
+      list-style: disc;
+      margin-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 15px;
+    }
+
+    .photo-card {
+      margin-top: 8px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ddd;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* AFTERNOON CHORES VIEW */
+
+    .content-chores {
       flex: 1;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      margin-top: 4px;
+      margin-top: 8px;
       margin-bottom: 12px;
     }
 
     .column {
+      background: rgba(0,0,0,0.18);
       border-radius: 20px;
       padding: 12px 12px 16px;
       display: flex;
@@ -161,10 +211,10 @@
       gap: 8px;
     }
 
-    .column.clay   { background: var(--family-1); }
-    .column.brett  { background: var(--family-2); }
-    .column.ellie  { background: var(--family-3); }
-    .column.shared { background: var(--family-4); }
+    .column.jon     { background: #4b1010; }
+    .column.arya    { background: #15202b; }
+    .column.catelyn { background: #103024; }
+    .column.ned     { background: #3b3002; }
 
     .column-header {
       display: flex;
@@ -176,11 +226,12 @@
     .column-title {
       font-size: 18px;
       font-weight: 600;
+      color: #f9f3ea;
     }
 
     .column-sub {
       font-size: 13px;
-      color: var(--text-muted);
+      color: rgba(255,255,255,0.75);
     }
 
     .task {
@@ -189,15 +240,16 @@
       gap: 8px;
       padding: 8px 10px;
       border-radius: 12px;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.55);
       font-size: 15px;
+      color: #fef7ee;
     }
 
     .task-dot {
       width: 16px;
       height: 16px;
       border-radius: 999px;
-      border: 2px solid var(--accent-soft);
+      border: 2px solid rgba(255,255,255,0.85);
       background: transparent;
       flex-shrink: 0;
     }
@@ -214,7 +266,7 @@
     /* FOOTER */
 
     .footer {
-      border-top: 1px solid rgba(255,255,255,0.12);
+      border-top: 1px solid #e0d2c4;
       padding-top: 8px;
       display: flex;
       justify-content: space-between;
@@ -225,28 +277,54 @@
 
     .verse-ref {
       font-weight: 600;
-      color: var(--accent-soft);
+      color: var(--accent);
       margin-left: 8px;
     }
 
     .status-pill {
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(0,0,0,0.45);
-      color: var(--text-muted);
+      background: var(--accent-soft);
+      color: var(--accent);
       font-size: 13px;
+    }
+
+    /* HIDE/SHOW HELPERS */
+
+    #view-morning,
+    #view-chores {
+      display: none; /* JS will decide */
+    }
+
+    /* Slightly darker frame in afternoon */
+    .frame.afternoon {
+      background: var(--afternoon-frame);
+      color: #fef7ee;
+    }
+    .frame.afternoon .time-sub,
+    .frame.afternoon .weather-line,
+    .frame.afternoon .footer {
+      color: rgba(255,255,255,0.78);
+      border-color: rgba(255,255,255,0.22);
+    }
+    .frame.afternoon .verse-ref {
+      color: #ffd79a;
+    }
+    .frame.afternoon .status-pill {
+      background: rgba(0,0,0,0.45);
+      color: #ffe0b6;
     }
   </style>
 </head>
 <body>
-  <div class="frame">
+  <div class="frame" id="frame">
     <!-- HEADER -->
     <header class="header">
       <div class="time-block">
         <div class="time-main" id="clock">9:15</div>
         <div class="time-sub">
-          <span id="date-line">Friday, Dec 5</span>
-          <span id="day-part">Afternoon chores</span>
+          <span id="date-line">Monday, Nov 30</span>
+          <span id="day-part">Morning dashboard</span>
         </div>
       </div>
       <div class="weather-block">
@@ -255,20 +333,42 @@
       </div>
     </header>
 
-    <!-- CALENDAR STRIP (auto-filled from calendar.txt) -->
-    <section class="calendar-strip">
-      <div class="calendar-strip-left">
-        <div class="calendar-title">Today</div>
-        <div class="calendar-sub">Family schedule</div>
-      </div>
-      <div class="calendar-events" id="calendar-events">
-        <!-- Events from calendar.txt will be injected here -->
-      </div>
-    </section>
+    <!-- MORNING VIEW -->
+    <main class="content-morning" id="view-morning">
+      <!-- Left: Today's calendar -->
+      <section class="card">
+        <div class="section-title">Today</div>
+        <div class="section-sub">Family schedule</div>
+        <ul class="calendar-list" id="calendar-list">
+          <!-- Filled by JS from calendar.txt -->
+        </ul>
+        <div class="calendar-empty" id="calendar-empty" style="display:none;">
+          No events today.
+        </div>
+      </section>
 
-    <!-- BODY: chore columns -->
-    <main class="content">
-      <section class="column clay">
+      <!-- Right: Tasks + photo -->
+      <section class="card">
+        <div>
+          <div class="section-title">Today’s Tasks</div>
+          <div class="section-sub">From your chore list</div>
+          <ul class="tasks-list" id="tasks-list">
+            <!-- Filled by JS from dashboard.txt -->
+          </ul>
+          <div class="tasks-empty" id="tasks-empty" style="display:none;">
+            No tasks listed for today.
+          </div>
+        </div>
+        <div class="photo-card">
+          <!-- Replace src with your own family photo URL if you like -->
+          <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=80" alt="Family">
+        </div>
+      </section>
+    </main>
+
+    <!-- AFTERNOON CHORES VIEW -->
+    <main class="content-chores" id="view-chores">
+      <section class="column jon">
         <div class="column-header">
           <div>
             <div class="column-title">Clay</div>
@@ -289,7 +389,7 @@
         </div>
       </section>
 
-      <section class="column brett">
+      <section class="column arya">
         <div class="column-header">
           <div>
             <div class="column-title">Brett</div>
@@ -302,11 +402,11 @@
         </div>
         <div class="task">
           <div class="task-dot"></div>
-          <div class="task-text">Feed dog & cats</div>
+          <div class="task-text">Feed dog &amp; cats</div>
         </div>
       </section>
 
-      <section class="column ellie">
+      <section class="column catelyn">
         <div class="column-header">
           <div>
             <div class="column-title">Ellie</div>
@@ -323,7 +423,7 @@
         </div>
       </section>
 
-      <section class="column shared">
+      <section class="column ned">
         <div class="column-header">
           <div>
             <div class="column-title">Shared</div>
@@ -356,70 +456,116 @@
   <script>
     function pad(n) { return n.toString().padStart(2, "0"); }
 
+    function switchView(now) {
+      const hour = now.getHours();
+      const morning = document.getElementById("view-morning");
+      const chores = document.getElementById("view-chores");
+      const frame = document.getElementById("frame");
+      const dayPart = document.getElementById("day-part");
+
+      if (hour < 12) {
+        morning.style.display = "grid";
+        chores.style.display = "none";
+        frame.classList.remove("afternoon");
+        dayPart.textContent = "Morning dashboard";
+      } else {
+        morning.style.display = "none";
+        chores.style.display = "grid";
+        frame.classList.add("afternoon");
+        if (hour < 16) {
+          dayPart.textContent = "Afternoon chores";
+        } else {
+          dayPart.textContent = "Evening reset";
+        }
+      }
+    }
+
     function updateClock() {
       const now = new Date();
-      const hours = now.getHours();
-      const minutes = pad(now.getMinutes());
       const clock = document.getElementById("clock");
       const dateLine = document.getElementById("date-line");
-      const dayPart = document.getElementById("day-part");
       const status = document.getElementById("status-pill");
 
-      clock.textContent = `${hours}:${minutes}`;
+      clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
       const dateOptions = { weekday: "long", month: "short", day: "numeric" };
       dateLine.textContent = now.toLocaleDateString(undefined, dateOptions);
 
-      if (hours < 12) dayPart.textContent = "Morning dashboard";
-      else if (hours < 16) dayPart.textContent = "Afternoon chores";
-      else dayPart.textContent = "Evening reset";
-
       status.textContent = "Updated at " +
         `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+      switchView(now);
     }
 
-    async function loadCalendar() {
+    async function loadTextFile(name) {
+      const url = `https://raw.githubusercontent.com/c14ysmith1-sys/home-dashboard/main/${name}`;
       try {
-        // cache-buster so GitHub Pages gives us the fresh file
-        const res = await fetch("calendar.txt?cb=" + Date.now());
-        if (!res.ok) {
-          console.warn("calendar.txt not found or error", res.status);
-          return;
-        }
-
-        const text = await res.text();
-        const lines = text
-          .split("\n")
-          .map(l => l.trim())
-          .filter(l => l.length > 0);
-
-        const container = document.getElementById("calendar-events");
-        if (!container) return;
-
-        container.innerHTML = "";
-
-        if (lines.length === 0) {
-          const empty = document.createElement("div");
-          empty.className = "calendar-item";
-          empty.textContent = "No events for today";
-          container.appendChild(empty);
-          return;
-        }
-
-        for (const line of lines) {
-          const div = document.createElement("div");
-          div.className = "calendar-item";
-          div.textContent = line;
-          container.appendChild(div);
-        }
-      } catch (err) {
-        console.error("Failed to load calendar:", err);
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) return "";
+        return await res.text();
+      } catch (e) {
+        console.error("Error loading", name, e);
+        return "";
       }
     }
 
-    updateClock();
-    setInterval(updateClock, 1000);
-    loadCalendar();
+    async function loadCalendar() {
+      const text = await loadTextFile("calendar.txt");
+      const listEl = document.getElementById("calendar-list");
+      const emptyEl = document.getElementById("calendar-empty");
+
+      listEl.innerHTML = "";
+      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+      if (!lines.length) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      // For now, treat each line as a full item, like "12/6/25, 6:00AM Pay Amazon"
+      lines.forEach(line => {
+        const li = document.createElement("li");
+        li.className = "calendar-item";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "calendar-item-title";
+        titleSpan.textContent = line;
+
+        li.appendChild(titleSpan);
+        listEl.appendChild(li);
+      });
+    }
+
+    async function loadTasks() {
+      const text = await loadTextFile("dashboard.txt");
+      const listEl = document.getElementById("tasks-list");
+      const emptyEl = document.getElementById("tasks-empty");
+
+      listEl.innerHTML = "";
+      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+      if (!lines.length) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      // Simple approach: every non-empty line becomes one bullet.
+      lines.forEach(line => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        listEl.appendChild(li);
+      });
+    }
+
+    async function initDashboard() {
+      updateClock();
+      await Promise.all([loadCalendar(), loadTasks()]);
+      setInterval(updateClock, 1000);
+    }
+
+    initDashboard();
   </script>
 </body>
 </html>
