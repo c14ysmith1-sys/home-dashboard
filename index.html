@@ -21,15 +21,10 @@
       --bullet: #c8905b;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-                   system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
       background: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
@@ -52,37 +47,68 @@
 
     .header {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       align-items: center;
+      column-gap: 16px;
     }
 
     .time-block {
       display: flex;
       align-items: baseline;
-      gap: 16px;
+      gap: 14px;
+      justify-self: start;
     }
 
     .time-main {
-      font-size: 64px;
-      font-weight: 600;
-      letter-spacing: 4px;
+      font-size: 78px;
+      font-weight: 650;
+      letter-spacing: 1px;
+      line-height: 1;
     }
 
-    .time-sub {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 20px;
+    .ampm {
+      font-size: 24px;
+      font-weight: 600;
       color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .date-center {
+      justify-self: center;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: center;
+      line-height: 1.1;
     }
 
     .weather-main {
+      justify-self: end;
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      column-gap: 14px;
       text-align: right;
     }
 
+    .weather-icon-big {
+      font-size: 56px;
+      line-height: 1;
+      text-align: center;
+      width: 64px;
+    }
+
+    .weather-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+
     .weather-temp {
-      font-size: 42px;
-      font-weight: 500;
+      font-size: 56px;
+      font-weight: 650;
+      line-height: 1;
     }
 
     .weather-line {
@@ -98,38 +124,49 @@
       padding: 12px 0;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
 
     .forecast-day {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
       align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      color: var(--text-muted);
+      justify-items: center;
+      padding: 6px 8px;
+      border-radius: 14px;
     }
 
     .forecast-name {
-      font-weight: 600;
+      font-weight: 650;
+      font-size: 16px;
+      color: var(--text-main);
+    }
+
+    .forecast-mid {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       color: var(--text-main);
     }
 
     .forecast-icon {
       font-size: 22px;
+      line-height: 1;
     }
 
-    .forecast-temp {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text-main);
+    .forecast-temp-pair {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
     }
 
     .forecast-extra {
-      font-size: 13px;
+      font-size: 14px;
+      color: var(--text-muted);
+      text-align: center;
     }
 
-    /* MAIN CONTENT: calendar + tasks + photo */
+    /* MAIN CONTENT */
 
     .main {
       display: grid;
@@ -142,26 +179,28 @@
       border-radius: 18px;
       padding: 16px 18px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
 
     .card-header {
       font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-weight: 650;
+      margin-bottom: 6px;
     }
 
     .card-subtitle {
       font-size: 14px;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .events-list,
     .tasks-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
+      gap: 10px;
     }
 
     .event-item,
@@ -173,11 +212,37 @@
     }
 
     .event-bar {
-      width: 3px;
+      width: 4px;
       border-radius: 999px;
       background: var(--accent);
-      margin-top: 2px;
+      margin-top: 3px;
       flex-shrink: 0;
+      height: 44px;
+    }
+
+    .event-text { flex: 1; min-width: 0; }
+
+    .event-cal {
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 2px;
+    }
+
+    .event-title {
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+      margin-bottom: 2px;
+      word-wrap: break-word;
+    }
+
+    .event-loc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.2;
     }
 
     .dot {
@@ -185,36 +250,31 @@
       height: 8px;
       border-radius: 999px;
       border: 2px solid var(--bullet);
-      margin-top: 4px;
+      margin-top: 6px;
       flex-shrink: 0;
     }
 
-    .event-text {
-      flex: 1;
-    }
+    .task-text { flex: 1; }
 
-    .event-title {
-      font-weight: 500;
-    }
+    /* Photo carousel in left column */
 
-    .event-time {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .task-text {
-      flex: 1;
-    }
-
-    .photo-card {
-      margin-top: 12px;
+    .photo-wrap {
+      margin-top: 14px;
       border-radius: 16px;
       overflow: hidden;
-      background: #ddd;
-      height: 210px;
-      background-image: url("https://images.pexels.com/photos/3770585/pexels-photo-3770585.jpeg?auto=compress&cs=tinysrgb&w=800");
-      background-size: cover;
-      background-position: center center;
+      background: #efe7dc;
+      border: 1px solid var(--border-soft);
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     /* FOOTER */
@@ -227,12 +287,14 @@
       align-items: baseline;
       font-size: 14px;
       color: var(--text-muted);
+      gap: 16px;
     }
 
     .verse-ref {
-      font-weight: 600;
+      font-weight: 650;
       color: var(--accent);
       margin-left: 8px;
+      white-space: nowrap;
     }
 
     .status-pill {
@@ -241,106 +303,123 @@
       background: var(--accent-soft);
       color: var(--accent);
       font-size: 13px;
+      white-space: nowrap;
     }
 
-    /* Simple responsive tweak for narrower screens */
     @media (max-width: 900px) {
-      .frame {
-        padding: 16px;
-      }
-      .time-main {
-        font-size: 40px;
-      }
-      .main {
-        grid-template-columns: 1fr;
-      }
+      .frame { padding: 16px; }
+      .time-main { font-size: 48px; }
+      .weather-temp { font-size: 42px; }
+      .main { grid-template-columns: 1fr; }
+      .header { grid-template-columns: 1fr; row-gap: 10px; }
+      .date-center { justify-self: start; }
+      .weather-main { justify-self: start; }
     }
   </style>
 </head>
 <body>
   <div class="frame">
+
     <!-- HEADER -->
     <header class="header">
       <div class="time-block">
-        <div class="time-main" id="clock">9:15</div>
-        <div class="time-sub">
-          <span id="date-line">Monday, Nov 30</span>
-          <span id="day-part">Morning dashboard</span>
-        </div>
+        <div class="time-main" id="clock">4:10</div>
+        <div class="ampm" id="ampm">PM</div>
       </div>
+
+      <div class="date-center" id="date-center">Sunday, Dec 14</div>
+
       <div class="weather-main">
-        <div class="weather-temp" id="weather-temp">26°</div>
-        <div class="weather-line" id="weather-line">
-          Feels like 24° · Westfield
+        <div class="weather-icon-big" id="weather-icon">☀️</div>
+        <div class="weather-stack">
+          <div class="weather-temp" id="weather-temp">26°</div>
+          <div class="weather-line" id="weather-line">Feels like 22°</div>
         </div>
       </div>
     </header>
 
-    <!-- FORECAST ROW (placeholder data for now) -->
+    <!-- FORECAST ROW -->
     <section class="forecast-row" id="forecast-row">
       <div class="forecast-day">
-        <div class="forecast-name">Tue</div>
-        <div class="forecast-icon">🌤️</div>
-        <div class="forecast-temp">31°</div>
-        <div class="forecast-extra">30%</div>
+        <div class="forecast-name">Tuesday</div>
+        <div class="forecast-mid">
+          <div class="forecast-icon">🌤️</div>
+          <div class="forecast-temp-pair">31° / 21°</div>
+        </div>
+        <div class="forecast-extra">Mostly sunny</div>
       </div>
+
       <div class="forecast-day">
-        <div class="forecast-name">Wed</div>
-        <div class="forecast-icon">⛅</div>
-        <div class="forecast-temp">29°</div>
-        <div class="forecast-extra">25%</div>
+        <div class="forecast-name">Wednesday</div>
+        <div class="forecast-mid">
+          <div class="forecast-icon">⛅</div>
+          <div class="forecast-temp-pair">29° / 20°</div>
+        </div>
+        <div class="forecast-extra">Partly cloudy</div>
       </div>
+
       <div class="forecast-day">
-        <div class="forecast-name">Thu</div>
-        <div class="forecast-icon">☁️</div>
-        <div class="forecast-temp">27°</div>
-        <div class="forecast-extra">20%</div>
+        <div class="forecast-name">Thursday</div>
+        <div class="forecast-mid">
+          <div class="forecast-icon">☁️</div>
+          <div class="forecast-temp-pair">27° / 19°</div>
+        </div>
+        <div class="forecast-extra">Overcast</div>
       </div>
+
       <div class="forecast-day">
-        <div class="forecast-name">Fri</div>
-        <div class="forecast-icon">🌧️</div>
-        <div class="forecast-temp">24°</div>
-        <div class="forecast-extra">40%</div>
+        <div class="forecast-name">Friday</div>
+        <div class="forecast-mid">
+          <div class="forecast-icon">🌧️</div>
+          <div class="forecast-temp-pair">24° / 18°</div>
+        </div>
+        <div class="forecast-extra">Light rain</div>
       </div>
+
       <div class="forecast-day">
-        <div class="forecast-name">Sat</div>
-        <div class="forecast-icon">☁️</div>
-        <div class="forecast-temp">22°</div>
-        <div class="forecast-extra">35%</div>
+        <div class="forecast-name">Saturday</div>
+        <div class="forecast-mid">
+          <div class="forecast-icon">❄️</div>
+          <div class="forecast-temp-pair">22° / 15°</div>
+        </div>
+        <div class="forecast-extra">Light snow</div>
       </div>
     </section>
 
     <!-- MAIN CONTENT -->
     <main class="main">
-      <!-- Left: Upcoming events -->
+
+      <!-- Left: Events + Photo -->
       <section class="card" id="events-card">
         <div class="card-header">Upcoming Events</div>
         <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
+
         <div class="events-list" id="events-list">
-          <!-- Filled from calendar.txt -->
           <div class="event-item">
             <div class="event-bar"></div>
             <div class="event-text">
+              <div class="event-cal">Calendar</div>
               <div class="event-title">Add events to calendar.txt</div>
-              <div class="event-time">One event per line</div>
             </div>
           </div>
         </div>
+
+        <div class="photo-wrap">
+          <img id="photo-img" alt="Family photo" src="" />
+        </div>
       </section>
 
-      <!-- Right: Today’s tasks + photo -->
+      <!-- Right: Tasks -->
       <section class="card">
         <div class="card-header">Today’s Tasks</div>
         <div class="card-subtitle">Family checklist</div>
+
         <div class="tasks-list" id="tasks-list">
-          <!-- Filled from dashboard.txt -->
           <div class="task-item">
             <div class="dot"></div>
             <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
           </div>
         </div>
-
-        <div class="photo-card"></div>
       </section>
     </main>
 
@@ -355,34 +434,154 @@
   </div>
 
   <script>
-    function pad(n) { return n.toString().padStart(2, "0"); }
+    function pad2(n) { return n.toString().padStart(2, "0"); }
+
+    function formatTime12(now) {
+      let h = now.getHours();
+      const m = now.getMinutes();
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12;
+      if (h === 0) h = 12;
+      return { time: `${h}:${pad2(m)}`, ampm };
+    }
 
     function updateClock() {
       const now = new Date();
-      const hours = pad(now.getHours());
-      const minutes = pad(now.getMinutes());
+      const { time, ampm } = formatTime12(now);
 
-      const clock = document.getElementById("clock");
-      const dateLine = document.getElementById("date-line");
-      const dayPart = document.getElementById("day-part");
-      const status = document.getElementById("status-pill");
-
-      clock.textContent = `${hours}:${minutes}`;
+      document.getElementById("clock").textContent = time;
+      document.getElementById("ampm").textContent = ampm;
 
       const dateOptions = { weekday: "long", month: "short", day: "numeric" };
-      dateLine.textContent = now.toLocaleDateString(undefined, dateOptions);
+      document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
 
-      const h = now.getHours();
-      if (h < 12) dayPart.textContent = "Morning dashboard";
-      else if (h < 16) dayPart.textContent = "Afternoon chores";
-      else dayPart.textContent = "Evening reset";
-
-      status.textContent = "Updated at " + `${hours}:${minutes}`;
+      document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
 
+    // --- Weather: parse weather.txt if present, e.g. "26° Feels like: 22°"
+    async function loadWeather() {
+      try {
+        const res = await fetch("weather.txt", { cache: "no-store" });
+        if (!res.ok) return;
+        const text = (await res.text()).trim();
+        if (!text) return;
+
+        // Extract temps from any format containing ° and "Feels like"
+        const tempMatch = text.match(/(-?\d+)\s*°/);
+        const feelsMatch = text.match(/Feels\s*like[:\s]*(-?\d+)\s*°/i);
+
+        if (tempMatch) document.getElementById("weather-temp").textContent = `${tempMatch[1]}°`;
+        if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
+      } catch (e) {
+        console.error("Error loading weather:", e);
+      }
+    }
+
+    // --- Big icon: time-based now (condition-based later when weather.txt includes condition text)
+    function getMoonPhaseEmoji(date) {
+      // Approx moon phase: 0=new, 0.5=full, 1=new
+      const synodicMonth = 29.53058867;
+      const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0)); // Jan 6, 2000
+      const daysSince = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
+      const phase = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
+      const fraction = phase / synodicMonth;
+
+      // Map to 8 emojis
+      if (fraction < 0.0625) return "🌑";
+      if (fraction < 0.1875) return "🌒";
+      if (fraction < 0.3125) return "🌓";
+      if (fraction < 0.4375) return "🌔";
+      if (fraction < 0.5625) return "🌕";
+      if (fraction < 0.6875) return "🌖";
+      if (fraction < 0.8125) return "🌗";
+      if (fraction < 0.9375) return "🌘";
+      return "🌑";
+    }
+
+    function updateBigWeatherIcon() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      const minutes = h * 60 + m;
+
+      // Simple sunrise-ish window (6:00–7:15) for the rising half-sun vibe
+      if (minutes >= 360 && minutes <= 435) {
+        document.getElementById("weather-icon").textContent = "🌅";
+        return;
+      }
+
+      // Day vs night fallback
+      if (h >= 7 && h < 18) {
+        document.getElementById("weather-icon").textContent = "☀️";
+      } else {
+        document.getElementById("weather-icon").textContent = getMoonPhaseEmoji(now);
+      }
+    }
+
+    // --- Events (5 max). Supports lines like: "Calendar | Event name | Location"
+    function hashToColor(str) {
+      const palette = ["#c8905b", "#7aa7c7", "#8bbf83", "#b58bc9", "#d88484", "#9aa6b2", "#d2a24c"];
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      return palette[hash % palette.length];
+    }
+
+    async function loadEvents() {
+      try {
+        const res = await fetch("calendar.txt", { cache: "no-store" });
+        if (!res.ok) return;
+        const text = await res.text();
+
+        const container = document.getElementById("events-list");
+        container.innerHTML = "";
+
+        const lines = text
+          .split("\n")
+          .map(l => l.trim())
+          .filter(l => l.length > 0)
+          .slice(0, 5);
+
+        if (lines.length === 0) {
+          container.innerHTML = `
+            <div class="event-item">
+              <div class="event-bar"></div>
+              <div class="event-text">
+                <div class="event-cal">Calendar</div>
+                <div class="event-title">No events scheduled.</div>
+              </div>
+            </div>`;
+          return;
+        }
+
+        for (const line of lines) {
+          const parts = line.split(" | ").map(p => p.trim()).filter(Boolean);
+          const cal = parts[0] || "Calendar";
+          const title = parts[1] || parts[0] || line;
+          const loc = parts[2] || "";
+
+          const color = hashToColor(cal);
+
+          const item = document.createElement("div");
+          item.className = "event-item";
+          item.innerHTML = `
+            <div class="event-bar" style="background:${color}"></div>
+            <div class="event-text">
+              <div class="event-cal">${cal}</div>
+              <div class="event-title">${title}</div>
+              ${loc ? `<div class="event-loc">${loc}</div>` : ""}
+            </div>
+          `;
+          container.appendChild(item);
+        }
+      } catch (e) {
+        console.error("Error loading events:", e);
+      }
+    }
+
+    // --- Tasks
     async function loadTasks() {
       try {
-        const res = await fetch("dashboard.txt");
+        const res = await fetch("dashboard.txt", { cache: "no-store" });
         if (!res.ok) return;
         const text = await res.text();
 
@@ -417,53 +616,43 @@
       }
     }
 
-    async function loadEvents() {
-      try {
-        const res = await fetch("calendar.txt");
-        if (!res.ok) return;
-        const text = await res.text();
+    // --- Photo carousel
+    const TOTAL_PHOTOS = 529; // change if your count changes
+    const PHOTO_INTERVAL_MS = 60000;
 
-        const container = document.getElementById("events-list");
-        container.innerHTML = "";
-
-        const lines = text
-          .split("\n")
-          .map(l => l.trim())
-          .filter(l => l.length > 0);
-
-        if (lines.length === 0) {
-          container.innerHTML = `
-            <div class="event-item">
-              <div class="event-bar"></div>
-              <div class="event-text">
-                <div class="event-title">No events scheduled.</div>
-                <div class="event-time">Enjoy the day.</div>
-              </div>
-            </div>`;
-          return;
-        }
-
-        for (const line of lines) {
-          const item = document.createElement("div");
-          item.className = "event-item";
-          item.innerHTML = `
-            <div class="event-bar"></div>
-            <div class="event-text">
-              <div class="event-title">${line}</div>
-            </div>
-          `;
-          container.appendChild(item);
-        }
-      } catch (e) {
-        console.error("Error loading events:", e);
-      }
+    function pickRandomPhotoIndex() {
+      return Math.floor(Math.random() * TOTAL_PHOTOS) + 1;
     }
 
+    function setPhotoByIndex(i) {
+      const num = String(i).padStart(3, "0");
+      const img = document.getElementById("photo-img");
+      if (!img) return;
+      img.src = `images/family-${num}.jpg`;
+    }
+
+    function rotatePhotoRandom() {
+      setPhotoByIndex(pickRandomPhotoIndex());
+    }
+
+    // Init
     updateClock();
     setInterval(updateClock, 1000);
 
     loadTasks();
     loadEvents();
+    loadWeather();
+    updateBigWeatherIcon();
+
+    // Refresh weather/icon occasionally without full page refresh
+    setInterval(() => {
+      loadWeather();
+      updateBigWeatherIcon();
+    }, 30000);
+
+    // Photo rotation
+    rotatePhotoRandom();
+    setInterval(rotatePhotoRandom, PHOTO_INTERVAL_MS);
   </script>
 </body>
 </html>
