@@ -1,1 +1,20 @@
-d
+Monday
+🌤️ 0°F / 0°F
+Partly Cloudy
+
+Tuesday
+☀️ 0°F / 0°F
+Mostly Clear
+
+Wednesday
+☁️ 0°F / 0°F
+Mostly Cloudy
+
+Thursday
+🌧️ 0°F / 0°F
+Rain
+
+Friday
+❄️ 0°F / 0°F
+Snow
+
