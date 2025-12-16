@@ -634,6 +634,64 @@
     function rotatePhotoRandom() {
       setPhotoByIndex(pickRandomPhotoIndex());
     }
+// --- 5-day Forecast (from 5DayForecast.txt)
+// Expected blocks like:
+// Monday
+// 🌤️ -4°F / 23°F
+// Partly Cloudy
+//
+// (blank line between days)
+async function loadForecast() {
+  try {
+    const res = await fetch("5DayForecast.txt", { cache: "no-store" });
+    if (!res.ok) return;
+
+    const raw = (await res.text()).trim();
+    if (!raw) return;
+
+    const blocks = raw.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+
+    const days = [];
+    for (const block of blocks) {
+      const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
+      if (lines.length < 2) continue;
+
+      const name = lines[0];
+      const line2 = lines[1];
+
+      // Emoji is usually first token on line 2
+      const firstSpace = line2.indexOf(" ");
+      const emoji = firstSpace === -1 ? "" : line2.slice(0, firstSpace).trim();
+      const temps = firstSpace === -1 ? line2 : line2.slice(firstSpace + 1).trim();
+
+      const condition = lines[2] || "";
+
+      days.push({ name, emoji, temps, condition });
+      if (days.length >= 5) break;
+    }
+
+    if (days.length === 0) return;
+
+    const row = document.getElementById("forecast-row");
+    row.innerHTML = "";
+
+    for (const d of days) {
+      const div = document.createElement("div");
+      div.className = "forecast-day";
+      div.innerHTML = `
+        <div class="forecast-name">${d.name}</div>
+        <div class="forecast-mid">
+          <div class="forecast-icon">${d.emoji || " "}</div>
+          <div class="forecast-temp-pair">${d.temps || ""}</div>
+        </div>
+        <div class="forecast-extra">${d.condition || ""}</div>
+      `;
+      row.appendChild(div);
+    }
+  } catch (e) {
+    console.error("Error loading 5DayForecast:", e);
+  }
+}
 
     // Init
     updateClock();
@@ -642,11 +700,13 @@
     loadTasks();
     loadEvents();
     loadWeather();
+    loadForecast();  
     updateBigWeatherIcon();
 
     // Refresh weather/icon occasionally without full page refresh
     setInterval(() => {
       loadWeather();
+        loadForecast(); 
       updateBigWeatherIcon();
     }, 30000);
 
@@ -656,3 +716,4 @@
   </script>
 </body>
 </html>
+
