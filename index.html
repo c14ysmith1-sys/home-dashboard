@@ -579,12 +579,19 @@
       return Math.floor(Math.random() * TOTAL_PHOTOS) + 1;
     }
 
-    function setPhotoByIndex(i) {
-      const num = String(i).padStart(3, "0");
-      const img = document.getElementById("photo-img");
-      if (!img) return;
-      img.src = `images/family-${num}.jpg`;
-    }
+function setPhotoByIndex(i) {
+  const num = String(i).padStart(3, "0");
+  const img = document.getElementById("photo-img");
+  if (!img) return;
+
+  const base = `images/family-${num}`;
+  img.onerror = () => {
+    img.onerror = null;
+    img.src = `${base}.jpeg?cb=${Date.now()}`;
+  };
+
+  img.src = `${base}.jpg?cb=${Date.now()}`;
+}
 
     function rotatePhotoRandom() {
       setPhotoByIndex(pickRandomPhotoIndex());
@@ -671,5 +678,6 @@ async function loadForecast() {
   </script>
 </body>
 </html>
+
 
 
