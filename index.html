@@ -44,19 +44,24 @@
 
     /* HEADER */
 
-    .header {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      align-items: center;
-      column-gap: 16px;
-    }
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: stretch;
+  column-gap: 16px;
+  min-height: 96px;
+}
 
-    .time-block {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      justify-self: start;
-    }
+
+
+.time-block {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  justify-self: start;
+  align-self: center;
+}
+
 
     .time-main {
       font-size: 78px;
@@ -72,30 +77,30 @@
       letter-spacing: 1px;
     }
 
-    .date-center {
-      justify-self: center;
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--text-main);
-      text-align: center;
-      line-height: 1.1;
-    }
+.date-center {
+  justify-self: center;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(34px, 2.2vw, 46px);
+  font-weight: 650;
+  color: var(--text-main);
+  text-align: center;
+  line-height: 1;
+}
 
-    .weather-main {
-      justify-self: end;
-      display: grid;
-      grid-template-columns: auto auto;
-      align-items: center;
-      column-gap: 14px;
-      text-align: right;
-    }
 
-    .weather-icon-big {
-      font-size: 56px;
-      line-height: 1;
-      text-align: center;
-      width: 64px;
-    }
+.weather-main {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+  align-self: center;
+}
+
+
 
     .weather-stack {
       display: flex;
@@ -120,11 +125,12 @@
   position: relative; /* needed for separators */
   border-top:1px solid var(--border-soft);
   border-bottom:1px solid var(--border-soft);
-  padding:10px 0;
+  padding:16px 0 12px; /* more top space below the divider line */
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:10px;
 }
+
 
 /* Optional: vertical separators between the 5 day cards */
 .forecast-row.has-separators::before{
@@ -132,8 +138,8 @@
   position:absolute;
   left:0;
   right:0;
-  top:8px;         /* keeps it off the top border */
-  bottom:8px;      /* keeps it off the bottom border */
+  top:12px;         /* keeps it off the top border */
+  bottom:12px;      /* keeps it off the bottom border */
   pointer-events:none;
 
   background-image:
@@ -153,8 +159,8 @@
   content:"";
   position:absolute;
   right:0;
-  top:8px;
-  bottom:8px;
+  top:12px;
+  bottom:12px;
   width:2px;
   background: var(--frame);
   pointer-events:none;
@@ -173,15 +179,17 @@
 /* HUGE day name */
 .forecast-top{
   display:flex;
-  align-items:flex-end;
-  justify-content:flex-start;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
   width:100%;
   font-weight:800;
   letter-spacing:-0.5px;
   line-height:0.95;
-  font-size:clamp(20px, 2.2vw, 44px);
-  padding:2px 2px 6px;
+  font-size:clamp(26px, 2.4vw, 46px);
+  padding:0 6px 8px;
 }
+
 
 /* Bottom strip: icon box + info box */
 .forecast-bottom{
@@ -402,7 +410,12 @@
       .weather-temp { font-size: 42px; }
       .main { grid-template-columns: 1fr; }
       .header { grid-template-columns: 1fr; row-gap: 10px; }
-      .date-center { justify-self: start; }
+    .date-center {
+  justify-self: start;
+  justify-content: flex-start;
+  align-self: center;
+}
+
       .weather-main { justify-self: start; }
     }
   </style>
@@ -418,13 +431,13 @@
 
       <div class="date-center" id="date-center">Sunday, Dec 14</div>
 
-      <div class="weather-main">
-        <div class="weather-icon-big" id="weather-icon">☀️</div>
-        <div class="weather-stack">
-          <div class="weather-temp" id="weather-temp">26°</div>
-          <div class="weather-line" id="weather-line">Feels like 22°</div>
-        </div>
-      </div>
+     <div class="weather-main">
+  <div class="weather-stack">
+    <div class="weather-temp" id="weather-temp">26°</div>
+    <div class="weather-line" id="weather-line">Feels like 22°</div>
+  </div>
+</div>
+
     </header>
 
 <section class="forecast-row has-separators" id="forecast-row"></section>
@@ -490,8 +503,9 @@
       document.getElementById("clock").textContent = time;
       document.getElementById("ampm").textContent = ampm;
 
-      const dateOptions = { weekday: "long", month: "short", day: "numeric" };
-      document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
+     const dateOptions = { weekday: "long", month: "long", day: "numeric" };
+document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
+
 
       document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
@@ -510,42 +524,6 @@
         if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
       } catch (e) {
         console.error("Error loading weather:", e);
-      }
-    }
-
-    function getMoonPhaseEmoji(date) {
-      const synodicMonth = 29.53058867;
-      const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
-      const daysSince = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
-      const phase = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
-      const fraction = phase / synodicMonth;
-
-      if (fraction < 0.0625) return "🌑";
-      if (fraction < 0.1875) return "🌒";
-      if (fraction < 0.3125) return "🌓";
-      if (fraction < 0.4375) return "🌔";
-      if (fraction < 0.5625) return "🌕";
-      if (fraction < 0.6875) return "🌖";
-      if (fraction < 0.8125) return "🌗";
-      if (fraction < 0.9375) return "🌘";
-      return "🌑";
-    }
-
-    function updateBigWeatherIcon() {
-      const now = new Date();
-      const h = now.getHours();
-      const m = now.getMinutes();
-      const minutes = h * 60 + m;
-
-      if (minutes >= 360 && minutes <= 435) {
-        document.getElementById("weather-icon").textContent = "🌅";
-        return;
-      }
-
-      if (h >= 7 && h < 18) {
-        document.getElementById("weather-icon").textContent = "☀️";
-      } else {
-        document.getElementById("weather-icon").textContent = getMoonPhaseEmoji(now);
       }
     }
 
@@ -774,12 +752,10 @@
     loadEvents();
     loadWeather();
     loadForecast();
-    updateBigWeatherIcon();
 
     setInterval(() => {
       loadWeather();
       loadForecast();
-      updateBigWeatherIcon();
     }, 30000);
 
     window.addEventListener("load", () => {
@@ -789,5 +765,6 @@
   </script>
 </body>
 </html>
+
 
 
