@@ -5,7 +5,6 @@
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Auto-refresh the whole page every 30 minutes -->
   <meta http-equiv="refresh" content="1800">
 
   <style>
@@ -121,49 +120,85 @@
     .forecast-row {
       border-top: 1px solid var(--border-soft);
       border-bottom: 1px solid var(--border-soft);
-      padding: 12px 0;
+      padding: 10px 0;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+      gap: 12px; /* small, equal spacing */
     }
 
     .forecast-day {
       display: grid;
-      grid-template-rows: 1fr 1fr 1fr;
-      align-items: center;
-      justify-items: center;
-      padding: 6px 8px;
+      grid-template-rows: 32% 68%; /* top 1/3 for day name */
+      padding: 8px 10px;
       border-radius: 14px;
+      min-height: 92px;
     }
 
-    .forecast-name {
-      font-weight: 650;
-      font-size: 16px;
-      color: var(--text-main);
-    }
-
-    .forecast-mid {
+    .forecast-top {
       display: flex;
       align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+      text-align: center;
+      width: 100%;
+    }
+
+    .forecast-bottom {
+      display: grid;
+      grid-template-columns: 0.9fr 1.6fr; /* emoji left, text right */
       gap: 10px;
-      color: var(--text-main);
+      align-items: center;
+      width: 100%;
     }
 
     .forecast-icon {
-      font-size: 22px;
+      font-size: 44px; /* big icon */
       line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .forecast-temp-pair {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+    .forecast-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      min-width: 0;
     }
 
-    .forecast-extra {
-      font-size: 14px;
+    .forecast-temps {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    .forecast-meta {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between; /* condition left, precip % floated right */
+      gap: 10px;
+      font-size: 13px;
       color: var(--text-muted);
-      text-align: center;
+      line-height: 1.1;
+      width: 100%;
+    }
+
+    .forecast-cond {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .forecast-pop {
+      font-weight: 650;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* MAIN CONTENT */
@@ -256,8 +291,6 @@
 
     .task-text { flex: 1; }
 
-    /* Photo carousel in left column */
-
     .photo-wrap {
       margin-top: 14px;
       border-radius: 16px;
@@ -276,8 +309,6 @@
       object-fit: contain;
       display: block;
     }
-
-    /* FOOTER */
 
     .footer {
       border-top: 1px solid var(--border-soft);
@@ -320,7 +351,6 @@
 <body>
   <div class="frame">
 
-    <!-- HEADER -->
     <header class="header">
       <div class="time-block">
         <div class="time-main" id="clock">4:10</div>
@@ -338,13 +368,9 @@
       </div>
     </header>
 
-    <!-- FORECAST ROW -->
     <section class="forecast-row" id="forecast-row"></section>
 
-    <!-- MAIN CONTENT -->
     <main class="main">
-
-      <!-- Left: Events + Photo -->
       <section class="card" id="events-card">
         <div class="card-header">Upcoming Events</div>
         <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
@@ -364,7 +390,6 @@
         </div>
       </section>
 
-      <!-- Right: Tasks -->
       <section class="card">
         <div class="card-header">Today’s Tasks</div>
         <div class="card-subtitle">Family checklist</div>
@@ -378,7 +403,6 @@
       </section>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
       <div>
         <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
@@ -413,7 +437,6 @@
       document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
 
-    // --- Weather: parse weather.txt if present
     async function loadWeather() {
       try {
         const res = await fetch("weather.txt", { cache: "no-store" });
@@ -431,7 +454,6 @@
       }
     }
 
-    // --- Big icon: time-based now
     function getMoonPhaseEmoji(date) {
       const synodicMonth = 29.53058867;
       const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
@@ -468,7 +490,6 @@
       }
     }
 
-    // --- Events
     function hashToColor(str) {
       const palette = ["#c8905b", "#7aa7c7", "#8bbf83", "#b58bc9", "#d88484", "#9aa6b2", "#d2a24c"];
       let hash = 0;
@@ -528,7 +549,6 @@
       }
     }
 
-    // --- Tasks
     async function loadTasks() {
       try {
         const res = await fetch("dashboard.txt", { cache: "no-store" });
@@ -566,7 +586,6 @@
       }
     }
 
-    // --- Photo carousel
     const TOTAL_PHOTOS = 529;
     const PHOTO_INTERVAL_MS = 60000;
 
@@ -592,15 +611,12 @@
       setPhotoByIndex(pickRandomPhotoIndex());
     }
 
-    // --- Forecast (from prediction.txt)
-    // Format: repeating groups of 3 lines: DayName, "Emoji High/Low", Condition
+    // --- 5-day Forecast (from prediction.txt)
+    // Supports:
+    // - 3 lines per day: Name, "Emoji temps", Condition (optionally includes a percent at end)
+    // - 4 lines per day: Name, "Emoji temps", Condition, Precip%
     async function loadForecast() {
-      const row = document.getElementById("forecast-row");
-      if (!row) return;
-
       try {
-        row.innerHTML = "";
-
         const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) return;
 
@@ -608,17 +624,32 @@
         if (!raw) return;
 
         const lines = raw
-          .split(/\r?\n/)
+          .split("\n")
           .map(l => l.trim())
           .filter(Boolean);
 
         const days = [];
-        for (let i = 0; i < lines.length; i += 3) {
-          const name = lines[i] || "";
-          const line2 = lines[i + 1] || "";
-          const condition = lines[i + 2] || "";
+        let i = 0;
+
+        while (i < lines.length && days.length < 5) {
+          const name = lines[i++] || "";
+          const line2 = lines[i++] || "";
+          let condition = lines[i++] || "";
+          let pop = "";
 
           if (!name || !line2) continue;
+
+          // If a 4th line exists and looks like precip, use it
+          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])) {
+            pop = lines[i++];
+          } else {
+            // Or pull precip from condition like "Wintry Mix 0.9 %"
+            const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
+            if (m) {
+              pop = `${m[1]}%`;
+              condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
+            }
+          }
 
           const parts = line2.split(/\s+/).filter(Boolean);
           let emoji = "";
@@ -633,29 +664,37 @@
             temps = parts.slice(1).join(" ");
           }
 
-          days.push({ name, emoji, temps, condition });
-          if (days.length >= 5) break;
+          days.push({ name, emoji, temps, condition, pop });
         }
+
+        const row = document.getElementById("forecast-row");
+        if (!row) return;
+
+        row.innerHTML = "";
 
         for (const d of days) {
           const div = document.createElement("div");
           div.className = "forecast-day";
           div.innerHTML = `
-            <div class="forecast-name">${d.name}</div>
-            <div class="forecast-mid">
+            <div class="forecast-top">${d.name}</div>
+            <div class="forecast-bottom">
               <div class="forecast-icon">${d.emoji || ""}</div>
-              <div class="forecast-temp-pair">${d.temps || ""}</div>
+              <div class="forecast-right">
+                <div class="forecast-temps">${d.temps || ""}</div>
+                <div class="forecast-meta">
+                  <div class="forecast-cond">${d.condition || ""}</div>
+                  <div class="forecast-pop">${d.pop || ""}</div>
+                </div>
+              </div>
             </div>
-            <div class="forecast-extra">${d.condition || ""}</div>
           `;
           row.appendChild(div);
         }
       } catch (e) {
-        console.error("Error loading prediction forecast:", e);
+        console.error("Error loading Forecast:", e);
       }
     }
 
-    // Init
     updateClock();
     setInterval(updateClock, 1000);
 
