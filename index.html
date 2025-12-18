@@ -597,43 +597,56 @@ function setPhotoByIndex(i) {
       setPhotoByIndex(pickRandomPhotoIndex());
     }
 // --- 5-day Forecast (from Forecast.txt)
-// Expected blocks like:
-// Monday
-// 🌤️ -4°F / 23°F
-// Partly Cloudy
-//
-// (blank line between days)
+// Supported formats:
+// 1) 3 lines per day, repeated (no blank lines)
+// 2) same thing but with blank lines between day blocks
 async function loadForecast() {
   try {
-    const res = await fetch("Forecast.txt", { cache: "no-store" });
+    // Cache-bust to avoid any edge caching
+    const res = await fetch(`Forecast.txt?cb=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) return;
 
     const raw = (await res.text()).trim();
     if (!raw) return;
 
-    const blocks = raw.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+    // Normalize: remove blank lines, keep meaningful lines only
+    const lines = raw
+      .split("\n")
+      .map(l => l.trim())
+      .filter(Boolean);
 
+    // Expect groups of 3: [Name, "Emoji temps", Condition]
     const days = [];
-    for (const block of blocks) {
-      const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
-      if (lines.length < 2) continue;
+    for (let i = 0; i < lines.length; i += 3) {
+      const name = lines[i];
+      const line2 = lines[i + 1] || "";
+      const condition = lines[i + 2] || "";
 
-      const name = lines[0];
-      const line2 = lines[1];
+      if (!name || !line2) continue;
 
-      const firstSpace = line2.indexOf(" ");
-      const emoji = firstSpace === -1 ? "" : line2.slice(0, firstSpace).trim();
-      const temps = firstSpace === -1 ? line2 : line2.slice(firstSpace + 1).trim();
+      // Parse emoji + temps
+      const parts = line2.split(/\s+/).filter(Boolean);
 
-      const condition = lines[2] || "";
+      let emoji = "";
+      let temps = "";
+
+      // If first token starts with a digit or "-", treat it as temps (no emoji)
+      if (parts.length === 1) {
+        temps = parts[0];
+      } else if (/^[\d-]/.test(parts[0])) {
+        temps = parts.join(" ");
+      } else {
+        emoji = parts[0];
+        temps = parts.slice(1).join(" ");
+      }
 
       days.push({ name, emoji, temps, condition });
       if (days.length >= 5) break;
     }
 
-    if (days.length === 0) return;
-
     const row = document.getElementById("forecast-row");
+    if (!row) return;
+
     row.innerHTML = "";
 
     for (const d of days) {
@@ -642,7 +655,7 @@ async function loadForecast() {
       div.innerHTML = `
         <div class="forecast-name">${d.name}</div>
         <div class="forecast-mid">
-          <div class="forecast-icon">${d.emoji || " "}</div>
+          <div class="forecast-icon">${d.emoji || ""}</div>
           <div class="forecast-temp-pair">${d.temps || ""}</div>
         </div>
         <div class="forecast-extra">${d.condition || ""}</div>
@@ -653,8 +666,6 @@ async function loadForecast() {
     console.error("Error loading Forecast:", e);
   }
 }
-
-
 
     // Init
     updateClock();
@@ -681,6 +692,7 @@ window.addEventListener("load", () => {
   </script>
 </body>
 </html>
+
 
 
 
