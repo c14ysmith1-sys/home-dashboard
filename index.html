@@ -338,8 +338,8 @@
       </div>
     </header>
 
-<!-- FORECAST ROW -->
-<section class="forecast-row" id="forecast-row"></section>
+    <!-- FORECAST ROW -->
+    <section class="forecast-row" id="forecast-row"></section>
 
     <!-- MAIN CONTENT -->
     <main class="main">
@@ -413,7 +413,7 @@
       document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
 
-    // --- Weather: parse weather.txt if present, e.g. "26° Feels like: 22°"
+    // --- Weather: parse weather.txt if present
     async function loadWeather() {
       try {
         const res = await fetch("weather.txt", { cache: "no-store" });
@@ -421,7 +421,6 @@
         const text = (await res.text()).trim();
         if (!text) return;
 
-        // Extract temps from any format containing ° and "Feels like"
         const tempMatch = text.match(/(-?\d+)\s*°/);
         const feelsMatch = text.match(/Feels\s*like[:\s]*(-?\d+)\s*°/i);
 
@@ -432,16 +431,14 @@
       }
     }
 
-    // --- Big icon: time-based now (condition-based later when weather.txt includes condition text)
+    // --- Big icon: time-based now
     function getMoonPhaseEmoji(date) {
-      // Approx moon phase: 0=new, 0.5=full, 1=new
       const synodicMonth = 29.53058867;
-      const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0)); // Jan 6, 2000
+      const knownNewMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
       const daysSince = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
       const phase = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
       const fraction = phase / synodicMonth;
 
-      // Map to 8 emojis
       if (fraction < 0.0625) return "🌑";
       if (fraction < 0.1875) return "🌒";
       if (fraction < 0.3125) return "🌓";
@@ -459,13 +456,11 @@
       const m = now.getMinutes();
       const minutes = h * 60 + m;
 
-      // Simple sunrise-ish window (6:00–7:15) for the rising half-sun vibe
       if (minutes >= 360 && minutes <= 435) {
         document.getElementById("weather-icon").textContent = "🌅";
         return;
       }
 
-      // Day vs night fallback
       if (h >= 7 && h < 18) {
         document.getElementById("weather-icon").textContent = "☀️";
       } else {
@@ -473,7 +468,7 @@
       }
     }
 
-    // --- Events (5 max). Supports lines like: "Calendar | Event name | Location"
+    // --- Events
     function hashToColor(str) {
       const palette = ["#c8905b", "#7aa7c7", "#8bbf83", "#b58bc9", "#d88484", "#9aa6b2", "#d2a24c"];
       let hash = 0;
@@ -572,100 +567,93 @@
     }
 
     // --- Photo carousel
-    const TOTAL_PHOTOS = 529; // change if your count changes
+    const TOTAL_PHOTOS = 529;
     const PHOTO_INTERVAL_MS = 60000;
 
     function pickRandomPhotoIndex() {
       return Math.floor(Math.random() * TOTAL_PHOTOS) + 1;
     }
 
-function setPhotoByIndex(i) {
-  const num = String(i).padStart(3, "0");
-  const img = document.getElementById("photo-img");
-  if (!img) return;
+    function setPhotoByIndex(i) {
+      const num = String(i).padStart(3, "0");
+      const img = document.getElementById("photo-img");
+      if (!img) return;
 
-  const base = `images/family-${num}`;
-  img.onerror = () => {
-    img.onerror = null;
-    img.src = `${base}.jpeg?cb=${Date.now()}`;
-  };
+      const base = `images/family-${num}`;
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = `${base}.jpeg?cb=${Date.now()}`;
+      };
 
-  img.src = `${base}.jpg?cb=${Date.now()}`;
-}
+      img.src = `${base}.jpg?cb=${Date.now()}`;
+    }
 
     function rotatePhotoRandom() {
       setPhotoByIndex(pickRandomPhotoIndex());
     }
-// --- 5-day Forecast (from Forecast.txt)
-// Supported formats:
-// 1) 3 lines per day, repeated (no blank lines)
-// 2) same thing but with blank lines between day blocks
-async function loadForecast() {
-  try {
-    // Cache-bust to avoid any edge caching
-    const res = await fetch(`Forecast.txt?cb=${Date.now()}`, { cache: "no-store" });
-    if (!res.ok) return;
 
-    const raw = (await res.text()).trim();
-    if (!raw) return;
+    // --- Forecast (from prediction.txt)
+    // Format: repeating groups of 3 lines: DayName, "Emoji High/Low", Condition
+    async function loadForecast() {
+      const row = document.getElementById("forecast-row");
+      if (!row) return;
 
-    // Normalize: remove blank lines, keep meaningful lines only
-    const lines = raw
-      .split("\n")
-      .map(l => l.trim())
-      .filter(Boolean);
+      try {
+        row.innerHTML = "";
 
-    // Expect groups of 3: [Name, "Emoji temps", Condition]
-    const days = [];
-    for (let i = 0; i < lines.length; i += 3) {
-      const name = lines[i];
-      const line2 = lines[i + 1] || "";
-      const condition = lines[i + 2] || "";
+        const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
+        if (!res.ok) return;
 
-      if (!name || !line2) continue;
+        const raw = (await res.text()).trim();
+        if (!raw) return;
 
-      // Parse emoji + temps
-      const parts = line2.split(/\s+/).filter(Boolean);
+        const lines = raw
+          .split(/\r?\n/)
+          .map(l => l.trim())
+          .filter(Boolean);
 
-      let emoji = "";
-      let temps = "";
+        const days = [];
+        for (let i = 0; i < lines.length; i += 3) {
+          const name = lines[i] || "";
+          const line2 = lines[i + 1] || "";
+          const condition = lines[i + 2] || "";
 
-      // If first token starts with a digit or "-", treat it as temps (no emoji)
-      if (parts.length === 1) {
-        temps = parts[0];
-      } else if (/^[\d-]/.test(parts[0])) {
-        temps = parts.join(" ");
-      } else {
-        emoji = parts[0];
-        temps = parts.slice(1).join(" ");
+          if (!name || !line2) continue;
+
+          const parts = line2.split(/\s+/).filter(Boolean);
+          let emoji = "";
+          let temps = "";
+
+          if (parts.length === 1) {
+            temps = parts[0];
+          } else if (/^[\d-]/.test(parts[0])) {
+            temps = parts.join(" ");
+          } else {
+            emoji = parts[0];
+            temps = parts.slice(1).join(" ");
+          }
+
+          days.push({ name, emoji, temps, condition });
+          if (days.length >= 5) break;
+        }
+
+        for (const d of days) {
+          const div = document.createElement("div");
+          div.className = "forecast-day";
+          div.innerHTML = `
+            <div class="forecast-name">${d.name}</div>
+            <div class="forecast-mid">
+              <div class="forecast-icon">${d.emoji || ""}</div>
+              <div class="forecast-temp-pair">${d.temps || ""}</div>
+            </div>
+            <div class="forecast-extra">${d.condition || ""}</div>
+          `;
+          row.appendChild(div);
+        }
+      } catch (e) {
+        console.error("Error loading prediction forecast:", e);
       }
-
-      days.push({ name, emoji, temps, condition });
-      if (days.length >= 5) break;
     }
-
-    const row = document.getElementById("forecast-row");
-    if (!row) return;
-
-    row.innerHTML = "";
-
-    for (const d of days) {
-      const div = document.createElement("div");
-      div.className = "forecast-day";
-      div.innerHTML = `
-        <div class="forecast-name">${d.name}</div>
-        <div class="forecast-mid">
-          <div class="forecast-icon">${d.emoji || ""}</div>
-          <div class="forecast-temp-pair">${d.temps || ""}</div>
-        </div>
-        <div class="forecast-extra">${d.condition || ""}</div>
-      `;
-      row.appendChild(div);
-    }
-  } catch (e) {
-    console.error("Error loading Forecast:", e);
-  }
-}
 
     // Init
     updateClock();
@@ -674,27 +662,19 @@ async function loadForecast() {
     loadTasks();
     loadEvents();
     loadWeather();
-    loadForecast();  
+    loadForecast();
     updateBigWeatherIcon();
 
-    // Refresh weather/icon occasionally without full page refresh
     setInterval(() => {
       loadWeather();
-        loadForecast(); 
+      loadForecast();
       updateBigWeatherIcon();
     }, 30000);
 
-    // Photo rotation
-window.addEventListener("load", () => {
-  rotatePhotoRandom();
-  setInterval(rotatePhotoRandom, PHOTO_INTERVAL_MS);
-});
+    window.addEventListener("load", () => {
+      rotatePhotoRandom();
+      setInterval(rotatePhotoRandom, PHOTO_INTERVAL_MS);
+    });
   </script>
 </body>
 </html>
-
-
-
-
-
-
