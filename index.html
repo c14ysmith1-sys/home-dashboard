@@ -115,8 +115,9 @@
       color: var(--text-muted);
     }
 
-  /* FORECAST ROW */
+/* FORECAST ROW */
 .forecast-row{
+  position: relative; /* needed for separators */
   border-top:1px solid var(--border-soft);
   border-bottom:1px solid var(--border-soft);
   padding:10px 0;
@@ -124,6 +125,41 @@
   grid-template-columns:repeat(5,1fr);
   gap:10px;
 }
+
+/* Optional: vertical separators between the 5 day cards */
+.forecast-row.has-separators::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:8px;         /* keeps it off the top border */
+  bottom:8px;      /* keeps it off the bottom border */
+  pointer-events:none;
+
+  background-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      transparent calc(100% - 1px),
+      rgba(0,0,0,0.18) calc(100% - 1px),
+      rgba(0,0,0,0.18) 100%
+    );
+  background-size: calc(100% / 5) 100%;
+  background-repeat: repeat;
+}
+
+/* Hide the far-right line so lines are only BETWEEN days */
+.forecast-row.has-separators::after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:8px;
+  bottom:8px;
+  width:2px;
+  background: var(--frame);
+  pointer-events:none;
+}
+
 
 /* Card */
 .forecast-day{
@@ -188,10 +224,6 @@
   width:100%;
 }
 
-.forecast-emojismall{
-  font-size:clamp(16px, 1.5vw, 22px);
-  line-height:1;
-}
 
 .forecast-temps{
   font-size:clamp(16px, 1.6vw, 26px);
@@ -395,7 +427,7 @@
       </div>
     </header>
 
-    <section class="forecast-row" id="forecast-row"></section>
+<section class="forecast-row has-separators" id="forecast-row"></section>
 
     <main class="main">
       <section class="card" id="events-card">
@@ -707,25 +739,25 @@
           const popSafe = (d.pop && d.pop.trim()) ? d.pop.trim() : "0%";
 
           div.innerHTML = `
-            <div class="forecast-top">${d.name}</div>
-            <div class="forecast-bottom">
-              <div class="forecast-iconbox">
-                <div class="forecast-iconbig">${emojiSafe}</div>
-              </div>
+  <div class="forecast-top">${d.name}</div>
 
-              <div class="forecast-rightbox">
-                <div class="forecast-tempsrow">
-                  <div class="forecast-emojismall">${emojiSafe}</div>
-                  <div class="forecast-temps">${d.temps || ""}</div>
-                </div>
+  <div class="forecast-bottom">
+    <div class="forecast-iconbox">
+      <div class="forecast-iconbig">${emojiSafe}</div>
+    </div>
 
-                <div class="forecast-condrow">
-                  <div class="forecast-cond">${d.condition || ""}</div>
-                  <div class="forecast-pop">${popSafe}</div>
-                </div>
-              </div>
-            </div>
-          `;
+    <div class="forecast-rightbox">
+      <div class="forecast-tempsrow">
+        <div class="forecast-temps">${d.temps || ""}</div>
+      </div>
+
+      <div class="forecast-condrow">
+        <div class="forecast-cond">${d.condition || ""}</div>
+        <div class="forecast-pop">${popSafe}</div>
+      </div>
+    </div>
+  </div>
+`;
 
           row.appendChild(div);
         }
@@ -757,4 +789,5 @@
   </script>
 </body>
 </html>
+
 
