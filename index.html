@@ -5,7 +5,6 @@
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Auto-refresh the whole page every 30 minutes -->
   <meta http-equiv="refresh" content="1800">
 
   <style>
@@ -21,15 +20,10 @@
       --bullet: #c8905b;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-                   system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
       background: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
@@ -50,39 +44,75 @@
 
     /* HEADER */
 
-    .header {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      align-items: center;
-    }
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: stretch;
+  column-gap: 16px;
+  min-height: 96px;
+}
 
-    .time-block {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-    }
+
+
+.time-block {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  justify-self: start;
+  align-self: center;
+}
+
 
     .time-main {
-      font-size: 64px;
-      font-weight: 600;
-      letter-spacing: 4px;
+      font-size: 78px;
+      font-weight: 650;
+      letter-spacing: 1px;
+      line-height: 1;
     }
 
-    .time-sub {
+    .ampm {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+.date-center {
+  justify-self: center;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(34px, 2.2vw, 46px);
+  font-weight: 650;
+  color: var(--text-main);
+  text-align: center;
+  line-height: 1;
+}
+
+
+.weather-main {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+  align-self: center;
+}
+
+
+
+    .weather-stack {
       display: flex;
       flex-direction: column;
       gap: 4px;
-      font-size: 20px;
-      color: var(--text-muted);
-    }
-
-    .weather-main {
-      text-align: right;
+      align-items: flex-end;
     }
 
     .weather-temp {
-      font-size: 42px;
-      font-weight: 500;
+      font-size: 56px;
+      font-weight: 650;
+      line-height: 1;
     }
 
     .weather-line {
@@ -90,46 +120,155 @@
       color: var(--text-muted);
     }
 
-    /* FORECAST ROW */
+/* FORECAST ROW */
+.forecast-row{
+  position: relative; /* needed for separators */
+  border-top:1px solid var(--border-soft);
+  border-bottom:1px solid var(--border-soft);
+  padding:16px 0 12px; /* more top space below the divider line */
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
 
-    .forecast-row {
-      border-top: 1px solid var(--border-soft);
-      border-bottom: 1px solid var(--border-soft);
-      padding: 12px 0;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-    }
 
-    .forecast-day {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+/* Optional: vertical separators between the 5 day cards */
+.forecast-row.has-separators::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:12px;         /* keeps it off the top border */
+  bottom:12px;      /* keeps it off the bottom border */
+  pointer-events:none;
 
-    .forecast-name {
-      font-weight: 600;
-      color: var(--text-main);
-    }
+  background-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      transparent calc(100% - 1px),
+      rgba(0,0,0,0.18) calc(100% - 1px),
+      rgba(0,0,0,0.18) 100%
+    );
+  background-size: calc(100% / 5) 100%;
+  background-repeat: repeat;
+}
 
-    .forecast-icon {
-      font-size: 22px;
-    }
+/* Hide the far-right line so lines are only BETWEEN days */
+.forecast-row.has-separators::after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:12px;
+  bottom:12px;
+  width:2px;
+  background: var(--frame);
+  pointer-events:none;
+}
 
-    .forecast-temp {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text-main);
-    }
 
-    .forecast-extra {
-      font-size: 13px;
-    }
+/* Card */
+.forecast-day{
+  display:grid;
+  grid-template-rows:56% 44%; /* big title like your mock */
+  padding:6px 6px 8px;
+  border-radius:14px;
+  min-height:120px; /* gives room for the big day title */
+}
 
-    /* MAIN CONTENT: calendar + tasks + photo */
+/* HUGE day name */
+.forecast-top{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  width:100%;
+  font-weight:800;
+  letter-spacing:-0.5px;
+  line-height:0.95;
+  font-size:clamp(26px, 2.4vw, 46px);
+  padding:0 6px 8px;
+}
+
+
+/* Bottom strip: icon box + info box */
+.forecast-bottom{
+  display:grid;
+  grid-template-columns:clamp(52px, 4.2vw, 84px) 1fr;
+  gap:8px;
+  align-items:stretch;
+  width:100%;
+}
+
+/* Left square */
+.forecast-iconbox{
+  border:2px solid rgba(255,255,255,0.20);
+  border-radius:0; /* mock is square corners */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Big emoji */
+.forecast-iconbig{
+  font-size:clamp(28px, 3.0vw, 54px);
+  line-height:1;
+}
+
+/* Right rectangle */
+.forecast-rightbox{
+  border:2px solid rgba(255,255,255,0.20);
+  border-radius:0; /* mock is square corners */
+  display:grid;
+  grid-template-rows:56% 44%;
+  padding:6px 10px;
+}
+
+/* Temps row */
+.forecast-tempsrow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+}
+
+
+.forecast-temps{
+  font-size:clamp(16px, 1.6vw, 26px);
+  font-weight:750;
+  letter-spacing:0.2px;
+  white-space:nowrap;
+}
+
+/* Condition + precip row */
+.forecast-condrow{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:10px;
+  width:100%;
+}
+
+.forecast-cond{
+  font-size:clamp(12px, 1.05vw, 16px);
+  color:var(--text-muted);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  min-width:0;
+  flex:1;
+}
+
+.forecast-pop{
+  font-size:clamp(12px, 1.05vw, 16px);
+  color:var(--text-muted);
+  font-weight:700;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+
+    /* MAIN CONTENT */
 
     .main {
       display: grid;
@@ -142,26 +281,28 @@
       border-radius: 18px;
       padding: 16px 18px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
 
     .card-header {
       font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-weight: 650;
+      margin-bottom: 6px;
     }
 
     .card-subtitle {
       font-size: 14px;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .events-list,
     .tasks-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
+      gap: 10px;
     }
 
     .event-item,
@@ -173,11 +314,37 @@
     }
 
     .event-bar {
-      width: 3px;
+      width: 4px;
       border-radius: 999px;
       background: var(--accent);
-      margin-top: 2px;
+      margin-top: 3px;
       flex-shrink: 0;
+      height: 44px;
+    }
+
+    .event-text { flex: 1; min-width: 0; }
+
+    .event-cal {
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 2px;
+    }
+
+    .event-title {
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+      margin-bottom: 2px;
+      word-wrap: break-word;
+    }
+
+    .event-loc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.2;
     }
 
     .dot {
@@ -185,39 +352,30 @@
       height: 8px;
       border-radius: 999px;
       border: 2px solid var(--bullet);
-      margin-top: 4px;
+      margin-top: 6px;
       flex-shrink: 0;
     }
 
-    .event-text {
-      flex: 1;
-    }
+    .task-text { flex: 1; }
 
-    .event-title {
-      font-weight: 500;
-    }
-
-    .event-time {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .task-text {
-      flex: 1;
-    }
-
-    .photo-card {
-      margin-top: 12px;
+    .photo-wrap {
+      margin-top: 14px;
       border-radius: 16px;
       overflow: hidden;
-      background: #ddd;
-      height: 210px;
-      background-image: url("https://images.pexels.com/photos/3770585/pexels-photo-3770585.jpeg?auto=compress&cs=tinysrgb&w=800");
-      background-size: cover;
-      background-position: center center;
+      background: #efe7dc;
+      border: 1px solid var(--border-soft);
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* FOOTER */
+    .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
 
     .footer {
       border-top: 1px solid var(--border-soft);
@@ -227,12 +385,14 @@
       align-items: baseline;
       font-size: 14px;
       color: var(--text-muted);
+      gap: 16px;
     }
 
     .verse-ref {
-      font-weight: 600;
+      font-weight: 650;
       color: var(--accent);
       margin-left: 8px;
+      white-space: nowrap;
     }
 
     .status-pill {
@@ -241,110 +401,80 @@
       background: var(--accent-soft);
       color: var(--accent);
       font-size: 13px;
+      white-space: nowrap;
     }
 
-    /* Simple responsive tweak for narrower screens */
     @media (max-width: 900px) {
-      .frame {
-        padding: 16px;
-      }
-      .time-main {
-        font-size: 40px;
-      }
-      .main {
-        grid-template-columns: 1fr;
-      }
+      .frame { padding: 16px; }
+      .time-main { font-size: 48px; }
+      .weather-temp { font-size: 42px; }
+      .main { grid-template-columns: 1fr; }
+      .header { grid-template-columns: 1fr; row-gap: 10px; }
+    .date-center {
+  justify-self: start;
+  justify-content: flex-start;
+  align-self: center;
+}
+
+      .weather-main { justify-self: start; }
     }
   </style>
 </head>
 <body>
   <div class="frame">
-    <!-- HEADER -->
+
     <header class="header">
       <div class="time-block">
-        <div class="time-main" id="clock">9:15</div>
-        <div class="time-sub">
-          <span id="date-line">Monday, Nov 30</span>
-          <span id="day-part">Morning dashboard</span>
-        </div>
+        <div class="time-main" id="clock">4:10</div>
+        <div class="ampm" id="ampm">PM</div>
       </div>
-      <div class="weather-main">
-        <div class="weather-temp" id="weather-temp">26°</div>
-        <div class="weather-line" id="weather-line">
-          Feels like 24° · Westfield
-        </div>
-      </div>
+
+      <div class="date-center" id="date-center">Sunday, Dec 14</div>
+
+     <div class="weather-main">
+  <div class="weather-stack">
+    <div class="weather-temp" id="weather-temp">26°</div>
+    <div class="weather-line" id="weather-line">Feels like 22°</div>
+  </div>
+</div>
+
     </header>
 
-    <!-- FORECAST ROW (placeholder data for now) -->
-    <section class="forecast-row" id="forecast-row">
-      <div class="forecast-day">
-        <div class="forecast-name">Tue</div>
-        <div class="forecast-icon">🌤️</div>
-        <div class="forecast-temp">31°</div>
-        <div class="forecast-extra">30%</div>
-      </div>
-      <div class="forecast-day">
-        <div class="forecast-name">Wed</div>
-        <div class="forecast-icon">⛅</div>
-        <div class="forecast-temp">29°</div>
-        <div class="forecast-extra">25%</div>
-      </div>
-      <div class="forecast-day">
-        <div class="forecast-name">Thu</div>
-        <div class="forecast-icon">☁️</div>
-        <div class="forecast-temp">27°</div>
-        <div class="forecast-extra">20%</div>
-      </div>
-      <div class="forecast-day">
-        <div class="forecast-name">Fri</div>
-        <div class="forecast-icon">🌧️</div>
-        <div class="forecast-temp">24°</div>
-        <div class="forecast-extra">40%</div>
-      </div>
-      <div class="forecast-day">
-        <div class="forecast-name">Sat</div>
-        <div class="forecast-icon">☁️</div>
-        <div class="forecast-temp">22°</div>
-        <div class="forecast-extra">35%</div>
-      </div>
-    </section>
+<section class="forecast-row has-separators" id="forecast-row"></section>
 
-    <!-- MAIN CONTENT -->
     <main class="main">
-      <!-- Left: Upcoming events -->
       <section class="card" id="events-card">
         <div class="card-header">Upcoming Events</div>
         <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
+
         <div class="events-list" id="events-list">
-          <!-- Filled from calendar.txt -->
           <div class="event-item">
             <div class="event-bar"></div>
             <div class="event-text">
+              <div class="event-cal">Calendar</div>
               <div class="event-title">Add events to calendar.txt</div>
-              <div class="event-time">One event per line</div>
             </div>
           </div>
         </div>
+
+        <div class="photo-wrap">
+          <img id="photo-img" alt="Family photo" src="" />
+        </div>
       </section>
 
-      <!-- Right: Today’s tasks + photo -->
       <section class="card">
         <div class="card-header">Today’s Tasks</div>
         <div class="card-subtitle">Family checklist</div>
+
         <div class="tasks-list" id="tasks-list">
-          <!-- Filled from dashboard.txt -->
           <div class="task-item">
             <div class="dot"></div>
             <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
           </div>
         </div>
-
-        <div class="photo-card"></div>
       </section>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
       <div>
         <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
@@ -355,34 +485,110 @@
   </div>
 
   <script>
-    function pad(n) { return n.toString().padStart(2, "0"); }
+    function pad2(n) { return n.toString().padStart(2, "0"); }
+
+    function formatTime12(now) {
+      let h = now.getHours();
+      const m = now.getMinutes();
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12;
+      if (h === 0) h = 12;
+      return { time: `${h}:${pad2(m)}`, ampm };
+    }
 
     function updateClock() {
       const now = new Date();
-      const hours = pad(now.getHours());
-      const minutes = pad(now.getMinutes());
+      const { time, ampm } = formatTime12(now);
 
-      const clock = document.getElementById("clock");
-      const dateLine = document.getElementById("date-line");
-      const dayPart = document.getElementById("day-part");
-      const status = document.getElementById("status-pill");
+      document.getElementById("clock").textContent = time;
+      document.getElementById("ampm").textContent = ampm;
 
-      clock.textContent = `${hours}:${minutes}`;
+     const dateOptions = { weekday: "long", month: "long", day: "numeric" };
+document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
 
-      const dateOptions = { weekday: "long", month: "short", day: "numeric" };
-      dateLine.textContent = now.toLocaleDateString(undefined, dateOptions);
 
-      const h = now.getHours();
-      if (h < 12) dayPart.textContent = "Morning dashboard";
-      else if (h < 16) dayPart.textContent = "Afternoon chores";
-      else dayPart.textContent = "Evening reset";
+      document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
+    }
 
-      status.textContent = "Updated at " + `${hours}:${minutes}`;
+    async function loadWeather() {
+      try {
+        const res = await fetch("weather.txt", { cache: "no-store" });
+        if (!res.ok) return;
+        const text = (await res.text()).trim();
+        if (!text) return;
+
+        const tempMatch = text.match(/(-?\d+)\s*°/);
+        const feelsMatch = text.match(/Feels\s*like[:\s]*(-?\d+)\s*°/i);
+
+        if (tempMatch) document.getElementById("weather-temp").textContent = `${tempMatch[1]}°`;
+        if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
+      } catch (e) {
+        console.error("Error loading weather:", e);
+      }
+    }
+
+    function hashToColor(str) {
+      const palette = ["#c8905b", "#7aa7c7", "#8bbf83", "#b58bc9", "#d88484", "#9aa6b2", "#d2a24c"];
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      return palette[hash % palette.length];
+    }
+
+    async function loadEvents() {
+      try {
+        const res = await fetch("calendar.txt", { cache: "no-store" });
+        if (!res.ok) return;
+        const text = await res.text();
+
+        const container = document.getElementById("events-list");
+        container.innerHTML = "";
+
+        const lines = text
+          .split("\n")
+          .map(l => l.trim())
+          .filter(l => l.length > 0)
+          .slice(0, 10);
+
+        if (lines.length === 0) {
+          container.innerHTML = `
+            <div class="event-item">
+              <div class="event-bar"></div>
+              <div class="event-text">
+                <div class="event-cal">Calendar</div>
+                <div class="event-title">No events scheduled.</div>
+              </div>
+            </div>`;
+          return;
+        }
+
+        for (const line of lines) {
+          const parts = line.split(" | ").map(p => p.trim()).filter(Boolean);
+          const cal = parts[0] || "Calendar";
+          const title = parts[1] || parts[0] || line;
+          const loc = parts[2] || "";
+
+          const color = hashToColor(cal);
+
+          const item = document.createElement("div");
+          item.className = "event-item";
+          item.innerHTML = `
+            <div class="event-bar" style="background:${color}"></div>
+            <div class="event-text">
+              <div class="event-cal">${cal}</div>
+              <div class="event-title">${title}</div>
+              ${loc ? `<div class="event-loc">${loc}</div>` : ""}
+            </div>
+          `;
+          container.appendChild(item);
+        }
+      } catch (e) {
+        console.error("Error loading events:", e);
+      }
     }
 
     async function loadTasks() {
       try {
-        const res = await fetch("dashboard.txt");
+        const res = await fetch("dashboard.txt", { cache: "no-store" });
         if (!res.ok) return;
         const text = await res.text();
 
@@ -417,53 +623,148 @@
       }
     }
 
-    async function loadEvents() {
+    const TOTAL_PHOTOS = 529;
+    const PHOTO_INTERVAL_MS = 60000;
+
+    function pickRandomPhotoIndex() {
+      return Math.floor(Math.random() * TOTAL_PHOTOS) + 1;
+    }
+
+    function setPhotoByIndex(i) {
+      const num = String(i).padStart(3, "0");
+      const img = document.getElementById("photo-img");
+      if (!img) return;
+
+      const base = `images/family-${num}`;
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = `${base}.jpeg?cb=${Date.now()}`;
+      };
+
+      img.src = `${base}.jpg?cb=${Date.now()}`;
+    }
+
+    function rotatePhotoRandom() {
+      setPhotoByIndex(pickRandomPhotoIndex());
+    }
+
+    // --- 5-day Forecast (from prediction.txt)
+    // Supports:
+    // - 3 lines per day: Name, "Emoji temps", Condition (optionally includes a percent at end)
+    // - 4 lines per day: Name, "Emoji temps", Condition, Precip%
+    async function loadForecast() {
       try {
-        const res = await fetch("calendar.txt");
+        const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) return;
-        const text = await res.text();
 
-        const container = document.getElementById("events-list");
-        container.innerHTML = "";
+        const raw = (await res.text()).trim();
+        if (!raw) return;
 
-        const lines = text
+        const lines = raw
           .split("\n")
           .map(l => l.trim())
-          .filter(l => l.length > 0);
+          .filter(Boolean);
 
-        if (lines.length === 0) {
-          container.innerHTML = `
-            <div class="event-item">
-              <div class="event-bar"></div>
-              <div class="event-text">
-                <div class="event-title">No events scheduled.</div>
-                <div class="event-time">Enjoy the day.</div>
-              </div>
-            </div>`;
-          return;
+        const days = [];
+        let i = 0;
+
+        while (i < lines.length && days.length < 5) {
+          const name = lines[i++] || "";
+          const line2 = lines[i++] || "";
+          let condition = lines[i++] || "";
+          let pop = "";
+
+          if (!name || !line2) continue;
+
+          // If a 4th line exists and looks like precip, use it
+          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])) {
+            pop = lines[i++];
+          } else {
+            // Or pull precip from condition like "Wintry Mix 0.9 %"
+            const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
+            if (m) {
+              pop = `${m[1]}%`;
+              condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
+            }
+          }
+
+          const parts = line2.split(/\s+/).filter(Boolean);
+          let emoji = "";
+          let temps = "";
+
+          if (parts.length === 1) {
+            temps = parts[0];
+          } else if (/^[\d-]/.test(parts[0])) {
+            temps = parts.join(" ");
+          } else {
+            emoji = parts[0];
+            temps = parts.slice(1).join(" ");
+          }
+
+          days.push({ name, emoji, temps, condition, pop });
         }
 
-        for (const line of lines) {
-          const item = document.createElement("div");
-          item.className = "event-item";
-          item.innerHTML = `
-            <div class="event-bar"></div>
-            <div class="event-text">
-              <div class="event-title">${line}</div>
-            </div>
-          `;
-          container.appendChild(item);
+        const row = document.getElementById("forecast-row");
+        if (!row) return;
+
+        row.innerHTML = "";
+
+        for (const d of days) {
+          const div = document.createElement("div");
+          div.className = "forecast-day";
+
+          const emojiSafe = d.emoji || "";
+          const popSafe = (d.pop && d.pop.trim()) ? d.pop.trim() : "0%";
+
+          div.innerHTML = `
+  <div class="forecast-top">${d.name}</div>
+
+  <div class="forecast-bottom">
+    <div class="forecast-iconbox">
+      <div class="forecast-iconbig">${emojiSafe}</div>
+    </div>
+
+    <div class="forecast-rightbox">
+      <div class="forecast-tempsrow">
+        <div class="forecast-temps">${d.temps || ""}</div>
+      </div>
+
+      <div class="forecast-condrow">
+        <div class="forecast-cond">${d.condition || ""}</div>
+        <div class="forecast-pop">${popSafe}</div>
+      </div>
+    </div>
+  </div>
+`;
+
+          row.appendChild(div);
         }
       } catch (e) {
-        console.error("Error loading events:", e);
+        console.error("Error loading Forecast:", e);
       }
     }
+
 
     updateClock();
     setInterval(updateClock, 1000);
 
     loadTasks();
     loadEvents();
+    loadWeather();
+    loadForecast();
+
+    setInterval(() => {
+      loadWeather();
+      loadForecast();
+    }, 30000);
+
+    window.addEventListener("load", () => {
+      rotatePhotoRandom();
+      setInterval(rotatePhotoRandom, PHOTO_INTERVAL_MS);
+    });
   </script>
 </body>
 </html>
+
+
+
