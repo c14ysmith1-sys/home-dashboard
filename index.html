@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <meta http-equiv="refresh" content="1800">
 
   <style>
@@ -23,27 +21,45 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text-main);
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
+    /* Important: avoid 100vw/100vh on Fire TV, use % sizing */
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
 
-/* This is the wrapper that used to be your body layout */
-#page {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  padding: 24px;
-}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      overflow: hidden;
+    }
 
+    /* Prevent Fire TV overscan from clipping edges */
+    #safe {
+      position: fixed;
+      inset: 0;
+      padding: clamp(18px, 2.8vw, 48px); /* increase if still clipped */
+      box-sizing: border-box;
+    }
 
+    /* Make sure nothing inside can exceed the visible area */
+    #app {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Wrapper that used to be body layout */
+    #page {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      padding: 0; /* important: safe wrapper handles margin now */
+    }
 
     .frame {
       flex: 1;
@@ -57,25 +73,21 @@ body {
     }
 
     /* HEADER */
+    .header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: stretch;
+      column-gap: 16px;
+      min-height: 96px;
+    }
 
-.header {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: stretch;
-  column-gap: 16px;
-  min-height: 96px;
-}
-
-
-
-.time-block {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  justify-self: start;
-  align-self: center;
-}
-
+    .time-block {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      justify-self: start;
+      align-self: center;
+    }
 
     .time-main {
       font-size: 78px;
@@ -91,30 +103,27 @@ body {
       letter-spacing: 1px;
     }
 
-.date-center {
-  justify-self: center;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(34px, 2.2vw, 46px);
-  font-weight: 650;
-  color: var(--text-main);
-  text-align: center;
-  line-height: 1;
-}
+    .date-center {
+      justify-self: center;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(34px, 2.2vw, 46px);
+      font-weight: 650;
+      color: var(--text-main);
+      text-align: center;
+      line-height: 1;
+    }
 
-
-.weather-main {
-  justify-self: end;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  text-align: right;
-  align-self: center;
-}
-
-
+    .weather-main {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: right;
+      align-self: center;
+    }
 
     .weather-stack {
       display: flex;
@@ -134,156 +143,150 @@ body {
       color: var(--text-muted);
     }
 
-/* FORECAST ROW */
-.forecast-row{
-  position: relative; /* needed for separators */
-  border-top:1px solid var(--border-soft);
-  border-bottom:1px solid var(--border-soft);
-  padding:16px 0 12px; /* more top space below the divider line */
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:10px;
-}
+    /* FORECAST ROW */
+    .forecast-row{
+      position: relative; /* needed for separators */
+      border-top:1px solid var(--border-soft);
+      border-bottom:1px solid var(--border-soft);
+      padding:16px 0 12px; /* more top space below the divider line */
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:10px;
+    }
 
+    /* Optional: vertical separators between the 5 day cards */
+    .forecast-row.has-separators::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:12px;         /* keeps it off the top border */
+      bottom:12px;      /* keeps it off the bottom border */
+      pointer-events:none;
 
-/* Optional: vertical separators between the 5 day cards */
-.forecast-row.has-separators::before{
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  top:12px;         /* keeps it off the top border */
-  bottom:12px;      /* keeps it off the bottom border */
-  pointer-events:none;
+      background-image:
+        linear-gradient(
+          to right,
+          transparent 0,
+          transparent calc(100% - 1px),
+          rgba(0,0,0,0.18) calc(100% - 1px),
+          rgba(0,0,0,0.18) 100%
+        );
+      background-size: calc(100% / 5) 100%;
+      background-repeat: repeat;
+    }
 
-  background-image:
-    linear-gradient(
-      to right,
-      transparent 0,
-      transparent calc(100% - 1px),
-      rgba(0,0,0,0.18) calc(100% - 1px),
-      rgba(0,0,0,0.18) 100%
-    );
-  background-size: calc(100% / 5) 100%;
-  background-repeat: repeat;
-}
+    /* Hide the far-right line so lines are only BETWEEN days */
+    .forecast-row.has-separators::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:12px;
+      bottom:12px;
+      width:2px;
+      background: var(--frame);
+      pointer-events:none;
+    }
 
-/* Hide the far-right line so lines are only BETWEEN days */
-.forecast-row.has-separators::after{
-  content:"";
-  position:absolute;
-  right:0;
-  top:12px;
-  bottom:12px;
-  width:2px;
-  background: var(--frame);
-  pointer-events:none;
-}
+    /* Card */
+    .forecast-day{
+      display:grid;
+      grid-template-rows:56% 44%; /* big title like your mock */
+      padding:6px 6px 8px;
+      border-radius:14px;
+      min-height:120px; /* gives room for the big day title */
+    }
 
+    /* HUGE day name */
+    .forecast-top{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      width:100%;
+      font-weight:800;
+      letter-spacing:-0.5px;
+      line-height:0.95;
+      font-size:clamp(26px, 2.4vw, 46px);
+      padding:0 6px 8px;
+    }
 
-/* Card */
-.forecast-day{
-  display:grid;
-  grid-template-rows:56% 44%; /* big title like your mock */
-  padding:6px 6px 8px;
-  border-radius:14px;
-  min-height:120px; /* gives room for the big day title */
-}
+    /* Bottom strip: icon box + info box */
+    .forecast-bottom{
+      display:grid;
+      grid-template-columns:clamp(52px, 4.2vw, 84px) 1fr;
+      gap:8px;
+      align-items:stretch;
+      width:100%;
+    }
 
-/* HUGE day name */
-.forecast-top{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  width:100%;
-  font-weight:800;
-  letter-spacing:-0.5px;
-  line-height:0.95;
-  font-size:clamp(26px, 2.4vw, 46px);
-  padding:0 6px 8px;
-}
+    /* Left square */
+    .forecast-iconbox{
+      border:2px solid rgba(255,255,255,0.20);
+      border-radius:0; /* mock is square corners */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
 
+    /* Big emoji */
+    .forecast-iconbig{
+      font-size:clamp(28px, 3.0vw, 54px);
+      line-height:1;
+    }
 
-/* Bottom strip: icon box + info box */
-.forecast-bottom{
-  display:grid;
-  grid-template-columns:clamp(52px, 4.2vw, 84px) 1fr;
-  gap:8px;
-  align-items:stretch;
-  width:100%;
-}
+    /* Right rectangle */
+    .forecast-rightbox{
+      border:2px solid rgba(255,255,255,0.20);
+      border-radius:0; /* mock is square corners */
+      display:grid;
+      grid-template-rows:56% 44%;
+      padding:6px 10px;
+    }
 
-/* Left square */
-.forecast-iconbox{
-  border:2px solid rgba(255,255,255,0.20);
-  border-radius:0; /* mock is square corners */
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    /* Temps row */
+    .forecast-tempsrow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      width:100%;
+    }
 
-/* Big emoji */
-.forecast-iconbig{
-  font-size:clamp(28px, 3.0vw, 54px);
-  line-height:1;
-}
+    .forecast-temps{
+      font-size:clamp(16px, 1.6vw, 26px);
+      font-weight:750;
+      letter-spacing:0.2px;
+      white-space:nowrap;
+    }
 
-/* Right rectangle */
-.forecast-rightbox{
-  border:2px solid rgba(255,255,255,0.20);
-  border-radius:0; /* mock is square corners */
-  display:grid;
-  grid-template-rows:56% 44%;
-  padding:6px 10px;
-}
+    /* Condition + precip row */
+    .forecast-condrow{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      width:100%;
+    }
 
-/* Temps row */
-.forecast-tempsrow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  width:100%;
-}
+    .forecast-cond{
+      font-size:clamp(12px, 1.05vw, 16px);
+      color:var(--text-muted);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      min-width:0;
+      flex:1;
+    }
 
-
-.forecast-temps{
-  font-size:clamp(16px, 1.6vw, 26px);
-  font-weight:750;
-  letter-spacing:0.2px;
-  white-space:nowrap;
-}
-
-/* Condition + precip row */
-.forecast-condrow{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:10px;
-  width:100%;
-}
-
-.forecast-cond{
-  font-size:clamp(12px, 1.05vw, 16px);
-  color:var(--text-muted);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  min-width:0;
-  flex:1;
-}
-
-.forecast-pop{
-  font-size:clamp(12px, 1.05vw, 16px);
-  color:var(--text-muted);
-  font-weight:700;
-  white-space:nowrap;
-  flex-shrink:0;
-}
-
+    .forecast-pop{
+      font-size:clamp(12px, 1.05vw, 16px);
+      color:var(--text-muted);
+      font-weight:700;
+      white-space:nowrap;
+      flex-shrink:0;
+    }
 
     /* MAIN CONTENT */
-
     .main {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
@@ -418,106 +421,111 @@ body {
       white-space: nowrap;
     }
 
-/* Fire TV rotation mode: rotate the whole dashboard when the device is landscape */
-html.rotate90 body {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  width: 100vh;
-  height: 100vw;
-  transform-origin: top left;
-  transform: rotate(90deg);
-}
+    /* Fire TV rotation mode: rotate the whole dashboard when the device is landscape */
+    html.rotate90 body {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 100vh;
+      height: 100vw;
+      transform-origin: top left;
+      transform: rotate(90deg);
+    }
 
-/* When rotated, make sure the wrapper still fills the screen */
-html.rotate90 #page {
-  width: 100%;
-  height: 100%;
-  padding: 24px;
-}
+    /* When rotated, make sure the wrapper still fills the screen */
+    html.rotate90 #page {
+      width: 100%;
+      height: 100%;
+      padding: 0; /* important: safe wrapper handles margin now */
+    }
 
-    
     @media (max-width: 900px) {
       .frame { padding: 16px; }
       .time-main { font-size: 48px; }
       .weather-temp { font-size: 42px; }
       .main { grid-template-columns: 1fr; }
       .header { grid-template-columns: 1fr; row-gap: 10px; }
-    .date-center {
-  justify-self: start;
-  justify-content: flex-start;
-  align-self: center;
-}
-
+      .date-center {
+        justify-self: start;
+        justify-content: flex-start;
+        align-self: center;
+      }
       .weather-main { justify-self: start; }
     }
   </style>
 </head>
+
 <body>
-  <div id="page">
-    <div class="frame">
+  <div id="safe">
+    <div id="app">
+      <div id="page">
+        <div class="frame">
 
-      <header class="header">
-        <div class="time-block">
-          <div class="time-main" id="clock">4:10</div>
-          <div class="ampm" id="ampm">PM</div>
-        </div>
-
-      <div class="date-center" id="date-center">Sunday, Dec 14</div>
-
-     <div class="weather-main">
-  <div class="weather-stack">
-    <div class="weather-temp" id="weather-temp">26°</div>
-    <div class="weather-line" id="weather-line">Feels like 22°</div>
-  </div>
-</div>
-
-    </header>
-
-<section class="forecast-row has-separators" id="forecast-row"></section>
-
-    <main class="main">
-      <section class="card" id="events-card">
-        <div class="card-header">Upcoming Events</div>
-        <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
-
-        <div class="events-list" id="events-list">
-          <div class="event-item">
-            <div class="event-bar"></div>
-            <div class="event-text">
-              <div class="event-cal">Calendar</div>
-              <div class="event-title">Add events to calendar.txt</div>
+          <header class="header">
+            <div class="time-block">
+              <div class="time-main" id="clock">4:10</div>
+              <div class="ampm" id="ampm">PM</div>
             </div>
-          </div>
+
+            <div class="date-center" id="date-center">Sunday, Dec 14</div>
+
+            <div class="weather-main">
+              <div class="weather-stack">
+                <div class="weather-temp" id="weather-temp">26°</div>
+                <div class="weather-line" id="weather-line">Feels like 22°</div>
+              </div>
+            </div>
+          </header>
+
+          <section class="forecast-row has-separators" id="forecast-row"></section>
+
+          <main class="main">
+            <section class="card" id="events-card">
+              <div class="card-header">Upcoming Events</div>
+              <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
+
+              <div class="events-list" id="events-list">
+                <div class="event-item">
+                  <div class="event-bar"></div>
+                  <div class="event-text">
+                    <div class="event-cal">Calendar</div>
+                    <div class="event-title">Add events to calendar.txt</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="photo-wrap">
+                <img id="photo-img" alt="Family photo" src="" />
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-header">Today’s Tasks</div>
+              <div class="card-subtitle">Family checklist</div>
+
+              <div class="tasks-list" id="tasks-list">
+                <div class="task-item">
+                  <div class="dot"></div>
+                  <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
+                </div>
+              </div>
+            </section>
+          </main>
+
+          <footer class="footer">
+            <div>
+              <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
+              <span class="verse-ref">Psalm 16:11</span>
+            </div>
+            <div class="status-pill" id="status-pill">Updated just now</div>
+          </footer>
+
         </div>
-
-        <div class="photo-wrap">
-          <img id="photo-img" alt="Family photo" src="" />
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-header">Today’s Tasks</div>
-        <div class="card-subtitle">Family checklist</div>
-
-        <div class="tasks-list" id="tasks-list">
-          <div class="task-item">
-            <div class="dot"></div>
-            <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div>
-        <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
-        <span class="verse-ref">Psalm 16:11</span>
       </div>
-      <div class="status-pill" id="status-pill">Updated just now</div>
-    </footer>
+    </div>
   </div>
-  </div>
+
+  <!-- Main dashboard logic -->
   <script>
     function pad2(n) { return n.toString().padStart(2, "0"); }
 
@@ -537,9 +545,8 @@ html.rotate90 #page {
       document.getElementById("clock").textContent = time;
       document.getElementById("ampm").textContent = ampm;
 
-     const dateOptions = { weekday: "long", month: "long", day: "numeric" };
-document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
-
+      const dateOptions = { weekday: "long", month: "long", day: "numeric" };
+      document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
 
       document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
@@ -751,25 +758,25 @@ document.getElementById("date-center").textContent = now.toLocaleDateString(unde
           const popSafe = (d.pop && d.pop.trim()) ? d.pop.trim() : "0%";
 
           div.innerHTML = `
-  <div class="forecast-top">${d.name}</div>
+            <div class="forecast-top">${d.name}</div>
 
-  <div class="forecast-bottom">
-    <div class="forecast-iconbox">
-      <div class="forecast-iconbig">${emojiSafe}</div>
-    </div>
+            <div class="forecast-bottom">
+              <div class="forecast-iconbox">
+                <div class="forecast-iconbig">${emojiSafe}</div>
+              </div>
 
-    <div class="forecast-rightbox">
-      <div class="forecast-tempsrow">
-        <div class="forecast-temps">${d.temps || ""}</div>
-      </div>
+              <div class="forecast-rightbox">
+                <div class="forecast-tempsrow">
+                  <div class="forecast-temps">${d.temps || ""}</div>
+                </div>
 
-      <div class="forecast-condrow">
-        <div class="forecast-cond">${d.condition || ""}</div>
-        <div class="forecast-pop">${popSafe}</div>
-      </div>
-    </div>
-  </div>
-`;
+                <div class="forecast-condrow">
+                  <div class="forecast-cond">${d.condition || ""}</div>
+                  <div class="forecast-pop">${popSafe}</div>
+                </div>
+              </div>
+            </div>
+          `;
 
           row.appendChild(div);
         }
@@ -779,13 +786,12 @@ document.getElementById("date-center").textContent = now.toLocaleDateString(unde
     }
 
     function applyFireTvPortraitMode() {
-  const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
-  document.documentElement.classList.toggle("rotate90", isLandscape);
-}
+      const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
+      document.documentElement.classList.toggle("rotate90", isLandscape);
+    }
 
-window.addEventListener("resize", applyFireTvPortraitMode);
-applyFireTvPortraitMode();
-
+    window.addEventListener("resize", applyFireTvPortraitMode);
+    applyFireTvPortraitMode();
 
     updateClock();
     setInterval(updateClock, 1000);
@@ -805,9 +811,36 @@ applyFireTvPortraitMode();
       setInterval(rotatePhotoRandom, PHOTO_INTERVAL_MS);
     });
   </script>
+
+  <!-- Keep screen awake (best-effort) -->
+  <script>
+    (async () => {
+      // Try Wake Lock first (may or may not be supported on Fire TV / Silk)
+      let wakeLock = null;
+
+      async function requestWakeLock() {
+        try {
+          if ("wakeLock" in navigator) {
+            wakeLock = await navigator.wakeLock.request("screen");
+          }
+        } catch (e) {
+          // Ignore, fallback below
+        }
+      }
+
+      // Re-request if the tab visibility changes
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") requestWakeLock();
+      });
+
+      await requestWakeLock();
+
+      // Fallback: tiny “activity” loop to avoid some idle detection
+      setInterval(() => {
+        window.scrollBy(0, 1);
+        window.scrollBy(0, -1);
+      }, 30000);
+    })();
+  </script>
 </body>
 </html>
-
-
-
-
