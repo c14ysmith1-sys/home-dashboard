@@ -1,245 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Home Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="1800">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="refresh" content="1800" />
 
   <style>
-:root{
-  --safeTop: clamp(24px, 3.8vw, 60px);
-  --safeRight: clamp(24px, 4.4vw, 70px);
-  --safeBottom: clamp(24px, 3.8vw, 60px);
-  --safeLeft: clamp(24px, 4.4vw, 60px);
+    :root{
+      /* If the RIGHT side is still clipping, increase --safeRight first (ex: 18px -> 26px) */
+      --safeTop: 0px;
+      --safeRight: 0px;
+      --safeBottom: 0px;
+      --safeLeft: 0px;
 
-  --bg: #f7f2e9;
-  --frame: #fdf8f1;
-  --card: #ffffff;
-  --border-soft: #eadfce;
-  --accent: #c8905b;
-  --accent-soft: #f1d4b8;
-  --text-main: #3b2c22;
-  --text-muted: #7b6a5b;
-  --bullet: #c8905b;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html.compact .frame{
-  gap: 12px;
-  padding: 16px 18px 12px;
-}
-
-html.compact .time-main{ font-size: 64px; }
-html.compact .weather-temp{ font-size: 46px; }
-
-html.compact .main{
-  grid-template-columns: 1fr 1fr;   /* keep 2 columns */
-  gap: 14px;
-}
-
-html.compact #events-card .events-list{
-  max-height: 260px;
-}
-
-html.compact .forecast-row{
-  gap: 6px;
-  padding: 12px 0 10px;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-html.compact .forecast-top{
-  font-size: 24px;
-}
-
-html.compact .event-item,
-html.compact .task-item{
-  font-size: 14px;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text-main);
-  overflow: hidden; /* important on Fire TV */
-}
-
-    
-/* Rotated canvas wrapper */
-#rotator{
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-}
-
-/* Full-screen “bleed” background (allowed to be cropped) */
-#bleed{
-  position: absolute;
-  inset: -6%;
-  background: var(--frame);
-  z-index: 0;
-}
-
-/* Safe area for real UI */
-#safe{
-  position: absolute;
-  inset: 0;
-  padding: var(--safeTop) var(--safeRight) var(--safeBottom) var(--safeLeft);
-  box-sizing: border-box;
-  z-index: 1;
-}
-
-/* Normal full-size layout inside safe area */
-#app, #page{
-  width: 100%;
-  height: 100%;
-}
-
-    .main { min-height: 0; }            /* allows grid children to shrink */
-.card { min-height: 0; overflow: hidden; }
-
-/* Events card should be able to stretch */
-#events-card { min-height: 0; }
-
-/* Let the events list scroll if needed */
-#events-card .events-list{
-  overflow: auto;
-  min-height: 0;
-  max-height: 320px;   /* tweak if you want more/less events visible */
-  padding-right: 6px;
-}
-
-/* Photo fills the leftover space in the card */
-.photo-wrap{
-  margin-top: 14px;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #efe7dc;
-  border: 1px solid var(--border-soft);
-
-  flex: 1 1 auto;     /* key */
-  min-height: 220px;  /* key */
-  height: auto;       /* remove fixed 360 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-
-.frame{
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 16px;
-
-  border-radius: 24px;
-  background: var(--frame);
-  box-shadow: 0 16px 60px rgba(0,0,0,0.08);
-  padding: 24px 32px 16px;
-
-  overflow: hidden; /* critical: keeps bottom from running off-screen */
-}
-
-    /* HEADER */
-    .header {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      align-items: stretch;
-      column-gap: 16px;
-      min-height: 96px;
+      --bg: #f7f2e9;
+      --frame: #fdf8f1;
+      --card: #ffffff;
+      --border-soft: #eadfce;
+      --accent: #c8905b;
+      --accent-soft: #f1d4b8;
+      --text-main: #3b2c22;
+      --text-muted: #7b6a5b;
+      --bullet: #c8905b;
     }
 
-    .time-block {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      justify-self: start;
-      align-self: center;
-    }
-
-    .time-main {
-      font-size: 78px;
-      font-weight: 650;
-      letter-spacing: 1px;
-      line-height: 1;
-    }
-
-    .ampm {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-    }
-
-    .date-center {
-      justify-self: center;
-      align-self: stretch;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(34px, 2.2vw, 46px);
-      font-weight: 650;
+    *{ box-sizing: border-box; margin:0; padding:0; }
+    html, body{ width:100%; height:100%; overflow:hidden; }
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      background: var(--bg);
       color: var(--text-main);
-      text-align: center;
+    }
+
+    /* Rotated canvas wrapper */
+    #rotator{
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* Full-screen “bleed” background (allowed to be cropped) */
+    #bleed{
+      position: absolute;
+      inset: -6%;
+      background: var(--frame);
+      z-index: 0;
+    }
+
+    /* Safe area to fight TV overscan */
+    #safe{
+      position: absolute;
+      inset: 0;
+      padding:
+        calc(var(--safeTop) + env(safe-area-inset-top))
+        calc(var(--safeRight) + env(safe-area-inset-right))
+        calc(var(--safeBottom) + env(safe-area-inset-bottom))
+        calc(var(--safeLeft) + env(safe-area-inset-left));
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    /* Page container (no extra padding here, #safe owns the padding) */
+    .frame{
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 10px;
+
+      /* “Butt to edge”: remove rounded corners and heavy shadow */
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+
+      overflow: hidden;
+    }
+
+    /* HEADER (thinner) */
+    .header{
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      column-gap: 12px;
+      padding: 2px 0 2px;
+      min-height: 70px;
+    }
+
+    .time-block{
+      display:flex;
+      align-items: baseline;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .time-main{
+      font-size: 64px;   /* still big, but thinner header */
+      font-weight: 700;
+      letter-spacing: 0.5px;
       line-height: 1;
     }
 
-    .weather-main {
+    .ampm{
+      font-size: 20px;
+      font-weight: 650;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+    }
+
+    .date-center{
+      justify-self: center;
+      text-align: center;
+      font-size: 34px;
+      font-weight: 750;
+      line-height: 1;
+      white-space: nowrap;       /* critical to prevent 2-3 line date */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 6px;
+    }
+
+    .weather-main{
       justify-self: end;
-      display: flex;
+      display:flex;
       align-items: center;
       justify-content: flex-end;
       text-align: right;
-      align-self: center;
+      white-space: nowrap;
     }
-
-    .weather-stack {
-      display: flex;
+    .weather-stack{
+      display:flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       align-items: flex-end;
     }
-
-    .weather-temp {
-      font-size: 56px;
-      font-weight: 650;
+    .weather-temp{
+      font-size: 46px;
+      font-weight: 750;
       line-height: 1;
     }
-
-    .weather-line {
-      font-size: 16px;
+    .weather-line{
+      font-size: 14px;
       color: var(--text-muted);
+      line-height: 1.1;
     }
 
-    /* FORECAST ROW */
+    /* FORECAST (next 3 days, thin banner, keep your format) */
     .forecast-row{
-      position: relative; /* needed for separators */
-      border-top:1px solid var(--border-soft);
-      border-bottom:1px solid var(--border-soft);
-      padding:16px 0 12px; /* more top space below the divider line */
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:10px;
+      position: relative;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 8px 0 8px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      min-width: 0;
+      overflow: hidden;
     }
 
-    /* Optional: vertical separators between the 5 day cards */
     .forecast-row.has-separators::before{
       content:"";
       position:absolute;
-      left:0;
-      right:0;
-      top:12px;         /* keeps it off the top border */
-      bottom:12px;      /* keeps it off the bottom border */
+      left:0; right:0;
+      top:8px; bottom:8px;
       pointer-events:none;
-
       background-image:
         linear-gradient(
           to right,
@@ -248,203 +172,177 @@ body {
           rgba(0,0,0,0.18) calc(100% - 1px),
           rgba(0,0,0,0.18) 100%
         );
-      background-size: calc(100% / 5) 100%;
+      background-size: calc(100% / 3) 100%;
       background-repeat: repeat;
     }
-
-    /* Hide the far-right line so lines are only BETWEEN days */
     .forecast-row.has-separators::after{
       content:"";
       position:absolute;
       right:0;
-      top:12px;
-      bottom:12px;
+      top:8px;
+      bottom:8px;
       width:2px;
       background: var(--frame);
       pointer-events:none;
     }
 
-    /* Card */
     .forecast-day{
-      display:grid;
-      grid-template-rows:56% 44%; /* big title like your mock */
-      padding:6px 6px 8px;
-      border-radius:14px;
-      min-height:120px; /* gives room for the big day title */
+      min-width: 0;
+      padding: 4px 6px;
+      border-radius: 10px;
+      overflow: hidden;
     }
 
-    /* HUGE day name */
     .forecast-top{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      width:100%;
-      font-weight:800;
-      letter-spacing:-0.5px;
-      line-height:0.95;
-      font-size:clamp(26px, 2.4vw, 46px);
-      padding:0 6px 8px;
-    }
-
-    /* Bottom strip: icon box + info box */
-    .forecast-bottom{
-      display:grid;
-      grid-template-columns:clamp(52px, 4.2vw, 84px) 1fr;
-      gap:8px;
-      align-items:stretch;
-      width:100%;
-    }
-
-    /* Left square */
-    .forecast-iconbox{
-      border:2px solid rgba(255,255,255,0.20);
-      border-radius:0; /* mock is square corners */
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    /* Big emoji */
-    .forecast-iconbig{
-      font-size:clamp(28px, 3.0vw, 54px);
-      line-height:1;
-    }
-
-    /* Right rectangle */
-    .forecast-rightbox{
-      border:2px solid rgba(255,255,255,0.20);
-      border-radius:0; /* mock is square corners */
-      display:grid;
-      grid-template-rows:56% 44%;
-      padding:6px 10px;
-    }
-
-    /* Temps row */
-    .forecast-tempsrow{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      width:100%;
-    }
-
-    .forecast-temps{
-      font-size:clamp(16px, 1.6vw, 26px);
-      font-weight:750;
-      letter-spacing:0.2px;
-      white-space:nowrap;
-    }
-
-    /* Condition + precip row */
-    .forecast-condrow{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:10px;
-      width:100%;
-    }
-
-    .forecast-cond{
-      font-size:clamp(12px, 1.05vw, 16px);
-      color:var(--text-muted);
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-      min-width:0;
-      flex:1;
-    }
-
-    .forecast-pop{
-      font-size:clamp(12px, 1.05vw, 16px);
-      color:var(--text-muted);
-      font-weight:700;
-      white-space:nowrap;
-      flex-shrink:0;
-    }
-
-    /* MAIN CONTENT */
-    .main {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 24px;
-    }
-
-    .main > * { min-width: 0; }
-.forecast-day, .forecast-bottom, .forecast-rightbox { min-width: 0; }
-
-    
-    .card {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 16px 18px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .card-header {
-      font-size: 18px;
-      font-weight: 650;
+      font-weight: 800;
+      font-size: 26px;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       margin-bottom: 6px;
     }
 
-    .card-subtitle {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
+    .forecast-bottom{
+      display:flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
 
-    .events-list,
-    .tasks-list {
-      display: flex;
+    .forecast-iconbig{
+      font-size: 28px;
+      line-height: 1;
+      width: 34px;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+
+    .forecast-right{
+      min-width: 0;
+      flex: 1 1 auto;
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .forecast-temps{
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .forecast-condline{
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .forecast-cond{
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .forecast-pop{
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 800;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    /* MAIN CONTENT */
+    .main{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 14px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .main > *{ min-width:0; }
+
+    .card{
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+      display:flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .card-header{
+      font-size: 16px;
+      font-weight: 750;
+      margin-bottom: 4px;
+    }
+    .card-subtitle{
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    #events-card .events-list{
+      overflow:auto;
+      min-height:0;
+      max-height: 280px;
+      padding-right: 6px;
+      display:flex;
       flex-direction: column;
       gap: 10px;
     }
 
     .event-item,
-    .task-item {
-      display: flex;
-      align-items: flex-start;
+    .task-item{
+      display:flex;
+      align-items:flex-start;
       gap: 10px;
-      font-size: 15px;
+      font-size: 14px;
+      min-width: 0;
     }
 
-    .event-bar {
+    .event-bar{
       width: 4px;
       border-radius: 999px;
       background: var(--accent);
       margin-top: 3px;
-      flex-shrink: 0;
+      flex-shrink:0;
       height: 44px;
     }
-
-    .event-text { flex: 1; min-width: 0; }
-
-    .event-cal {
-      font-size: 12px;
-      font-weight: 650;
+    .event-text{ flex: 1; min-width: 0; }
+    .event-cal{
+      font-size: 11px;
+      font-weight: 750;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.6px;
       margin-bottom: 2px;
     }
-
-    .event-title {
-      font-weight: 600;
+    .event-title{
+      font-weight: 650;
       color: var(--text-main);
       line-height: 1.2;
       margin-bottom: 2px;
-      word-wrap: break-word;
+      overflow-wrap: anywhere;
     }
-
-    .event-loc {
-      font-size: 13px;
+    .event-loc{
+      font-size: 12px;
       color: var(--text-muted);
       line-height: 1.2;
+      overflow-wrap: anywhere;
     }
 
-    .dot {
+    .dot{
       width: 8px;
       height: 8px;
       border-radius: 999px;
@@ -453,152 +351,173 @@ body {
       flex-shrink: 0;
     }
 
-    .task-text { flex: 1; }
+    .tasks-list{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .task-text{
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
 
-    .photo-wrap img {
+    /* PHOTO (fix "Family photo" but no image) */
+    .photo-wrap{
+      margin-top: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #efe7dc;
+      border: 1px solid var(--border-soft);
+      flex: 1 1 auto;
+      min-height: 220px;
+      position: relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .photo-placeholder{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: rgba(59,44,34,0.55);
+      font-weight: 650;
+      font-size: 16px;
+      letter-spacing: 0.2px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(0,0,0,0));
+      z-index: 1;
+      pointer-events:none;
+    }
+
+    .photo-wrap img{
       width: 100%;
       height: 100%;
       object-fit: contain;
-      display: block;
+      display:block;
+      opacity: 0;
+      transition: opacity 220ms ease;
+      z-index: 2;
     }
 
-    .footer {
+    /* FOOTER (no Bible verse) */
+    .footer{
       border-top: 1px solid var(--border-soft);
-      padding-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 14px;
-      color: var(--text-muted);
-      gap: 16px;
+      padding-top: 8px;
+      display:flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
     }
-
-    .verse-ref {
-      font-weight: 650;
-      color: var(--accent);
-      margin-left: 8px;
-      white-space: nowrap;
-    }
-
-    .status-pill {
+    .status-pill{
       padding: 4px 10px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
       font-size: 13px;
       white-space: nowrap;
+      font-weight: 700;
     }
 
-/* Rotate the wrapper when the device is landscape (Fire TV) so the UI is portrait */
-html.rotate90 #rotator{
-  width: 100vh;
-  height: 100vw;
-  transform-origin: 0 0;
-  transform: rotate(90deg) translate(0, -100%);
-}
-
-
-    @media (max-width: 600px) {
-      .frame { padding: 16px; }
-      .time-main { font-size: 48px; }
-      .weather-temp { font-size: 42px; }
-      .main { grid-template-columns: 1fr; }
-      .header { grid-template-columns: 1fr; row-gap: 10px; }
-      .date-center {
-        justify-self: start;
-        justify-content: flex-start;
-        align-self: center;
-      }
-      .weather-main { justify-self: start; }
+    /* Rotate wrapper when Fire TV is landscape so UI is portrait */
+    html.rotate90 #rotator{
+      width: 100vh;
+      height: 100vw;
+      transform-origin: 0 0;
+      transform: rotate(90deg) translate(0, -100%);
     }
+
+    /* Compact mode if the browser reports a narrow "portrait width" */
+    html.compact .header{ min-height: 62px; }
+    html.compact .time-main{ font-size: 56px; }
+    html.compact .date-center{ font-size: 28px; }
+    html.compact .weather-temp{ font-size: 40px; }
+    html.compact .forecast-top{ font-size: 22px; }
   </style>
 </head>
 
 <body>
- <div id="rotator">
+  <div id="rotator">
     <div id="bleed" aria-hidden="true"></div>
 
-    <div style="position:absolute;top:20px;left:20px;z-index:999999;background:#ff0000;color:#fff;
-      font-size:44px;font-weight:800;padding:14px 18px;border-radius:12px">
-      V-004
+    <!-- debug badge (optional). Delete this div when done -->
+    <div style="position:absolute;top:16px;left:16px;z-index:999999;background:#ff0000;color:#fff;
+      font-size:36px;font-weight:800;padding:10px 14px;border-radius:10px">
+      V-005
     </div>
-  
-  <div id="safe">
-    <div id="app">
-      <div id="page">
-        <div class="frame">
 
-          <header class="header">
-            <div class="time-block">
-              <div class="time-main" id="clock">4:10</div>
-              <div class="ampm" id="ampm">PM</div>
+    <div id="safe">
+      <div class="frame">
+
+        <header class="header">
+          <div class="time-block">
+            <div class="time-main" id="clock">4:10</div>
+            <div class="ampm" id="ampm">PM</div>
+          </div>
+
+          <div class="date-center" id="date-center">Thu, Jan 1</div>
+
+          <div class="weather-main">
+            <div class="weather-stack">
+              <div class="weather-temp" id="weather-temp">26°</div>
+              <div class="weather-line" id="weather-line">Feels like 22°</div>
             </div>
+          </div>
+        </header>
 
-            <div class="date-center" id="date-center">Sunday, Dec 14</div>
+        <section class="forecast-row has-separators" id="forecast-row"></section>
 
-            <div class="weather-main">
-              <div class="weather-stack">
-                <div class="weather-temp" id="weather-temp">26°</div>
-                <div class="weather-line" id="weather-line">Feels like 22°</div>
-              </div>
-            </div>
-          </header>
+        <main class="main">
+          <section class="card" id="events-card">
+            <div class="card-header">Upcoming Events</div>
+            <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
 
-          <section class="forecast-row has-separators" id="forecast-row"></section>
-
-          <main class="main">
-            <section class="card" id="events-card">
-              <div class="card-header">Upcoming Events</div>
-              <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
-
-              <div class="events-list" id="events-list">
-                <div class="event-item">
-                  <div class="event-bar"></div>
-                  <div class="event-text">
-                    <div class="event-cal">Calendar</div>
-                    <div class="event-title">Add events to calendar.txt</div>
-                  </div>
+            <div class="events-list" id="events-list">
+              <div class="event-item">
+                <div class="event-bar"></div>
+                <div class="event-text">
+                  <div class="event-cal">Calendar</div>
+                  <div class="event-title">Add events to calendar.txt</div>
                 </div>
               </div>
-
-              <div class="photo-wrap">
-                <img id="photo-img" alt="Family photo" src="" />
-              </div>
-            </section>
-
-            <section class="card">
-              <div class="card-header">Today’s Tasks</div>
-              <div class="card-subtitle">Family checklist</div>
-
-              <div class="tasks-list" id="tasks-list">
-                <div class="task-item">
-                  <div class="dot"></div>
-                  <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
-                </div>
-              </div>
-            </section>
-          </main>
-
-          <footer class="footer">
-            <div>
-              <span>You make known to me the path of life; in your presence there is fullness of joy.</span>
-              <span class="verse-ref">Psalm 16:11</span>
             </div>
-            <div class="status-pill" id="status-pill">Updated just now</div>
-          </footer>
 
-      </div> <!-- end .frame -->
-    </div>   <!-- end #page -->
-  </div>     <!-- end #app -->
-</div>       <!-- end #safe -->
-</div>       <!-- end #rotator -->
+            <div class="photo-wrap">
+              <div class="photo-placeholder" id="photo-ph">Loading photo…</div>
+              <img id="photo-img" alt="Family photo" src="" />
+            </div>
+          </section>
 
+          <section class="card">
+            <div class="card-header">Today’s Tasks</div>
+            <div class="card-subtitle">Family checklist</div>
 
-  <!-- Main dashboard logic -->
+            <div class="tasks-list" id="tasks-list">
+              <div class="task-item">
+                <div class="dot"></div>
+                <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer class="footer">
+          <div class="status-pill" id="status-pill">Updated just now</div>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
   <script>
-    function pad2(n) { return n.toString().padStart(2, "0"); }
+    function pad2(n){ return n.toString().padStart(2, "0"); }
 
-    function formatTime12(now) {
+    function formatTime12(now){
       let h = now.getHours();
       const m = now.getMinutes();
       const ampm = h >= 12 ? "PM" : "AM";
@@ -607,21 +526,24 @@ html.rotate90 #rotator{
       return { time: `${h}:${pad2(m)}`, ampm };
     }
 
-    function updateClock() {
+    function formatDateShort(now){
+      // Force "Thu, Jan 1" style regardless of device locale quirks
+      const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      const mos  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      return `${dows[now.getDay()]}, ${mos[now.getMonth()]} ${now.getDate()}`;
+    }
+
+    function updateClock(){
       const now = new Date();
       const { time, ampm } = formatTime12(now);
-
       document.getElementById("clock").textContent = time;
       document.getElementById("ampm").textContent = ampm;
-
-      const dateOptions = { weekday: "long", month: "long", day: "numeric" };
-      document.getElementById("date-center").textContent = now.toLocaleDateString(undefined, dateOptions);
-
+      document.getElementById("date-center").textContent = formatDateShort(now);
       document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
 
-    async function loadWeather() {
-      try {
+    async function loadWeather(){
+      try{
         const res = await fetch("weather.txt", { cache: "no-store" });
         if (!res.ok) return;
         const text = (await res.text()).trim();
@@ -632,20 +554,20 @@ html.rotate90 #rotator{
 
         if (tempMatch) document.getElementById("weather-temp").textContent = `${tempMatch[1]}°`;
         if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
-      } catch (e) {
+      } catch(e){
         console.error("Error loading weather:", e);
       }
     }
 
-    function hashToColor(str) {
+    function hashToColor(str){
       const palette = ["#c8905b", "#7aa7c7", "#8bbf83", "#b58bc9", "#d88484", "#9aa6b2", "#d2a24c"];
       let hash = 0;
-      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      for (let i=0;i<str.length;i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
       return palette[hash % palette.length];
     }
 
-    async function loadEvents() {
-      try {
+    async function loadEvents(){
+      try{
         const res = await fetch("calendar.txt", { cache: "no-store" });
         if (!res.ok) return;
         const text = await res.text();
@@ -659,7 +581,7 @@ html.rotate90 #rotator{
           .filter(l => l.length > 0)
           .slice(0, 10);
 
-        if (lines.length === 0) {
+        if (lines.length === 0){
           container.innerHTML = `
             <div class="event-item">
               <div class="event-bar"></div>
@@ -671,7 +593,7 @@ html.rotate90 #rotator{
           return;
         }
 
-        for (const line of lines) {
+        for (const line of lines){
           const parts = line.split(" | ").map(p => p.trim()).filter(Boolean);
           const cal = parts[0] || "Calendar";
           const title = parts[1] || parts[0] || line;
@@ -691,13 +613,13 @@ html.rotate90 #rotator{
           `;
           container.appendChild(item);
         }
-      } catch (e) {
+      } catch(e){
         console.error("Error loading events:", e);
       }
     }
 
-    async function loadTasks() {
-      try {
+    async function loadTasks(){
+      try{
         const res = await fetch("dashboard.txt", { cache: "no-store" });
         if (!res.ok) return;
         const text = await res.text();
@@ -710,7 +632,7 @@ html.rotate90 #rotator{
           .map(l => l.trim())
           .filter(l => l.length > 0);
 
-        if (lines.length === 0) {
+        if (lines.length === 0){
           container.innerHTML = `
             <div class="task-item">
               <div class="dot"></div>
@@ -719,7 +641,7 @@ html.rotate90 #rotator{
           return;
         }
 
-        for (const line of lines) {
+        for (const line of lines){
           const div = document.createElement("div");
           div.className = "task-item";
           div.innerHTML = `
@@ -728,42 +650,17 @@ html.rotate90 #rotator{
           `;
           container.appendChild(div);
         }
-      } catch (e) {
+      } catch(e){
         console.error("Error loading tasks:", e);
       }
     }
 
-    const TOTAL_PHOTOS = 529;
-    const PHOTO_INTERVAL_MS = 60000;
-
-    function pickRandomPhotoIndex() {
-      return Math.floor(Math.random() * TOTAL_PHOTOS) + 1;
-    }
-
-    function setPhotoByIndex(i) {
-      const num = String(i).padStart(3, "0");
-      const img = document.getElementById("photo-img");
-      if (!img) return;
-
-      const base = `images/family-${num}`;
-      img.onerror = () => {
-        img.onerror = null;
-        img.src = `${base}.jpeg?cb=${Date.now()}`;
-      };
-
-      img.src = `${base}.jpg?cb=${Date.now()}`;
-    }
-
-    function rotatePhotoRandom() {
-      setPhotoByIndex(pickRandomPhotoIndex());
-    }
-
-    // --- 5-day Forecast (from prediction.txt)
+    // --- 3-day Forecast (from prediction.txt)
     // Supports:
     // - 3 lines per day: Name, "Emoji temps", Condition (optionally includes a percent at end)
     // - 4 lines per day: Name, "Emoji temps", Condition, Precip%
-    async function loadForecast() {
-      try {
+    async function loadForecast(){
+      try{
         const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) return;
 
@@ -778,7 +675,7 @@ html.rotate90 #rotator{
         const days = [];
         let i = 0;
 
-        while (i < lines.length && days.length < 5) {
+        while (i < lines.length && days.length < 3){
           const name = lines[i++] || "";
           const line2 = lines[i++] || "";
           let condition = lines[i++] || "";
@@ -786,13 +683,11 @@ html.rotate90 #rotator{
 
           if (!name || !line2) continue;
 
-          // If a 4th line exists and looks like precip, use it
-          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])) {
+          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])){
             pop = lines[i++];
           } else {
-            // Or pull precip from condition like "Wintry Mix 0.9 %"
             const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
-            if (m) {
+            if (m){
               pop = `${m[1]}%`;
               condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
             }
@@ -802,9 +697,9 @@ html.rotate90 #rotator{
           let emoji = "";
           let temps = "";
 
-          if (parts.length === 1) {
+          if (parts.length === 1){
             temps = parts[0];
-          } else if (/^[\d-]/.test(parts[0])) {
+          } else if (/^[\d-]/.test(parts[0])){
             temps = parts.join(" ");
           } else {
             emoji = parts[0];
@@ -819,29 +714,22 @@ html.rotate90 #rotator{
 
         row.innerHTML = "";
 
-        for (const d of days) {
+        for (const d of days){
           const div = document.createElement("div");
           div.className = "forecast-day";
 
           const emojiSafe = d.emoji || "";
-          const popSafe = (d.pop && d.pop.trim()) ? d.pop.trim() : "0%";
+          const popSafe = (d.pop && d.pop.trim() && d.pop.trim() !== "0%") ? d.pop.trim() : "";
 
           div.innerHTML = `
             <div class="forecast-top">${d.name}</div>
-
             <div class="forecast-bottom">
-              <div class="forecast-iconbox">
-                <div class="forecast-iconbig">${emojiSafe}</div>
-              </div>
-
-              <div class="forecast-rightbox">
-                <div class="forecast-tempsrow">
-                  <div class="forecast-temps">${d.temps || ""}</div>
-                </div>
-
-                <div class="forecast-condrow">
+              <div class="forecast-iconbig">${emojiSafe}</div>
+              <div class="forecast-right">
+                <div class="forecast-temps">${d.temps || ""}</div>
+                <div class="forecast-condline">
                   <div class="forecast-cond">${d.condition || ""}</div>
-                  <div class="forecast-pop">${popSafe}</div>
+                  ${popSafe ? `<div class="forecast-pop">${popSafe}</div>` : ``}
                 </div>
               </div>
             </div>
@@ -849,24 +737,114 @@ html.rotate90 #rotator{
 
           row.appendChild(div);
         }
-      } catch (e) {
+      } catch(e){
         console.error("Error loading Forecast:", e);
       }
     }
 
- function applyLayoutMode() {
-  const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
-  document.documentElement.classList.toggle("rotate90", isLandscape);
+    // --- Photo loading: avoid "Family photo" but no image
+const PHOTO_MAX_INDEX = 263;     // set to the highest photo number you actually have
+const PHOTO_INTERVAL_MS = 60000;
+const PHOTO_CACHE_BUST = false;  // set true only when you just uploaded new photos
 
-  // After rotation, the effective portrait width is the "short side"
-  const portraitWidth = isLandscape ? window.innerHeight : window.innerWidth;
 
-  // Toggle compact mode for very narrow CSS widths (common on TVs due to DPR)
-  document.documentElement.classList.toggle("compact", portraitWidth < 900);
+// --- FAST + STRICT photo loader (images/family-###.jpg only)
+const missingPhotos = new Set();
+let photoPool = [];
+let photoCursor = 0;
+
+function buildPhotoPool(){
+  // Known missing files
+  missingPhotos.add(2);
+  missingPhotos.add(4);
+
+  photoPool = [];
+  for (let i = 1; i <= PHOTO_MAX_INDEX; i++) photoPool.push(i);
+
+
+
+  // Fisher-Yates shuffle
+  for (let i = photoPool.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [photoPool[i], photoPool[j]] = [photoPool[j], photoPool[i]];
+  }
+  photoCursor = 0;
 }
 
-window.addEventListener("resize", applyLayoutMode);
-applyLayoutMode();
+function nextPhotoIndex(){
+  if (photoPool.length === 0 || photoCursor >= photoPool.length) buildPhotoPool();
+
+  while (photoCursor < photoPool.length && missingPhotos.has(photoPool[photoCursor])){
+    photoCursor++;
+  }
+
+  if (photoCursor >= photoPool.length){
+    buildPhotoPool();
+    while (photoCursor < photoPool.length && missingPhotos.has(photoPool[photoCursor])){
+      photoCursor++;
+    }
+  }
+
+  if (photoCursor >= photoPool.length) return 1;
+  return photoPool[photoCursor++];
+}
+
+function photoUrlForIndex(i){
+  const num = String(i).padStart(3, "0");
+  const base = `images/family-${num}.jpg`;
+  return PHOTO_CACHE_BUST ? `${base}?v=${Date.now()}` : base;
+}
+
+function showPhotoByIndex(i){
+  const img = document.getElementById("photo-img");
+  const ph = document.getElementById("photo-ph");
+  if (!img) return;
+
+  if (ph){
+    ph.style.display = "flex";
+    ph.textContent = "Loading photo…";
+  }
+
+  img.style.opacity = "0";
+
+  img.onload = () => {
+    if (ph) ph.style.display = "none";
+    img.style.opacity = "1";
+  };
+
+  img.onerror = () => {
+    missingPhotos.add(i);
+    const next = nextPhotoIndex();
+
+    // set hints again before retrying
+    img.decoding = "async";
+    img.loading = "eager";
+
+    img.src = photoUrlForIndex(next);
+  };
+
+  // set hints before first load
+  img.decoding = "async";
+  img.loading = "eager";
+
+  img.src = photoUrlForIndex(i);
+}
+
+
+function rotatePhotoFastStrict(){
+  const i = nextPhotoIndex();
+  showPhotoByIndex(i);
+}
+    function applyLayoutMode(){
+      const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
+      document.documentElement.classList.toggle("rotate90", isLandscape);
+
+      const portraitWidth = isLandscape ? window.innerHeight : window.innerWidth;
+      document.documentElement.classList.toggle("compact", portraitWidth < 900);
+    }
+
+    window.addEventListener("resize", applyLayoutMode);
+    applyLayoutMode();
 
     updateClock();
     setInterval(updateClock, 1000);
@@ -881,36 +859,33 @@ applyLayoutMode();
       loadForecast();
     }, 30000);
 
-    window.addEventListener("load", () => {
-      rotatePhotoRandom();
-      setInterval(rotatePhotoRandom, PHOTO_INTERVAL_MS);
-    });
+window.addEventListener("load", () => {
+  buildPhotoPool();
+  rotatePhotoFastStrict();
+  setInterval(rotatePhotoFastStrict, PHOTO_INTERVAL_MS);
+});
   </script>
 
-  <!-- Keep screen awake (best-effort) -->
   <script>
     (async () => {
-      // Try Wake Lock first (may or may not be supported on Fire TV / Silk)
       let wakeLock = null;
 
-      async function requestWakeLock() {
-        try {
-          if ("wakeLock" in navigator) {
+      async function requestWakeLock(){
+        try{
+          if ("wakeLock" in navigator){
             wakeLock = await navigator.wakeLock.request("screen");
           }
-        } catch (e) {
-          // Ignore, fallback below
+        } catch(e){
+          // ignore
         }
       }
 
-      // Re-request if the tab visibility changes
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") requestWakeLock();
       });
 
       await requestWakeLock();
 
-      // Fallback: tiny “activity” loop to avoid some idle detection
       setInterval(() => {
         window.scrollBy(0, 1);
         window.scrollBy(0, -1);
@@ -919,16 +894,3 @@ applyLayoutMode();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
