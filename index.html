@@ -7,17 +7,19 @@
   <meta http-equiv="refresh" content="1800">
 
   <style>
-    :root {
-      --bg: #f7f2e9;
-      --frame: #fdf8f1;
-      --card: #ffffff;
-      --border-soft: #eadfce;
-      --accent: #c8905b;
-      --accent-soft: #f1d4b8;
-      --text-main: #3b2c22;
-      --text-muted: #7b6a5b;
-      --bullet: #c8905b;
-    }
+:root{
+  --fit: 0.90; /* 0.90 = shrink 10% to defeat overscan */
+  --bg: #f7f2e9;
+  --frame: #fdf8f1;
+  --card: #ffffff;
+  --border-soft: #eadfce;
+  --accent: #c8905b;
+  --accent-soft: #f1d4b8;
+  --text-main: #3b2c22;
+  --text-muted: #7b6a5b;
+  --bullet: #c8905b;
+}
+
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -39,13 +41,10 @@
 #safe{
   position: fixed;
   inset: 0;
-  outline: 12px solid red !important;
-  background: rgba(255,0,0,0.05) !important;
-  /* Overscan on TVs is often ~5% of width (~90px on 1920). */
-  padding: 48px 80px 48px 48px; /* top right bottom left */
-
+  padding: 0;
   box-sizing: border-box;
 }
+
 
     /* Make sure nothing inside can exceed the visible area */
     #app {
@@ -57,13 +56,18 @@
     }
 
     /* Wrapper that used to be body layout */
-    #page {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      padding: 0; /* important: safe wrapper handles margin now */
-    }
+   #page{
+  position: relative;
+  display: flex;
+  padding: 0;
+
+  transform: scale(var(--fit));
+  transform-origin: 0 0;
+
+  width: calc(100% / var(--fit));
+  height: calc(100% / var(--fit));
+}
+
 
     .frame {
       flex: 1;
@@ -848,6 +852,7 @@
   </script>
 </body>
 </html>
+
 
 
 
