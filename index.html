@@ -35,13 +35,16 @@
       overflow: hidden;
     }
 
-    /* Prevent Fire TV overscan from clipping edges */
-    #safe {
-      position: fixed;
-      inset: 0;
-      padding: clamp(18px, 2.8vw, 48px); /* increase if still clipped */
-      box-sizing: border-box;
-    }
+/* Prevent Fire TV overscan from clipping edges */
+#safe{
+  position: fixed;
+  inset: 0;
+
+  /* Overscan on TVs is often ~5% of width (~90px on 1920). */
+  padding: 64px 120px 64px 64px; /* top right bottom left */
+
+  box-sizing: border-box;
+}
 
     /* Make sure nothing inside can exceed the visible area */
     #app {
@@ -844,3 +847,4 @@
   </script>
 </body>
 </html>
+
