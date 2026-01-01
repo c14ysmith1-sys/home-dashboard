@@ -8,7 +8,7 @@
 
   <style>
 :root{
-  --fit: 0.90; /* 0.90 = shrink 10% to defeat overscan */
+  --fit: 0.84; /* start here */
   --bg: #f7f2e9;
   --frame: #fdf8f1;
   --card: #ffffff;
@@ -19,7 +19,6 @@
   --text-muted: #7b6a5b;
   --bullet: #c8905b;
 }
-
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -56,18 +55,15 @@
     }
 
     /* Wrapper that used to be body layout */
-   #page{
+#page{
   position: relative;
-  display: flex;
-  padding: 0;
-
-  transform: scale(var(--fit));
-  transform-origin: 0 0;
-
   width: calc(100% / var(--fit));
   height: calc(100% / var(--fit));
+  transform: scale(var(--fit));
+  transform-origin: top left;
+  display: flex;
+  padding: 0;
 }
-
 
     .frame {
       flex: 1;
@@ -857,6 +853,7 @@
   </script>
 </body>
 </html>
+
 
 
 
