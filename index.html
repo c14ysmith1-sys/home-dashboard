@@ -8,10 +8,10 @@
 
   <style>
 :root{
-  --safeTop: 60px;
-  --safeRight: 70px;
-  --safeBottom: 60px;
-  --safeLeft: 60px;
+  --safeTop: clamp(24px, 3.8vw, 60px);
+  --safeRight: clamp(24px, 4.4vw, 70px);
+  --safeBottom: clamp(24px, 3.8vw, 60px);
+  --safeLeft: clamp(24px, 4.4vw, 60px);
 
   --bg: #f7f2e9;
   --frame: #fdf8f1;
@@ -24,6 +24,37 @@
   --bullet: #c8905b;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html.compact .frame{
+  gap: 12px;
+  padding: 16px 18px 12px;
+}
+
+html.compact .time-main{ font-size: 64px; }
+html.compact .weather-temp{ font-size: 46px; }
+
+html.compact .main{
+  grid-template-columns: 1fr 1fr;   /* keep 2 columns */
+  gap: 14px;
+}
+
+html.compact #events-card .events-list{
+  max-height: 260px;
+}
+
+html.compact .forecast-row{
+  gap: 6px;
+  padding: 12px 0 10px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+html.compact .forecast-top{
+  font-size: 24px;
+}
+
+html.compact .event-item,
+html.compact .task-item{
+  font-size: 14px;
+}
 
 html, body {
   width: 100%;
@@ -38,17 +69,24 @@ body {
 }
 
     
+/* Rotated canvas wrapper */
+#rotator{
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
 /* Full-screen “bleed” background (allowed to be cropped) */
 #bleed{
-  position: fixed;
-  inset: -6%;              /* extend beyond edges */
+  position: absolute;
+  inset: -6%;
   background: var(--frame);
   z-index: 0;
 }
 
-/* Safe area for real UI (never touch edges) */
+/* Safe area for real UI */
 #safe{
-  position: fixed;
+  position: absolute;
   inset: 0;
   padding: var(--safeTop) var(--safeRight) var(--safeBottom) var(--safeLeft);
   box-sizing: border-box;
@@ -331,6 +369,10 @@ body {
       gap: 24px;
     }
 
+    .main > * { min-width: 0; }
+.forecast-day, .forecast-bottom, .forecast-rightbox { min-width: 0; }
+
+    
     .card {
       background: var(--card);
       border-radius: 18px;
@@ -413,18 +455,6 @@ body {
 
     .task-text { flex: 1; }
 
-    .photo-wrap {
-      margin-top: 14px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #efe7dc;
-      border: 1px solid var(--border-soft);
-      height: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .photo-wrap img {
       width: 100%;
       height: 100%;
@@ -459,23 +489,14 @@ body {
       white-space: nowrap;
     }
 
-    /* Fire TV rotation mode: rotate the whole dashboard when the device is landscape */
-    html.rotate90 body {
-      position: absolute;
-      top: 0;
-      left: 100%;
-      width: 100vh;
-      height: 100vw;
-      transform-origin: top left;
-      transform: rotate(90deg);
-    }
+/* Rotate the wrapper when the device is landscape (Fire TV) so the UI is portrait */
+html.rotate90 #rotator{
+  width: 100vh;
+  height: 100vw;
+  transform-origin: 0 0;
+  transform: rotate(90deg) translate(0, -100%);
+}
 
-    /* When rotated, make sure the wrapper still fills the screen */
-    html.rotate90 #page {
-      width: 100%;
-      height: 100%;
-      padding: 0; /* important: safe wrapper handles margin now */
-    }
 
     @media (max-width: 600px) {
       .frame { padding: 16px; }
@@ -494,12 +515,13 @@ body {
 </head>
 
 <body>
- <div id="bleed" aria-hidden="true"></div>
+ <div id="rotator">
+    <div id="bleed" aria-hidden="true"></div>
 
-  <div style="position:fixed;top:20px;left:20px;z-index:999999;background:#ff0000;color:#fff;
-    font-size:44px;font-weight:800;padding:14px 18px;border-radius:12px">
-    V-003
-  </div>
+    <div style="position:absolute;top:20px;left:20px;z-index:999999;background:#ff0000;color:#fff;
+      font-size:44px;font-weight:800;padding:14px 18px;border-radius:12px">
+      V-003
+    </div>
   
   <div id="safe">
     <div id="app">
@@ -565,10 +587,12 @@ body {
             <div class="status-pill" id="status-pill">Updated just now</div>
           </footer>
 
-        </div>
-      </div>
-    </div>
-  </div>
+      </div> <!-- end .frame -->
+    </div>   <!-- end #page -->
+  </div>     <!-- end #app -->
+</div>       <!-- end #safe -->
+</div>       <!-- end #rotator -->
+
 
   <!-- Main dashboard logic -->
   <script>
@@ -830,13 +854,19 @@ body {
       }
     }
 
-    function applyFireTvPortraitMode() {
-      const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
-      document.documentElement.classList.toggle("rotate90", isLandscape);
-    }
+ function applyLayoutMode() {
+  const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
+  document.documentElement.classList.toggle("rotate90", isLandscape);
 
-    window.addEventListener("resize", applyFireTvPortraitMode);
-    applyFireTvPortraitMode();
+  // After rotation, the effective portrait width is the "short side"
+  const portraitWidth = isLandscape ? window.innerHeight : window.innerWidth;
+
+  // Toggle compact mode for very narrow CSS widths (common on TVs due to DPR)
+  document.documentElement.classList.toggle("compact", portraitWidth < 900);
+}
+
+window.addEventListener("resize", applyLayoutMode);
+applyLayoutMode();
 
     updateClock();
     setInterval(updateClock, 1000);
@@ -889,6 +919,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
