@@ -64,15 +64,33 @@ body {
     .main { min-height: 0; }            /* allows grid children to shrink */
 .card { min-height: 0; overflow: hidden; }
 
-#events-card .events-list {
+/* Events card should be able to stretch */
+#events-card { min-height: 0; }
+
+/* Let the events list scroll if needed */
+#events-card .events-list{
   overflow: auto;
   min-height: 0;
-  padding-right: 6px;              /* avoids scrollbar overlaying text */
+  max-height: 320px;   /* tweak if you want more/less events visible */
+  padding-right: 6px;
 }
 
-#events-card .photo-wrap {
-  flex: 0 0 auto;                  /* photo stays visible */
+/* Photo fills the leftover space in the card */
+.photo-wrap{
+  margin-top: 14px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #efe7dc;
+  border: 1px solid var(--border-soft);
+
+  flex: 1 1 auto;     /* key */
+  min-height: 220px;  /* key */
+  height: auto;       /* remove fixed 360 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 
 .frame{
@@ -459,7 +477,7 @@ body {
       padding: 0; /* important: safe wrapper handles margin now */
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 600px) {
       .frame { padding: 16px; }
       .time-main { font-size: 48px; }
       .weather-temp { font-size: 42px; }
@@ -480,7 +498,7 @@ body {
 
   <div style="position:fixed;top:20px;left:20px;z-index:999999;background:#ff0000;color:#fff;
     font-size:44px;font-weight:800;padding:14px 18px;border-radius:12px">
-    V-002
+    V-003
   </div>
   
   <div id="safe">
@@ -871,6 +889,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
