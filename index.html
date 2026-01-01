@@ -8,7 +8,11 @@
 
   <style>
 :root{
-  --fit: 0.80; /* start here */
+  --safeTop: 60px;
+  --safeRight: 70px;
+  --safeBottom: 60px;
+  --safeLeft: 60px;
+
   --bg: #f7f2e9;
   --frame: #fdf8f1;
   --card: #ffffff;
@@ -19,62 +23,74 @@
   --text-muted: #7b6a5b;
   --bullet: #c8905b;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%;
+  height: 100%;
+}
 
-    /* Important: avoid 100vw/100vh on Fire TV, use % sizing */
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-    }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  overflow: hidden; /* important on Fire TV */
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text-main);
-      overflow: hidden;
-    }
+    
+/* Full-screen “bleed” background (allowed to be cropped) */
+#bleed{
+  position: fixed;
+  inset: -6%;              /* extend beyond edges */
+  background: var(--frame);
+  z-index: 0;
+}
 
-/* Prevent Fire TV overscan from clipping edges */
+/* Safe area for real UI (never touch edges) */
 #safe{
   position: fixed;
   inset: 0;
-  padding: 0;
+  padding: var(--safeTop) var(--safeRight) var(--safeBottom) var(--safeLeft);
   box-sizing: border-box;
+  z-index: 1;
+}
+
+/* Normal full-size layout inside safe area */
+#app, #page{
+  width: 100%;
+  height: 100%;
+}
+
+    .main { min-height: 0; }            /* allows grid children to shrink */
+.card { min-height: 0; overflow: hidden; }
+
+#events-card .events-list {
+  overflow: auto;
+  min-height: 0;
+  padding-right: 6px;              /* avoids scrollbar overlaying text */
+}
+
+#events-card .photo-wrap {
+  flex: 0 0 auto;                  /* photo stays visible */
 }
 
 
-    /* Make sure nothing inside can exceed the visible area */
-    #app {
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      max-height: 100%;
-      box-sizing: border-box;
-    }
+.frame{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 
-    /* Wrapper that used to be body layout */
-#page{
-  position: relative;
-  width: calc(100% / var(--fit));
-  height: calc(100% / var(--fit));
-  transform: scale(var(--fit));
-  transform-origin: top left;
-  display: flex;
-  padding: 0;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 16px;
+
+  border-radius: 24px;
+  background: var(--frame);
+  box-shadow: 0 16px 60px rgba(0,0,0,0.08);
+  padding: 24px 32px 16px;
+
+  overflow: hidden; /* critical: keeps bottom from running off-screen */
 }
-
-    .frame {
-      flex: 1;
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 16px;
-      border-radius: 24px;
-      background: var(--frame);
-      box-shadow: 0 16px 60px rgba(0,0,0,0.08);
-      padding: 24px 32px 16px;
-    }
 
     /* HEADER */
     .header {
@@ -460,9 +476,11 @@
 </head>
 
 <body>
- <div style="position:fixed;top:20px;left:20px;z-index:999999;background:#ff0000;color:#fff;
+ <div id="bleed" aria-hidden="true"></div>
+
+  <div style="position:fixed;top:20px;left:20px;z-index:999999;background:#ff0000;color:#fff;
     font-size:44px;font-weight:800;padding:14px 18px;border-radius:12px">
-    V-001
+    V-002
   </div>
   
   <div id="safe">
@@ -853,6 +871,7 @@
   </script>
 </body>
 </html>
+
 
 
 
