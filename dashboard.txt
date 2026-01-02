@@ -1,42 +1,29 @@
 Chores – Today
-• Kitchen | C/V | Load dishwasher
-• Kitchen | C | Unload dishwasher
-• Kitchen | C | Hand-wash pots/pans/knives
-• Kitchen | V | Wipe counters
-• Kitchen | V | Wipe stove top
-• Kitchen | V | Clean microwave
-• Kitchen | C | Empty kitchen trash
-• Kitchen | C | Empty kitchen trash
-• Kitchen | C/V | Clear kitchen surfaces
-• Kitchen | C/V | Pantry: toss expired food
-• Kitchen | V | Wipe dining table
-• Kitchen | C | Clean sink
-• Kitchen | C/V | Deep clean oven
-• Kids Food | R | 🥪🫧 wash lunch containers
-• Kids Food | V | Wash kids water bottles
-• Kids Food | C/V | Clean high chair
-• Floors | C/V | Wipe switches + door handles
-• Floors | C | Clean sliding door track
-• Floors | C/V | Dust baseboards
-• Floors | C/V | Clean windows
-• Pets | C | Wash pet food/water bowls
-• Pets | C | Scoop boxes + Refill food
-• Pets | V | Flea/tick/heartworm meds
-• Pets | C | Vacuum litter area
-• Pets | R | 🐶🍽️ feed Chester
-• Pets | C/V | Walk dog
-• Pets | C | Pick up dog poop
-• Pets | V | Vacuum dog bed
-• Pets | C/V | Dog haircut
-• Kids | R | 🧸📚 tidy living room toys/books
-• Kids | R | 🧸📚 tidy loft toys/books
-• Kids | V | Lay out Eloise clothes
-• Kids | V | Lay out Clarity clothes
-• Kids | R | 🎒🧊👟 school reset (bag, water, shoes)
-• Kids | V | Check school folders/papers
-• Car | C | Wash Clay’s car
-• Car | C | Wash Victoria’s car
-• Car | C/V | Check windshield washer fluid
-• Home | R | 🚪👟 reset entryway (shoes/coats/bags)
 • Kitchen | R | 🍽️➡️🫧 collect dishes to sink
 • Pets | V | Brush cats
+• Planning | C/V | Review calendar for
+• Kitchen | V | Wipe fridge handles/doors
+• Kitchen | C/V | Fridge: toss old food
+• Kitchen | C/V | Restock fridge drinks
+• Kitchen | V | Restock snacks
+• Kitchen | V | Wipe cabinet handles
+• Kitchen | C/V | Clean fridge shelves
+• Kitchen | V | Wipe backsplash
+• Kitchen | V | Clean garbage disposal
+• Kitchen | V | Replace/sanitize sponge
+• Laundry | C | Wash Clay clothes
+• Laundry | C | Wash towels
+• Laundry | C/V | Wash and replace hand towels
+• Bathrooms | V/R | 🪥🫧 wipe sink + toothbrush holder
+• Bathrooms | R | 🧻🔁 replace toilet paper
+• Bathrooms | V | Restock soap/shampoo/kids bath
+• Bathrooms | V | Wipe bath tub after use
+• Floors | C/V | Run robot vacuum
+• Pets | R | 🐾💧 refill pet water bowls
+• Pets | R | 🐱⛲ fill cat fountain
+• Pets | C/V | Refill dog food
+• Kids | V | Repack diaper/toddler bag
+• Kids | C/V | Trim Clarity nails
+• Kids | C/V | Trim Eloise nails
+• Kids | R | 🧽🧒 wipe kids play table
+• Outside | V | Sweep porch/entry
