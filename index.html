@@ -66,7 +66,7 @@
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      grid-template-rows: auto auto 1fr;
       gap: 10px;
 
       /* “Butt to edge”: remove rounded corners and heavy shadow */
@@ -78,67 +78,69 @@
     }
 
     /* HEADER (thinner) */
-    .header{
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      column-gap: 12px;
-      padding: 2px 0 2px;
-      min-height: 70px;
-    }
+.header{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: stretch;              /* lets the center date fill height */
+  column-gap: 12px;
+  padding: 2px 0 2px;
+  min-height: 74px;
+}
 
-    .time-block{
-      display:flex;
-      align-items: baseline;
-      gap: 10px;
-      white-space: nowrap;
-    }
+.time-block{
+  display:flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  align-self: center;
+}
 
-    .time-main{
-      font-size: 64px;   /* still big, but thinner header */
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      line-height: 1;
-    }
+.time-main{
+  font-size: 54px;                   /* shrink clock first */
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
 
-    .ampm{
-      font-size: 20px;
-      font-weight: 650;
-      color: var(--text-muted);
-      letter-spacing: 0.8px;
-    }
+.ampm{
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+}
 
-    .date-center{
-      justify-self: center;
-      text-align: center;
-      font-size: 34px;
-      font-weight: 750;
-      line-height: 1;
-      white-space: nowrap;       /* critical to prevent 2-3 line date */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 0 6px;
-    }
+.date-center{
+  justify-self: center;
+  text-align: center;
 
-    .weather-main{
-      justify-self: end;
-      display:flex;
-      align-items: center;
-      justify-content: flex-end;
-      text-align: right;
-      white-space: nowrap;
-    }
-    .weather-stack{
-      display:flex;
-      flex-direction: column;
-      gap: 2px;
-      align-items: flex-end;
-    }
-    .weather-temp{
-      font-size: 46px;
-      font-weight: 750;
-      line-height: 1;
-    }
+  display:flex;                      /* fill header height */
+  align-items:center;
+  justify-content:center;
+
+  font-size: 56px;                   /* big date */
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+}
+
+.weather-main{
+  justify-self: end;
+  display:flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.weather-temp{
+  font-size: 40px;                   /* shrink temp after clock */
+  font-weight: 750;
+  line-height: 1;
+}
     .weather-line{
       font-size: 14px;
       color: var(--text-muted);
@@ -281,26 +283,31 @@
       overflow: hidden;
     }
 
-    .card-header{
-      font-size: 16px;
-      font-weight: 750;
-      margin-bottom: 4px;
-    }
+.card-header{
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 8px;
+
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
     .card-subtitle{
       font-size: 13px;
       color: var(--text-muted);
       margin-bottom: 8px;
     }
 
-    #events-card .events-list{
-      overflow:auto;
-      min-height:0;
-      max-height: 280px;
-      padding-right: 6px;
-      display:flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+#events-card .events-list{
+  overflow:auto;
+  min-height:0;
+  flex: 1 1 auto;
+  padding-right: 6px;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
     .event-item,
     .task-item{
@@ -341,7 +348,104 @@
       line-height: 1.2;
       overflow-wrap: anywhere;
     }
+.events-day{
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-main);
+  text-align: left;
+  margin-top: 2px;
+}
 
+.event-item{
+  display:grid;
+  grid-template-columns: 22px 1fr auto;
+  column-gap: 10px;
+  align-items:start;
+  font-size: 14px;
+  min-width: 0;
+}
+
+.event-emoji{
+  width: 22px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.event-main{
+  min-width: 0;
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-top{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items:start;
+  min-width: 0;
+}
+
+.event-title{
+  font-weight: 750;
+  color: var(--text-main);
+  line-height: 1.2;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;     /* never more than 2 lines */
+  overflow: hidden;
+}
+
+.event-title.noloc{
+  font-size: 16px;           /* bigger when no location */
+}
+
+.event-title.hasloc{
+  font-size: 14px;           /* slightly smaller when location exists */
+}
+
+.event-loc{
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.2;
+
+  white-space: nowrap;       /* 1 line only */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time{
+  display:flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.event-time-main{
+  font-size: 18px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.event-time-ampm{
+  font-size: 9px;
+  font-weight: 850;
+  color: var(--text-muted);
+  line-height: 1;
+  margin-left: 0;            /* no space */
+}
+
+.event-time-allday{
+  font-size: 12px;
+  font-weight: 850;
+  color: var(--text-main);
+}
+
+    
     .dot{
       width: 8px;
       height: 8px;
@@ -365,64 +469,47 @@
       word-break: break-word;
     }
 
-    /* PHOTO (fix "Family photo" but no image) */
-    .photo-wrap{
-      margin-top: 12px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #efe7dc;
-      border: 1px solid var(--border-soft);
-      flex: 1 1 auto;
-      min-height: 220px;
-      position: relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
+    .tasks-list{
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  overflow:auto;
+  min-height:0;
+  flex: 1 1 auto;
+}
 
-    .photo-placeholder{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color: rgba(59,44,34,0.55);
-      font-weight: 650;
-      font-size: 16px;
-      letter-spacing: 0.2px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(0,0,0,0));
-      z-index: 1;
-      pointer-events:none;
-    }
+.task-location{
+  font-size: 14px;     /* same as events day heading */
+  font-weight: 800;
+  color: var(--text-main);
+  margin-top: 2px;
+}
 
-    .photo-wrap img{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display:block;
-      opacity: 0;
-      transition: opacity 220ms ease;
-      z-index: 2;
-    }
+.task-line{
+  display:flex;
+  align-items:flex-start;
+  gap: 8px;
+  padding-left: 12px;  /* gentle indent */
+  min-width: 0;
+}
 
-    /* FOOTER (no Bible verse) */
-    .footer{
-      border-top: 1px solid var(--border-soft);
-      padding-top: 8px;
-      display:flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 12px;
-    }
-    .status-pill{
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 13px;
-      white-space: nowrap;
-      font-weight: 700;
-    }
+.task-emoji{
+  width: 22px;
+  text-align: center;
+  flex: 0 0 auto;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.task-text{
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  font-size: 14px;
+}
+
 
     /* Rotate wrapper when Fire TV is landscape so UI is portrait */
     html.rotate90 #rotator{
@@ -448,7 +535,7 @@
     <!-- debug badge (optional). Delete this div when done -->
     <div style="position:absolute;top:16px;left:16px;z-index:999999;background:#ff0000;color:#fff;
       font-size:36px;font-weight:800;padding:10px 14px;border-radius:10px">
-      V-005
+      V-006
     </div>
 
     <div id="safe">
@@ -475,7 +562,6 @@
         <main class="main">
           <section class="card" id="events-card">
             <div class="card-header">Upcoming Events</div>
-            <div class="card-subtitle" id="events-subtitle">Today & next few days</div>
 
             <div class="events-list" id="events-list">
               <div class="event-item">
@@ -487,15 +573,8 @@
               </div>
             </div>
 
-            <div class="photo-wrap">
-              <div class="photo-placeholder" id="photo-ph">Loading photo…</div>
-              <img id="photo-img" alt="Family photo" src="" />
-            </div>
-          </section>
-
           <section class="card">
             <div class="card-header">Today’s Tasks</div>
-            <div class="card-subtitle">Family checklist</div>
 
             <div class="tasks-list" id="tasks-list">
               <div class="task-item">
@@ -505,10 +584,6 @@
             </div>
           </section>
         </main>
-
-        <footer class="footer">
-          <div class="status-pill" id="status-pill">Updated just now</div>
-        </footer>
 
       </div>
     </div>
@@ -539,7 +614,6 @@
       document.getElementById("clock").textContent = time;
       document.getElementById("ampm").textContent = ampm;
       document.getElementById("date-center").textContent = formatDateShort(now);
-      document.getElementById("status-pill").textContent = "Updated at " + time + " " + ampm;
     }
 
     async function loadWeather(){
@@ -566,32 +640,161 @@
       return palette[hash % palette.length];
     }
 
-    async function loadEvents(){
-      try{
-        const res = await fetch("calendar.txt", { cache: "no-store" });
-        if (!res.ok) return;
-        const text = await res.text();
+   function ordinal(n){
+  const v = n % 100;
+  if (v >= 11 && v <= 13) return `${n}th`;
+  const last = n % 10;
+  if (last === 1) return `${n}st`;
+  if (last === 2) return `${n}nd`;
+  if (last === 3) return `${n}rd`;
+  return `${n}th`;
+}
 
-        const container = document.getElementById("events-list");
-        container.innerHTML = "";
+function extractLeadingEmoji(calName){
+  const s = (calName || "").trim();
+  if (!s) return "";
+  const first = Array.from(s)[0] || "";
+  // crude but practical: if it's not a letter/number, treat as emoji/symbol
+  if (/[\p{L}\p{N}]/u.test(first)) return "";
+  return first;
+}
 
-        const lines = text
-          .split("\n")
-          .map(l => l.trim())
-          .filter(l => l.length > 0)
-          .slice(0, 10);
+function parseStart(startStr){
+  const s = (startStr || "").trim();
+  const out = {
+    dateKey: "",
+    dayLabel: "",
+    timeMain: "",
+    timeAmPm: "",
+    allDay: false,
+  };
 
-        if (lines.length === 0){
-          container.innerHTML = `
-            <div class="event-item">
-              <div class="event-bar"></div>
-              <div class="event-text">
-                <div class="event-cal">Calendar</div>
-                <div class="event-title">No events scheduled.</div>
-              </div>
-            </div>`;
-          return;
-        }
+  // Date: "Jan 3, 2026 ..."
+  const dateM = s.match(/([A-Za-z]{3,})\s+(\d{1,2}),\s*(\d{4})/i);
+  if (!dateM) return out;
+
+  const monStr = dateM[1].slice(0,3).toLowerCase();
+  const dayNum = parseInt(dateM[2], 10);
+  const yearNum = parseInt(dateM[3], 10);
+
+  const months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+  const monthIdx = months.indexOf(monStr);
+  if (monthIdx < 0) return out;
+
+  const dt = new Date(yearNum, monthIdx, dayNum);
+  const dows = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const mosFull = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  out.dateKey = `${yearNum}-${monthIdx+1}-${dayNum}`;
+  out.dayLabel = `${dows[dt.getDay()]} - ${mosFull[monthIdx]} ${ordinal(dayNum)}`;
+
+  // All day?
+  if (/all\s*day/i.test(s)){
+    out.allDay = true;
+    return out;
+  }
+
+  // Time: "at 1:00PM" or "at 1:00 PM"
+  const timeM = s.match(/at\s+(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (timeM){
+    const h = parseInt(timeM[1], 10);
+    const mm = timeM[2];
+    const ap = timeM[3].toUpperCase();
+    out.timeMain = `${h}:${mm}`;
+    out.timeAmPm = ap;
+  }
+
+  return out;
+}
+
+async function loadEvents(){
+  try{
+    const res = await fetch("calendar.txt", { cache: "no-store" });
+    if (!res.ok) return;
+    const text = await res.text();
+
+    const container = document.getElementById("events-list");
+    container.innerHTML = "";
+
+    const lines = text
+      .split("\n")
+      .map(l => l.trim())
+      .filter(l => l.length > 0)
+      .slice(0, 10);
+
+    if (lines.length === 0){
+      container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
+      return;
+    }
+
+    // Support either:
+    // 3 parts: Title | Start Date | Location
+    // 4 parts: Title | Start Date | Location | CalendarName(with emoji prefix)
+    const events = [];
+
+    for (const line of lines){
+      const parts = line.split(" | ").map(p => p.trim());
+      if (parts.length < 2) continue;
+
+      const title = parts[0] || "";
+      const start = parts[1] || "";
+      const loc = parts[2] || "";
+      const calName = parts[3] || "";
+
+      const parsed = parseStart(start);
+
+      events.push({
+        title,
+        start,
+        loc,
+        calEmoji: extractLeadingEmoji(calName),
+        dateKey: parsed.dateKey,
+        dayLabel: parsed.dayLabel,
+        timeMain: parsed.timeMain,
+        timeAmPm: parsed.timeAmPm,
+        allDay: parsed.allDay
+      });
+    }
+
+    // Group by dateKey (keep input order)
+    let lastKey = null;
+
+    for (const ev of events){
+      if (ev.dateKey && ev.dateKey !== lastKey){
+        lastKey = ev.dateKey;
+
+        const day = document.createElement("div");
+        day.className = "events-day";
+        day.textContent = ev.dayLabel || "";
+        if (day.textContent) container.appendChild(day);
+      }
+
+      const hasLoc = !!(ev.loc && ev.loc.trim());
+      const timeHtml = ev.allDay
+        ? `<div class="event-time"><div class="event-time-allday">All day</div></div>`
+        : (ev.timeMain
+            ? `<div class="event-time"><div class="event-time-main">${ev.timeMain}</div><div class="event-time-ampm">${ev.timeAmPm}</div></div>`
+            : `<div class="event-time"></div>`);
+
+      const item = document.createElement("div");
+      item.className = "event-item";
+      item.innerHTML = `
+        <div class="event-emoji">${ev.calEmoji || ""}</div>
+        <div class="event-main">
+          <div class="event-top">
+            <div class="event-title ${hasLoc ? "hasloc" : "noloc"}">${ev.title}</div>
+            ${timeHtml}
+          </div>
+          ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
+        </div>
+        <div></div>
+      `;
+      container.appendChild(item);
+    }
+  } catch(e){
+    console.error("Error loading events:", e);
+  }
+}
 
         for (const line of lines){
           const parts = line.split(" | ").map(p => p.trim()).filter(Boolean);
@@ -618,28 +821,85 @@
       }
     }
 
-    async function loadTasks(){
-      try{
-        const res = await fetch("dashboard.txt", { cache: "no-store" });
-        if (!res.ok) return;
-        const text = await res.text();
+async function loadTasks(){
+  try{
+    const res = await fetch("dashboard.txt", { cache: "no-store" });
+    if (!res.ok) return;
+    const text = await res.text();
 
-        const container = document.getElementById("tasks-list");
-        container.innerHTML = "";
+    const container = document.getElementById("tasks-list");
+    container.innerHTML = "";
 
-        const lines = text
-          .split("\n")
-          .map(l => l.trim())
-          .filter(l => l.length > 0);
+    const lines = text
+      .split("\n")
+      .map(l => l.trim())
+      .filter(l => l.length > 0);
 
-        if (lines.length === 0){
-          container.innerHTML = `
-            <div class="task-item">
-              <div class="dot"></div>
-              <div class="task-text">No tasks for today.</div>
-            </div>`;
-          return;
+    if (lines.length === 0){
+      container.innerHTML = `<div class="task-text">No tasks for today.</div>`;
+      return;
+    }
+
+    // Parse and group: Location | Assignee | Task
+    const byLocation = new Map();
+
+    for (const line of lines){
+      const parts = line.split(" | ").map(p => p.trim());
+      if (parts.length < 3) continue;
+
+      const location = parts[0];
+      const assigneeRaw = parts[1];         // uppercase always
+      const task = parts.slice(2).join(" | "); // just in case, though you said no pipes in task
+
+      if (!byLocation.has(location)) byLocation.set(location, []);
+      byLocation.get(location).push({ assigneeRaw, task });
+    }
+
+    const emojiFor = (a) => {
+      const key = a.replace(/\s+/g, "").toUpperCase();
+      if (key === "C") return "🐧";
+      if (key === "V") return "🦩";
+      if (key === "C/V") return "👫🏻";
+      if (key === "R") return "🦄";
+      return "";
+    };
+
+    const assigneeOrder = ["C", "V", "C/V", "R"];
+
+    for (const [location, items] of byLocation.entries()){
+      // Location heading
+      const locDiv = document.createElement("div");
+      locDiv.className = "task-location";
+      locDiv.textContent = location;
+      container.appendChild(locDiv);
+
+      // Group by assignee in fixed order
+      const groups = new Map();
+      for (const it of items){
+        const key = it.assigneeRaw.replace(/\s+/g, "").toUpperCase();
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(it.task);
+      }
+
+      for (const a of assigneeOrder){
+        const tasks = groups.get(a);
+        if (!tasks || tasks.length === 0) continue;
+
+        for (const t of tasks){
+          const row = document.createElement("div");
+          row.className = "task-line";
+          row.innerHTML = `
+            <div class="task-emoji">${emojiFor(a)}</div>
+            <div class="task-text">${t}</div>
+          `;
+          container.appendChild(row);
         }
+      }
+    }
+  } catch(e){
+    console.error("Error loading tasks:", e);
+  }
+}
 
         for (const line of lines){
           const div = document.createElement("div");
@@ -742,128 +1002,7 @@
       }
     }
 
-    // --- Photo loading: avoid "Family photo" but no image
-const PHOTO_MAX_INDEX = 263;     // set to the highest photo number you actually have
-const PHOTO_INTERVAL_MS = 60000;
-const PHOTO_CACHE_BUST = false;  // set true only when you just uploaded new photos
 
-
-// --- FAST + STRICT photo loader (images/family-###.jpg only)
-const missingPhotos = new Set();
-let photoPool = [];
-let photoCursor = 0;
-
-function buildPhotoPool(){
-  // Known missing files
-  missingPhotos.add(2);
-  missingPhotos.add(4);
-
-  photoPool = [];
-  for (let i = 1; i <= PHOTO_MAX_INDEX; i++) photoPool.push(i);
-
-
-
-  // Fisher-Yates shuffle
-  for (let i = photoPool.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [photoPool[i], photoPool[j]] = [photoPool[j], photoPool[i]];
-  }
-  photoCursor = 0;
-}
-
-function nextPhotoIndex(){
-  if (photoPool.length === 0 || photoCursor >= photoPool.length) buildPhotoPool();
-
-  while (photoCursor < photoPool.length && missingPhotos.has(photoPool[photoCursor])){
-    photoCursor++;
-  }
-
-  if (photoCursor >= photoPool.length){
-    buildPhotoPool();
-    while (photoCursor < photoPool.length && missingPhotos.has(photoPool[photoCursor])){
-      photoCursor++;
-    }
-  }
-
-  if (photoCursor >= photoPool.length) return 1;
-  return photoPool[photoCursor++];
-}
-
-function photoUrlForIndex(i){
-  const num = String(i).padStart(3, "0");
-  const base = `images/family-${num}.jpg`;
-  return PHOTO_CACHE_BUST ? `${base}?v=${Date.now()}` : base;
-}
-
-function showPhotoByIndex(i){
-  const img = document.getElementById("photo-img");
-  const ph = document.getElementById("photo-ph");
-  if (!img) return;
-
-  if (ph){
-    ph.style.display = "flex";
-    ph.textContent = "Loading photo…";
-  }
-
-  img.style.opacity = "0";
-
-  img.onload = () => {
-    if (ph) ph.style.display = "none";
-    img.style.opacity = "1";
-  };
-
-  img.onerror = () => {
-    missingPhotos.add(i);
-    const next = nextPhotoIndex();
-
-    // set hints again before retrying
-    img.decoding = "async";
-    img.loading = "eager";
-
-    img.src = photoUrlForIndex(next);
-  };
-
-  // set hints before first load
-  img.decoding = "async";
-  img.loading = "eager";
-
-  img.src = photoUrlForIndex(i);
-}
-
-
-function rotatePhotoFastStrict(){
-  const i = nextPhotoIndex();
-  showPhotoByIndex(i);
-}
-    function applyLayoutMode(){
-      const isLandscape = window.matchMedia && window.matchMedia("(orientation: landscape)").matches;
-      document.documentElement.classList.toggle("rotate90", isLandscape);
-
-      const portraitWidth = isLandscape ? window.innerHeight : window.innerWidth;
-      document.documentElement.classList.toggle("compact", portraitWidth < 900);
-    }
-
-    window.addEventListener("resize", applyLayoutMode);
-    applyLayoutMode();
-
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    loadTasks();
-    loadEvents();
-    loadWeather();
-    loadForecast();
-
-    setInterval(() => {
-      loadWeather();
-      loadForecast();
-    }, 30000);
-
-window.addEventListener("load", () => {
-  buildPhotoPool();
-  rotatePhotoFastStrict();
-  setInterval(rotatePhotoFastStrict, PHOTO_INTERVAL_MS);
-});
   </script>
 
   <script>
@@ -894,3 +1033,4 @@ window.addEventListener("load", () => {
   </script>
 </body>
 </html>
+
