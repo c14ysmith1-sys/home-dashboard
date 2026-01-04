@@ -34,11 +34,15 @@
     }
 
     /* Rotated canvas wrapper */
-    #rotator{
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-    }
+#rotator{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
 
     /* Full-screen “bleed” background (allowed to be cropped) */
     #bleed{
@@ -511,13 +515,21 @@
 }
 
 
-    /* Rotate wrapper when Fire TV is landscape so UI is portrait */
-    html.rotate90 #rotator{
-      width: 100vh;
-      height: 100vw;
-      transform-origin: 0 0;
-      transform: rotate(90deg) translate(0, -100%);
-    }
+/* Rotation options (choose via JS) */
+html.rotate90cw #rotator{
+  width: 100vh;
+  height: 100vw;
+  transform-origin: 0 0;
+  transform: rotate(90deg) translate(0, -100%);
+}
+
+html.rotate90ccw #rotator{
+  width: 100vh;
+  height: 100vw;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) translate(-100%, 0);
+}
+
 
     /* Compact mode if the browser reports a narrow "portrait width" */
     html.compact .header{ min-height: 62px; }
@@ -535,7 +547,7 @@
     <!-- debug badge (optional). Delete this div when done -->
     <div style="position:absolute;top:16px;left:16px;z-index:999999;background:#ff0000;color:#fff;
       font-size:36px;font-weight:800;padding:10px 14px;border-radius:10px">
-      V-006
+      V-007
     </div>
 
     <div id="safe">
@@ -559,451 +571,422 @@
 
         <section class="forecast-row has-separators" id="forecast-row"></section>
 
-        <main class="main">
-          <section class="card" id="events-card">
-            <div class="card-header">Upcoming Events</div>
+       <main class="main">
+  <section class="card" id="events-card">
+    <div class="card-header">Upcoming Events</div>
 
-            <div class="events-list" id="events-list">
-              <div class="event-item">
-                <div class="event-bar"></div>
-                <div class="event-text">
-                  <div class="event-cal">Calendar</div>
-                  <div class="event-title">Add events to calendar.txt</div>
-                </div>
-              </div>
-            </div>
+    <div class="events-list" id="events-list">
+      <div class="event-title noloc">Loading events…</div>
+    </div>
+  </section>
 
-          <section class="card">
-            <div class="card-header">Today’s Tasks</div>
+  <section class="card" id="tasks-card">
+    <div class="card-header">Today’s Tasks</div>
 
-            <div class="tasks-list" id="tasks-list">
-              <div class="task-item">
-                <div class="dot"></div>
-                <div class="task-text">Add tasks to dashboard.txt (one per line).</div>
-              </div>
-            </div>
-          </section>
-        </main>
+    <div class="tasks-list" id="tasks-list">
+      <div class="task-text">Loading tasks…</div>
+    </div>
+  </section>
+</main>
 
       </div>
     </div>
   </div>
 
-  <script>
-    function pad2(n){ return n.toString().padStart(2, "0"); }
+ <script>
+  // Rotation: bottom of TV is on the right, so we want CCW
+  const FORCE_ROTATION = "ccw"; // "ccw" or "cw"
 
-    function formatTime12(now){
-      let h = now.getHours();
-      const m = now.getMinutes();
-      const ampm = h >= 12 ? "PM" : "AM";
-      h = h % 12;
-      if (h === 0) h = 12;
-      return { time: `${h}:${pad2(m)}`, ampm };
+  function applyLayoutMode(){
+    document.documentElement.classList.remove("rotate90cw", "rotate90ccw");
+
+    if (FORCE_ROTATION === "cw") {
+      document.documentElement.classList.add("rotate90cw");
+    } else {
+      document.documentElement.classList.add("rotate90ccw");
     }
 
-    function formatDateShort(now){
-      // Force "Thu, Jan 1" style regardless of device locale quirks
-      const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-      const mos  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      return `${dows[now.getDay()]}, ${mos[now.getMonth()]} ${now.getDate()}`;
+    const portraitWidth = window.innerWidth;
+    document.documentElement.classList.toggle("compact", portraitWidth < 900);
+  }
+
+  window.addEventListener("resize", applyLayoutMode);
+
+  function pad2(n){ return n.toString().padStart(2, "0"); }
+
+  function formatTime12(now){
+    let h = now.getHours();
+    const m = now.getMinutes();
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12;
+    if (h === 0) h = 12;
+    return { time: `${h}:${pad2(m)}`, ampm };
+  }
+
+  function formatDateShort(now){
+    const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    const mos  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return `${dows[now.getDay()]}, ${mos[now.getMonth()]} ${now.getDate()}`;
+  }
+
+  function updateClock(){
+    const now = new Date();
+    const { time, ampm } = formatTime12(now);
+    document.getElementById("clock").textContent = time;
+    document.getElementById("ampm").textContent = ampm;
+    document.getElementById("date-center").textContent = formatDateShort(now);
+  }
+
+  async function loadWeather(){
+    try{
+      const res = await fetch("weather.txt", { cache: "no-store" });
+      if (!res.ok) return;
+      const text = (await res.text()).trim();
+      if (!text) return;
+
+      const tempMatch = text.match(/(-?\d+)\s*°/);
+      const feelsMatch = text.match(/Feels\s*like[:\s]*(-?\d+)\s*°/i);
+
+      if (tempMatch) document.getElementById("weather-temp").textContent = `${tempMatch[1]}°`;
+      if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
+    } catch(e){
+      console.error("Error loading weather:", e);
     }
+  }
 
-    function updateClock(){
-      const now = new Date();
-      const { time, ampm } = formatTime12(now);
-      document.getElementById("clock").textContent = time;
-      document.getElementById("ampm").textContent = ampm;
-      document.getElementById("date-center").textContent = formatDateShort(now);
-    }
+  function ordinal(n){
+    const v = n % 100;
+    if (v >= 11 && v <= 13) return `${n}th`;
+    const last = n % 10;
+    if (last === 1) return `${n}st`;
+    if (last === 2) return `${n}nd`;
+    if (last === 3) return `${n}rd`;
+    return `${n}th`;
+  }
 
-    async function loadWeather(){
-      try{
-        const res = await fetch("weather.txt", { cache: "no-store" });
-        if (!res.ok) return;
-        const text = (await res.text()).trim();
-        if (!text) return;
+  function firstGrapheme(str){
+    const s = (str || "").trim();
+    if (!s) return "";
 
-        const tempMatch = text.match(/(-?\d+)\s*°/);
-        const feelsMatch = text.match(/Feels\s*like[:\s]*(-?\d+)\s*°/i);
-
-        if (tempMatch) document.getElementById("weather-temp").textContent = `${tempMatch[1]}°`;
-        if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
-      } catch(e){
-        console.error("Error loading weather:", e);
+    if (typeof Intl !== "undefined" && Intl.Segmenter){
+      const seg = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+      for (const part of seg.segment(s)){
+        return part.segment;
       }
+      return "";
     }
 
-    function hashToColor(str){
-      const palette = ["#c8905b", "#7aa7c7", "#8bbf83", "#b58bc9", "#d88484", "#9aa6b2", "#d2a24c"];
-      let hash = 0;
-      for (let i=0;i<str.length;i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
-      return palette[hash % palette.length];
+    return Array.from(s)[0] || "";
+  }
+
+  function extractLeadingEmoji(calName){
+    const s = (calName || "").trim();
+    if (!s) return "";
+    const g = firstGrapheme(s);
+
+    // if it starts with a letter/number, no emoji prefix
+    if (/[\p{L}\p{N}]/u.test(g)) return "";
+    return g;
+  }
+
+  function parseStart(startStr){
+    const s = (startStr || "").trim();
+    const out = { dateKey:"", dayLabel:"", timeMain:"", timeAmPm:"", allDay:false };
+
+    const dateM = s.match(/([A-Za-z]{3,})\s+(\d{1,2}),\s*(\d{4})/i);
+    if (!dateM) return out;
+
+    const monStr = dateM[1].slice(0,3).toLowerCase();
+    const dayNum = parseInt(dateM[2], 10);
+    const yearNum = parseInt(dateM[3], 10);
+
+    const months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+    const monthIdx = months.indexOf(monStr);
+    if (monthIdx < 0) return out;
+
+    const dt = new Date(yearNum, monthIdx, dayNum);
+    const dows = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const mosFull = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    out.dateKey = `${yearNum}-${monthIdx+1}-${dayNum}`;
+    out.dayLabel = `${dows[dt.getDay()]} - ${mosFull[monthIdx]} ${ordinal(dayNum)}`;
+
+    if (/all\s*day/i.test(s)){
+      out.allDay = true;
+      return out;
     }
 
-   function ordinal(n){
-  const v = n % 100;
-  if (v >= 11 && v <= 13) return `${n}th`;
-  const last = n % 10;
-  if (last === 1) return `${n}st`;
-  if (last === 2) return `${n}nd`;
-  if (last === 3) return `${n}rd`;
-  return `${n}th`;
-}
+    const timeM = s.match(/at\s+(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (timeM){
+      const h = parseInt(timeM[1], 10);
+      const mm = timeM[2];
+      const ap = timeM[3].toUpperCase();
+      out.timeMain = `${h}:${mm}`;
+      out.timeAmPm = ap;
+    }
 
-function extractLeadingEmoji(calName){
-  const s = (calName || "").trim();
-  if (!s) return "";
-  const first = Array.from(s)[0] || "";
-  // crude but practical: if it's not a letter/number, treat as emoji/symbol
-  if (/[\p{L}\p{N}]/u.test(first)) return "";
-  return first;
-}
-
-function parseStart(startStr){
-  const s = (startStr || "").trim();
-  const out = {
-    dateKey: "",
-    dayLabel: "",
-    timeMain: "",
-    timeAmPm: "",
-    allDay: false,
-  };
-
-  // Date: "Jan 3, 2026 ..."
-  const dateM = s.match(/([A-Za-z]{3,})\s+(\d{1,2}),\s*(\d{4})/i);
-  if (!dateM) return out;
-
-  const monStr = dateM[1].slice(0,3).toLowerCase();
-  const dayNum = parseInt(dateM[2], 10);
-  const yearNum = parseInt(dateM[3], 10);
-
-  const months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
-  const monthIdx = months.indexOf(monStr);
-  if (monthIdx < 0) return out;
-
-  const dt = new Date(yearNum, monthIdx, dayNum);
-  const dows = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const mosFull = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  out.dateKey = `${yearNum}-${monthIdx+1}-${dayNum}`;
-  out.dayLabel = `${dows[dt.getDay()]} - ${mosFull[monthIdx]} ${ordinal(dayNum)}`;
-
-  // All day?
-  if (/all\s*day/i.test(s)){
-    out.allDay = true;
     return out;
   }
 
-  // Time: "at 1:00PM" or "at 1:00 PM"
-  const timeM = s.match(/at\s+(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-  if (timeM){
-    const h = parseInt(timeM[1], 10);
-    const mm = timeM[2];
-    const ap = timeM[3].toUpperCase();
-    out.timeMain = `${h}:${mm}`;
-    out.timeAmPm = ap;
-  }
+  async function loadEvents(){
+    try{
+      const res = await fetch("calendar.txt", { cache: "no-store" });
+      if (!res.ok) return;
+      const text = await res.text();
 
-  return out;
-}
+      const container = document.getElementById("events-list");
+      if (!container) return;
+      container.innerHTML = "";
 
-async function loadEvents(){
-  try{
-    const res = await fetch("calendar.txt", { cache: "no-store" });
-    if (!res.ok) return;
-    const text = await res.text();
+      const lines = text
+        .split("\n")
+        .map(l => l.trim())
+        .filter(l => l.length > 0)
+        .slice(0, 10);
 
-    const container = document.getElementById("events-list");
-    container.innerHTML = "";
-
-    const lines = text
-      .split("\n")
-      .map(l => l.trim())
-      .filter(l => l.length > 0)
-      .slice(0, 10);
-
-    if (lines.length === 0){
-      container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
-      return;
-    }
-
-    // Support either:
-    // 3 parts: Title | Start Date | Location
-    // 4 parts: Title | Start Date | Location | CalendarName(with emoji prefix)
-    const events = [];
-
-    for (const line of lines){
-      const parts = line.split(" | ").map(p => p.trim());
-      if (parts.length < 2) continue;
-
-      const title = parts[0] || "";
-      const start = parts[1] || "";
-      const loc = parts[2] || "";
-      const calName = parts[3] || "";
-
-      const parsed = parseStart(start);
-
-      events.push({
-        title,
-        start,
-        loc,
-        calEmoji: extractLeadingEmoji(calName),
-        dateKey: parsed.dateKey,
-        dayLabel: parsed.dayLabel,
-        timeMain: parsed.timeMain,
-        timeAmPm: parsed.timeAmPm,
-        allDay: parsed.allDay
-      });
-    }
-
-    // Group by dateKey (keep input order)
-    let lastKey = null;
-
-    for (const ev of events){
-      if (ev.dateKey && ev.dateKey !== lastKey){
-        lastKey = ev.dateKey;
-
-        const day = document.createElement("div");
-        day.className = "events-day";
-        day.textContent = ev.dayLabel || "";
-        if (day.textContent) container.appendChild(day);
+      if (lines.length === 0){
+        container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
+        return;
       }
 
-      const hasLoc = !!(ev.loc && ev.loc.trim());
-      const timeHtml = ev.allDay
-        ? `<div class="event-time"><div class="event-time-allday">All day</div></div>`
-        : (ev.timeMain
-            ? `<div class="event-time"><div class="event-time-main">${ev.timeMain}</div><div class="event-time-ampm">${ev.timeAmPm}</div></div>`
-            : `<div class="event-time"></div>`);
+      const events = [];
 
-      const item = document.createElement("div");
-      item.className = "event-item";
-      item.innerHTML = `
-        <div class="event-emoji">${ev.calEmoji || ""}</div>
-        <div class="event-main">
-          <div class="event-top">
-            <div class="event-title ${hasLoc ? "hasloc" : "noloc"}">${ev.title}</div>
-            ${timeHtml}
-          </div>
-          ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
-        </div>
-        <div></div>
-      `;
-      container.appendChild(item);
-    }
-  } catch(e){
-    console.error("Error loading events:", e);
-  }
-}
+      for (const line of lines){
+        const parts = line.split(" | ").map(p => p.trim());
+        if (parts.length < 2) continue;
 
-        for (const line of lines){
-          const parts = line.split(" | ").map(p => p.trim()).filter(Boolean);
-          const cal = parts[0] || "Calendar";
-          const title = parts[1] || parts[0] || line;
-          const loc = parts[2] || "";
+        const title = parts[0] || "";
+        const start = parts[1] || "";
+        const loc = parts[2] || "";
+        const calName = parts[3] || "";
+        const parsed = parseStart(start);
 
-          const color = hashToColor(cal);
+        events.push({
+          title,
+          loc,
+          calEmoji: extractLeadingEmoji(calName),
+          dateKey: parsed.dateKey,
+          dayLabel: parsed.dayLabel,
+          timeMain: parsed.timeMain,
+          timeAmPm: parsed.timeAmPm,
+          allDay: parsed.allDay
+        });
+      }
 
-          const item = document.createElement("div");
-          item.className = "event-item";
-          item.innerHTML = `
-            <div class="event-bar" style="background:${color}"></div>
-            <div class="event-text">
-              <div class="event-cal">${cal}</div>
-              <div class="event-title">${title}</div>
-              ${loc ? `<div class="event-loc">${loc}</div>` : ""}
+      let lastKey = null;
+
+      for (const ev of events){
+        if (ev.dateKey && ev.dateKey !== lastKey){
+          lastKey = ev.dateKey;
+
+          const day = document.createElement("div");
+          day.className = "events-day";
+          day.textContent = ev.dayLabel || "";
+          if (day.textContent) container.appendChild(day);
+        }
+
+        const hasLoc = !!(ev.loc && ev.loc.trim());
+        const timeHtml = ev.allDay
+          ? `<div class="event-time"><div class="event-time-allday">All day</div></div>`
+          : (ev.timeMain
+              ? `<div class="event-time"><div class="event-time-main">${ev.timeMain}</div><div class="event-time-ampm">${ev.timeAmPm}</div></div>`
+              : `<div class="event-time"></div>`);
+
+        const item = document.createElement("div");
+        item.className = "event-item";
+        item.innerHTML = `
+          <div class="event-emoji">${ev.calEmoji || ""}</div>
+          <div class="event-main">
+            <div class="event-top">
+              <div class="event-title ${hasLoc ? "hasloc" : "noloc"}">${ev.title}</div>
+              ${timeHtml}
             </div>
-          `;
-          container.appendChild(item);
-        }
-      } catch(e){
-        console.error("Error loading events:", e);
+            ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
+          </div>
+          <div></div>
+        `;
+        container.appendChild(item);
       }
+    } catch(e){
+      console.error("Error loading events:", e);
     }
-
-async function loadTasks(){
-  try{
-    const res = await fetch("dashboard.txt", { cache: "no-store" });
-    if (!res.ok) return;
-    const text = await res.text();
-
-    const container = document.getElementById("tasks-list");
-    container.innerHTML = "";
-
-    const lines = text
-      .split("\n")
-      .map(l => l.trim())
-      .filter(l => l.length > 0);
-
-    if (lines.length === 0){
-      container.innerHTML = `<div class="task-text">No tasks for today.</div>`;
-      return;
-    }
-
-    // Parse and group: Location | Assignee | Task
-    const byLocation = new Map();
-
-    for (const line of lines){
-      const parts = line.split(" | ").map(p => p.trim());
-      if (parts.length < 3) continue;
-
-      const location = parts[0];
-      const assigneeRaw = parts[1];         // uppercase always
-      const task = parts.slice(2).join(" | "); // just in case, though you said no pipes in task
-
-      if (!byLocation.has(location)) byLocation.set(location, []);
-      byLocation.get(location).push({ assigneeRaw, task });
-    }
-
-    const emojiFor = (a) => {
-      const key = a.replace(/\s+/g, "").toUpperCase();
-      if (key === "C") return "🐧";
-      if (key === "V") return "🦩";
-      if (key === "C/V") return "👫🏻";
-      if (key === "R") return "🦄";
-      return "";
-    };
-
-    const assigneeOrder = ["C", "V", "C/V", "R"];
-
-    for (const [location, items] of byLocation.entries()){
-      // Location heading
-      const locDiv = document.createElement("div");
-      locDiv.className = "task-location";
-      locDiv.textContent = location;
-      container.appendChild(locDiv);
-
-      // Group by assignee in fixed order
-      const groups = new Map();
-      for (const it of items){
-        const key = it.assigneeRaw.replace(/\s+/g, "").toUpperCase();
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(it.task);
-      }
-
-      for (const a of assigneeOrder){
-        const tasks = groups.get(a);
-        if (!tasks || tasks.length === 0) continue;
-
-        for (const t of tasks){
-          const row = document.createElement("div");
-          row.className = "task-line";
-          row.innerHTML = `
-            <div class="task-emoji">${emojiFor(a)}</div>
-            <div class="task-text">${t}</div>
-          `;
-          container.appendChild(row);
-        }
-      }
-    }
-  } catch(e){
-    console.error("Error loading tasks:", e);
   }
-}
 
-        for (const line of lines){
-          const div = document.createElement("div");
-          div.className = "task-item";
-          div.innerHTML = `
-            <div class="dot"></div>
-            <div class="task-text">${line}</div>
-          `;
-          container.appendChild(div);
-        }
-      } catch(e){
-        console.error("Error loading tasks:", e);
+  async function loadTasks(){
+    try{
+      const res = await fetch("dashboard.txt", { cache: "no-store" });
+      if (!res.ok) return;
+      const text = await res.text();
+
+      const container = document.getElementById("tasks-list");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const lines = text
+        .split("\n")
+        .map(l => l.trim())
+        .filter(l => l.length > 0);
+
+      if (lines.length === 0){
+        container.innerHTML = `<div class="task-text">No tasks for today.</div>`;
+        return;
       }
-    }
 
-    // --- 3-day Forecast (from prediction.txt)
-    // Supports:
-    // - 3 lines per day: Name, "Emoji temps", Condition (optionally includes a percent at end)
-    // - 4 lines per day: Name, "Emoji temps", Condition, Precip%
-    async function loadForecast(){
-      try{
-        const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
-        if (!res.ok) return;
+      const byLocation = new Map();
 
-        const raw = (await res.text()).trim();
-        if (!raw) return;
+      for (const line of lines){
+        const parts = line.split(" | ").map(p => p.trim());
+        if (parts.length < 3) continue;
 
-        const lines = raw
-          .split("\n")
-          .map(l => l.trim())
-          .filter(Boolean);
+        const location = parts[0];
+        const assigneeRaw = parts[1];
+        const task = parts.slice(2).join(" | ");
 
-        const days = [];
-        let i = 0;
+        if (!byLocation.has(location)) byLocation.set(location, []);
+        byLocation.get(location).push({ assigneeRaw, task });
+      }
 
-        while (i < lines.length && days.length < 3){
-          const name = lines[i++] || "";
-          const line2 = lines[i++] || "";
-          let condition = lines[i++] || "";
-          let pop = "";
+      const emojiFor = (a) => {
+        const key = a.replace(/\s+/g, "").toUpperCase();
+        if (key === "C") return "🐧";
+        if (key === "V") return "🦩";
+        if (key === "C/V") return "👫🏻";
+        if (key === "R") return "🦄";
+        return "";
+      };
 
-          if (!name || !line2) continue;
+      const assigneeOrder = ["C", "V", "C/V", "R"];
 
-          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])){
-            pop = lines[i++];
-          } else {
-            const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
-            if (m){
-              pop = `${m[1]}%`;
-              condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
-            }
-          }
+      for (const [location, items] of byLocation.entries()){
+        const locDiv = document.createElement("div");
+        locDiv.className = "task-location";
+        locDiv.textContent = location;
+        container.appendChild(locDiv);
 
-          const parts = line2.split(/\s+/).filter(Boolean);
-          let emoji = "";
-          let temps = "";
-
-          if (parts.length === 1){
-            temps = parts[0];
-          } else if (/^[\d-]/.test(parts[0])){
-            temps = parts.join(" ");
-          } else {
-            emoji = parts[0];
-            temps = parts.slice(1).join(" ");
-          }
-
-          days.push({ name, emoji, temps, condition, pop });
+        const groups = new Map();
+        for (const it of items){
+          const key = it.assigneeRaw.replace(/\s+/g, "").toUpperCase();
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(it.task);
         }
 
-        const row = document.getElementById("forecast-row");
-        if (!row) return;
+        for (const a of assigneeOrder){
+          const tasks = groups.get(a);
+          if (!tasks || tasks.length === 0) continue;
 
-        row.innerHTML = "";
+          for (const t of tasks){
+            const row = document.createElement("div");
+            row.className = "task-line";
+            row.innerHTML = `
+              <div class="task-emoji">${emojiFor(a)}</div>
+              <div class="task-text">${t}</div>
+            `;
+            container.appendChild(row);
+          }
+        }
+      }
+    } catch(e){
+      console.error("Error loading tasks:", e);
+    }
+  }
 
-        for (const d of days){
-          const div = document.createElement("div");
-          div.className = "forecast-day";
+  async function loadForecast(){
+    try{
+      const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
+      if (!res.ok) return;
 
-          const emojiSafe = d.emoji || "";
-          const popSafe = (d.pop && d.pop.trim() && d.pop.trim() !== "0%") ? d.pop.trim() : "";
+      const raw = (await res.text()).trim();
+      if (!raw) return;
 
-          div.innerHTML = `
-            <div class="forecast-top">${d.name}</div>
-            <div class="forecast-bottom">
-              <div class="forecast-iconbig">${emojiSafe}</div>
-              <div class="forecast-right">
-                <div class="forecast-temps">${d.temps || ""}</div>
-                <div class="forecast-condline">
-                  <div class="forecast-cond">${d.condition || ""}</div>
-                  ${popSafe ? `<div class="forecast-pop">${popSafe}</div>` : ``}
-                </div>
+      const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+
+      const days = [];
+      let i = 0;
+
+      while (i < lines.length && days.length < 3){
+        const name = lines[i++] || "";
+        const line2 = lines[i++] || "";
+        let condition = lines[i++] || "";
+        let pop = "";
+
+        if (!name || !line2) continue;
+
+        if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])){
+          pop = lines[i++];
+        } else {
+          const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
+          if (m){
+            pop = `${m[1]}%`;
+            condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
+          }
+        }
+
+        const parts = line2.split(/\s+/).filter(Boolean);
+        let emoji = "";
+        let temps = "";
+
+        if (parts.length === 1){
+          temps = parts[0];
+        } else if (/^[\d-]/.test(parts[0])){
+          temps = parts.join(" ");
+        } else {
+          emoji = parts[0];
+          temps = parts.slice(1).join(" ");
+        }
+
+        days.push({ name, emoji, temps, condition, pop });
+      }
+
+      const row = document.getElementById("forecast-row");
+      if (!row) return;
+
+      row.innerHTML = "";
+
+      for (const d of days){
+        const div = document.createElement("div");
+        div.className = "forecast-day";
+
+        const emojiSafe = d.emoji || "";
+        const popSafe = (d.pop && d.pop.trim() && d.pop.trim() !== "0%") ? d.pop.trim() : "";
+
+        div.innerHTML = `
+          <div class="forecast-top">${d.name}</div>
+          <div class="forecast-bottom">
+            <div class="forecast-iconbig">${emojiSafe}</div>
+            <div class="forecast-right">
+              <div class="forecast-temps">${d.temps || ""}</div>
+              <div class="forecast-condline">
+                <div class="forecast-cond">${d.condition || ""}</div>
+                ${popSafe ? `<div class="forecast-pop">${popSafe}</div>` : ``}
               </div>
             </div>
-          `;
+          </div>
+        `;
 
-          row.appendChild(div);
-        }
-      } catch(e){
-        console.error("Error loading Forecast:", e);
+        row.appendChild(div);
       }
+    } catch(e){
+      console.error("Error loading Forecast:", e);
     }
+  }
 
+  // Start everything
+  document.addEventListener("DOMContentLoaded", () => {
+    applyLayoutMode();
 
-  </script>
+    updateClock();
+    loadWeather();
+    loadForecast();
+    loadEvents();
+    loadTasks();
+
+    setInterval(updateClock, 15000);
+    setInterval(loadWeather, 300000);
+    setInterval(loadForecast, 1800000);
+    setInterval(loadEvents, 60000);
+    setInterval(loadTasks, 60000);
+  });
+</script>
 
   <script>
     (async () => {
@@ -1033,4 +1016,5 @@ async function loadTasks(){
   </script>
 </body>
 </html>
+
 
