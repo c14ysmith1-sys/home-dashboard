@@ -378,6 +378,12 @@
   flex: 0 0 auto;
 }
 
+.task-emoji img, .event-emoji img, .forecast-iconbig img{
+  width: 18px;
+  height: 18px;
+  vertical-align: -0.15em;
+}
+
 .event-main{
   min-width: 0;
   display:flex;
@@ -538,6 +544,8 @@ html.rotate90ccw #rotator{
     html.compact .weather-temp{ font-size: 40px; }
     html.compact .forecast-top{ font-size: 22px; }
   </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -765,7 +773,6 @@ html.rotate90ccw #rotator{
           timeAmPm: parsed.timeAmPm,
           allDay: parsed.allDay
         });
-      }
 
       let lastKey = null;
 
@@ -804,8 +811,11 @@ html.rotate90ccw #rotator{
     } catch(e){
       console.error("Error loading events:", e);
     }
+    if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
   }
 
+   
+   
   async function loadTasks(){
     try{
       const res = await fetch("dashboard.txt", { cache: "no-store" });
@@ -838,16 +848,18 @@ html.rotate90ccw #rotator{
 
         if (!byLocation.has(location)) byLocation.set(location, []);
         byLocation.get(location).push({ assigneeRaw, task });
+
+        if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
       }
 
-      const emojiFor = (a) => {
-        const key = a.replace(/\s+/g, "").toUpperCase();
-        if (key === "C") return "🐧";
-        if (key === "V") return "🦩";
-        if (key === "C/V") return "👫🏻";
-        if (key === "R") return "🦄";
-        return "";
-      };
+const emojiFor = (a) => {
+  const key = a.replace(/\s+/g, "").toUpperCase();
+  if (key === "C") return "🐧";     // may still not render on Fire TV
+  if (key === "V") return "🦩";     // may still not render on Fire TV
+  if (key === "C/V") return "👫";   // removed skin tone
+  if (key === "R") return "🦄";     // may still not render on Fire TV
+  return "";
+};
 
       const assigneeOrder = ["C", "V", "C/V", "R"];
 
@@ -929,6 +941,8 @@ html.rotate90ccw #rotator{
         }
 
         days.push({ name, emoji, temps, condition, pop });
+
+        if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
       }
 
       const row = document.getElementById("forecast-row");
@@ -980,6 +994,7 @@ html.rotate90ccw #rotator{
     setInterval(loadEvents, 60000);
     setInterval(loadTasks, 60000);
   });
+
 </script>
 
   <script>
@@ -1010,6 +1025,7 @@ html.rotate90ccw #rotator{
   </script>
 </body>
 </html>
+
 
 
 
