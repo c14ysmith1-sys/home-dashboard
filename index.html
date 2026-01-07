@@ -346,12 +346,24 @@
       margin-bottom: 2px;
       overflow-wrap: anywhere;
     }
-    .event-loc{
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.2;
-      overflow-wrap: anywhere;
-    }
+.event-loc{
+  font-size: 11px;          /* smaller than title */
+  font-weight: 450;         /* explicitly not bold */
+  color: var(--text-muted);
+  line-height: 1.2;
+
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  overflow-wrap: normal;    /* important: prevents breaking the address */
+  word-break: normal;       /* important: prevents breaking “Whitestown” to next line */
+}
+
 .events-day{
   font-size: 14px;
   font-weight: 800;
@@ -384,6 +396,10 @@
   vertical-align: -0.15em;
 }
 
+  #tasks-list::-webkit-scrollbar{ width: 0; height: 0; }
+#tasks-list{ scrollbar-width: none; }
+
+
 .event-main{
   min-width: 0;
   display:flex;
@@ -408,19 +424,6 @@
   white-space: nowrap;      /* 1 line only */
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.event-loc{
-  font-size: 11px;          /* smaller than title */
-  font-weight: 450;         /* explicitly not bold */
-  color: var(--text-muted);
-  line-height: 1.2;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  max-width: 100%;
 }
 
 .event-time{
@@ -707,12 +710,14 @@ html.rotate90ccw #rotator{
     return g;
   }
 
-   function calendarEmoji(calName){
+ function calendarEmoji(calName){
+  // 1) If calendar name begins with an emoji (ex: "💑 Date Night"), use it
   const lead = extractLeadingEmoji(calName);
   if (lead) return lead;
 
   const s = (calName || "").toLowerCase();
 
+  if (s.includes("us holidays") || s.includes("u.s. holidays") || s.includes("holidays")) return "🇺🇸";
   if (s.includes("work")) return "💊";
   if (s.includes("church")) return "⛪️";
   if (s.includes("valor")) return "🎤";
@@ -720,12 +725,12 @@ html.rotate90ccw #rotator{
   if (s.includes("vacation")) return "🛳️";
   if (s.includes("credit")) return "💰";
   if (s.includes("victoria")) return "👸";
-  if (s.includes("family")) return "👑";
+  if (s.includes("family")) return "👨‍👩‍👧‍👦";
   if (s.includes("home")) return "🏡";
   if (s.includes("date night") || s.includes("date")) return "👩‍❤️‍👨";
   if (s.includes("school")) return "🏫";
 
-  return "";
+  return "📅";
 }
 
 
@@ -794,7 +799,7 @@ async function loadEvents(){
 
     for (const line of lines){
       const parts = line.split(" | ").map(p => p.trim());
-      if (parts.length < 2) continue;
+      if (parts.length < 2) continue;f
 
       const title = parts[0] || "";
       const start = parts[1] || "";
@@ -806,7 +811,7 @@ const loc = cleanLocation(locRaw);
       events.push({
         title,
         loc,
-        calEmoji: extractLeadingEmoji(calName),
+calEmoji: calendarEmoji(calName),
         dateKey: parsed.dateKey,
         dayLabel: parsed.dayLabel,
         timeMain: parsed.timeMain,
@@ -857,7 +862,49 @@ const loc = cleanLocation(locRaw);
   if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
 
 }
-  
+
+   let __tasksScrollRAF = null;
+let __tasksScrollPause = null;
+
+function startAutoScrollTasks(){
+  const el = document.getElementById("tasks-list");
+  if (!el) return;
+
+  // stop any previous run (important because loadTasks runs every 60s)
+  if (__tasksScrollRAF) cancelAnimationFrame(__tasksScrollRAF);
+  if (__tasksScrollPause) clearTimeout(__tasksScrollPause);
+
+  // reset to top each refresh
+  el.scrollTop = 0;
+
+  let dir = 1;                 // 1 = down, -1 = up
+  const speed = 0.35;          // px per frame, tune 0.2–0.6
+  const pauseMs = 1200;        // pause at top/bottom
+
+  function step(){
+    const max = el.scrollHeight - el.clientHeight;
+    if (max <= 0) return;      // nothing to scroll
+
+    el.scrollTop += dir * speed;
+
+    if (el.scrollTop >= max - 1){
+      dir = -1;
+      __tasksScrollPause = setTimeout(() => { __tasksScrollRAF = requestAnimationFrame(step); }, pauseMs);
+      return;
+    }
+
+    if (el.scrollTop <= 0){
+      dir = 1;
+      __tasksScrollPause = setTimeout(() => { __tasksScrollRAF = requestAnimationFrame(step); }, pauseMs);
+      return;
+    }
+
+    __tasksScrollRAF = requestAnimationFrame(step);
+  }
+
+  __tasksScrollRAF = requestAnimationFrame(step);
+}
+
    
 async function loadTasks(){
   const container = document.getElementById("tasks-list");
@@ -938,6 +985,9 @@ async function loadTasks(){
     console.error("Error loading tasks:", e);
   }
   if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
+  // start scrolling after render
+requestAnimationFrame(startAutoScrollTasks);
+
 
 }
 
@@ -1073,6 +1123,7 @@ async function loadForecast(){
   </script>
 </body>
 </html>
+
 
 
 
