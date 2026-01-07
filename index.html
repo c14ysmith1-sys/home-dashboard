@@ -730,253 +730,260 @@ html.rotate90ccw #rotator{
     return out;
   }
 
-  async function loadEvents(){
-    try{
-      const res = await fetch("calendar.txt", { cache: "no-store" });
-      if (!res.ok) return;
-      const text = await res.text();
+async function loadEvents(){
+  const container = document.getElementById("events-list");
+  if (!container) return;
 
-      const container = document.getElementById("events-list");
-      if (!container) return;
-      container.innerHTML = "";
+  try{
+    const res = await fetch("calendar.txt", { cache: "no-store" });
+    if (!res.ok) return;
+    const text = await res.text();
 
-      const lines = text
-        .split("\n")
-        .map(l => l.trim())
-        .filter(l => l.length > 0)
-        .slice(0, 10);
+    container.innerHTML = "";
 
-      if (lines.length === 0){
-        container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
-        return;
-      }
+    const lines = text
+      .split("\n")
+      .map(l => l.trim())
+      .filter(l => l.length > 0)
+      .slice(0, 10);
 
-      const events = [];
-
-      for (const line of lines){
-        const parts = line.split(" | ").map(p => p.trim());
-        if (parts.length < 2) continue;
-
-        const title = parts[0] || "";
-        const start = parts[1] || "";
-        const loc = parts[2] || "";
-        const calName = parts[3] || "";
-        const parsed = parseStart(start);
-
-        events.push({
-          title,
-          loc,
-          calEmoji: extractLeadingEmoji(calName),
-          dateKey: parsed.dateKey,
-          dayLabel: parsed.dayLabel,
-          timeMain: parsed.timeMain,
-          timeAmPm: parsed.timeAmPm,
-          allDay: parsed.allDay
-        });
-
-      let lastKey = null;
-
-      for (const ev of events){
-        if (ev.dateKey && ev.dateKey !== lastKey){
-          lastKey = ev.dateKey;
-
-          const day = document.createElement("div");
-          day.className = "events-day";
-          day.textContent = ev.dayLabel || "";
-          if (day.textContent) container.appendChild(day);
-        }
-
-        const hasLoc = !!(ev.loc && ev.loc.trim());
-        const timeHtml = ev.allDay
-          ? `<div class="event-time"><div class="event-time-allday">All day</div></div>`
-          : (ev.timeMain
-              ? `<div class="event-time"><div class="event-time-main">${ev.timeMain}</div><div class="event-time-ampm">${ev.timeAmPm}</div></div>`
-              : `<div class="event-time"></div>`);
-
-        const item = document.createElement("div");
-        item.className = "event-item";
-        item.innerHTML = `
-          <div class="event-emoji">${ev.calEmoji || ""}</div>
-          <div class="event-main">
-            <div class="event-top">
-              <div class="event-title ${hasLoc ? "hasloc" : "noloc"}">${ev.title}</div>
-              ${timeHtml}
-            </div>
-            ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
-          </div>
-          <div></div>
-        `;
-        container.appendChild(item);
-      }
-    } catch(e){
-      console.error("Error loading events:", e);
+    if (lines.length === 0){
+      container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
+      return;
     }
+
+    const events = [];
+
+    for (const line of lines){
+      const parts = line.split(" | ").map(p => p.trim());
+      if (parts.length < 2) continue;
+
+      const title = parts[0] || "";
+      const start = parts[1] || "";
+      const loc = parts[2] || "";
+      const calName = parts[3] || "";
+      const parsed = parseStart(start);
+
+      events.push({
+        title,
+        loc,
+        calEmoji: extractLeadingEmoji(calName),
+        dateKey: parsed.dateKey,
+        dayLabel: parsed.dayLabel,
+        timeMain: parsed.timeMain,
+        timeAmPm: parsed.timeAmPm,
+        allDay: parsed.allDay
+      });
+    }
+
+    let lastKey = null;
+
+    for (const ev of events){
+      if (ev.dateKey && ev.dateKey !== lastKey){
+        lastKey = ev.dateKey;
+
+        const day = document.createElement("div");
+        day.className = "events-day";
+        day.textContent = ev.dayLabel || "";
+        if (day.textContent) container.appendChild(day);
+      }
+
+      const hasLoc = !!(ev.loc && ev.loc.trim());
+      const timeHtml = ev.allDay
+        ? `<div class="event-time"><div class="event-time-allday">All day</div></div>`
+        : (ev.timeMain
+            ? `<div class="event-time"><div class="event-time-main">${ev.timeMain}</div><div class="event-time-ampm">${ev.timeAmPm}</div></div>`
+            : `<div class="event-time"></div>`);
+
+      const item = document.createElement("div");
+      item.className = "event-item";
+      item.innerHTML = `
+        <div class="event-emoji">${ev.calEmoji || ""}</div>
+        <div class="event-main">
+          <div class="event-top">
+            <div class="event-title ${hasLoc ? "hasloc" : "noloc"}">${ev.title}</div>
+            ${timeHtml}
+          </div>
+          ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
+        </div>
+        <div></div>
+      `;
+      container.appendChild(item);
+    }
+
     if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
+
+  } catch(e){
+    console.error("Error loading events:", e);
   }
-
+}
+  
    
-   
-  async function loadTasks(){
-    try{
-      const res = await fetch("dashboard.txt", { cache: "no-store" });
-      if (!res.ok) return;
-      const text = await res.text();
+async function loadTasks(){
+  const container = document.getElementById("tasks-list");
+  if (!container) return;
 
-      const container = document.getElementById("tasks-list");
-      if (!container) return;
-      container.innerHTML = "";
+  try{
+    const res = await fetch("dashboard.txt", { cache: "no-store" });
+    if (!res.ok) return;
+    const text = await res.text();
 
-      const lines = text
-        .split("\n")
-        .map(l => l.trim())
-        .filter(l => l.length > 0);
+    container.innerHTML = "";
 
-      if (lines.length === 0){
-        container.innerHTML = `<div class="task-text">No tasks for today.</div>`;
-        return;
-      }
+    const lines = text
+      .split("\n")
+      .map(l => l.trim())
+      .filter(l => l.length > 0);
 
-      const byLocation = new Map();
-
-      for (const line of lines){
-        const parts = line.split(" | ").map(p => p.trim());
-        if (parts.length < 3) continue;
-
-        const location = parts[0];
-        const assigneeRaw = parts[1];
-        const task = parts.slice(2).join(" | ");
-
-        if (!byLocation.has(location)) byLocation.set(location, []);
-        byLocation.get(location).push({ assigneeRaw, task });
-
-        if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
-      }
-
-const emojiFor = (a) => {
-  const key = a.replace(/\s+/g, "").toUpperCase();
-  if (key === "C") return "🐧";     // may still not render on Fire TV
-  if (key === "V") return "🦩";     // may still not render on Fire TV
-  if (key === "C/V") return "👫";   // removed skin tone
-  if (key === "R") return "🦄";     // may still not render on Fire TV
-  return "";
-};
-
-      const assigneeOrder = ["C", "V", "C/V", "R"];
-
-      for (const [location, items] of byLocation.entries()){
-        const locDiv = document.createElement("div");
-        locDiv.className = "task-location";
-        locDiv.textContent = location;
-        container.appendChild(locDiv);
-
-        const groups = new Map();
-        for (const it of items){
-          const key = it.assigneeRaw.replace(/\s+/g, "").toUpperCase();
-          if (!groups.has(key)) groups.set(key, []);
-          groups.get(key).push(it.task);
-        }
-
-        for (const a of assigneeOrder){
-          const tasks = groups.get(a);
-          if (!tasks || tasks.length === 0) continue;
-
-          for (const t of tasks){
-            const row = document.createElement("div");
-            row.className = "task-line";
-            row.innerHTML = `
-              <div class="task-emoji">${emojiFor(a)}</div>
-              <div class="task-text">${t}</div>
-            `;
-            container.appendChild(row);
-          }
-        }
-      }
-    } catch(e){
-      console.error("Error loading tasks:", e);
+    if (lines.length === 0){
+      container.innerHTML = `<div class="task-text">No tasks for today.</div>`;
+      return;
     }
-  }
 
-  async function loadForecast(){
-    try{
-      const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
-      if (!res.ok) return;
+    const byLocation = new Map();
 
-      const raw = (await res.text()).trim();
-      if (!raw) return;
+    for (const line of lines){
+      const parts = line.split(" | ").map(p => p.trim());
+      if (parts.length < 3) continue;
 
-      const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+      const location = parts[0];
+      const assigneeRaw = parts[1];
+      const task = parts.slice(2).join(" | ");
 
-      const days = [];
-      let i = 0;
+      if (!byLocation.has(location)) byLocation.set(location, []);
+      byLocation.get(location).push({ assigneeRaw, task });
+    }
 
-      while (i < lines.length && days.length < 3){
-        const name = lines[i++] || "";
-        const line2 = lines[i++] || "";
-        let condition = lines[i++] || "";
-        let pop = "";
+    const emojiFor = (a) => {
+      const key = a.replace(/\s+/g, "").toUpperCase();
+      if (key === "C") return "🐧";
+      if (key === "V") return "🦩";
+      if (key === "C/V") return "👫";
+      if (key === "R") return "🦄";
+      return "";
+    };
 
-        if (!name || !line2) continue;
+    const assigneeOrder = ["C", "V", "C/V", "R"];
 
-        if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])){
-          pop = lines[i++];
-        } else {
-          const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
-          if (m){
-            pop = `${m[1]}%`;
-            condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
-          }
-        }
+    for (const [location, items] of byLocation.entries()){
+      const locDiv = document.createElement("div");
+      locDiv.className = "task-location";
+      locDiv.textContent = location;
+      container.appendChild(locDiv);
 
-        const parts = line2.split(/\s+/).filter(Boolean);
-        let emoji = "";
-        let temps = "";
-
-        if (parts.length === 1){
-          temps = parts[0];
-        } else if (/^[\d-]/.test(parts[0])){
-          temps = parts.join(" ");
-        } else {
-          emoji = parts[0];
-          temps = parts.slice(1).join(" ");
-        }
-
-        days.push({ name, emoji, temps, condition, pop });
-
-        if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
+      const groups = new Map();
+      for (const it of items){
+        const key = it.assigneeRaw.replace(/\s+/g, "").toUpperCase();
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(it.task);
       }
 
-      const row = document.getElementById("forecast-row");
-      if (!row) return;
+      for (const a of assigneeOrder){
+        const tasks = groups.get(a);
+        if (!tasks || tasks.length === 0) continue;
 
-      row.innerHTML = "";
+        for (const t of tasks){
+          const row = document.createElement("div");
+          row.className = "task-line";
+          row.innerHTML = `
+            <div class="task-emoji">${emojiFor(a)}</div>
+            <div class="task-text">${t}</div>
+          `;
+          container.appendChild(row);
+        }
+      }
+    }
 
-      for (const d of days){
-        const div = document.createElement("div");
-        div.className = "forecast-day";
+    if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
 
-        const emojiSafe = d.emoji || "";
-        const popSafe = (d.pop && d.pop.trim() && d.pop.trim() !== "0%") ? d.pop.trim() : "";
+  } catch(e){
+    console.error("Error loading tasks:", e);
+  }
+}
 
-        div.innerHTML = `
-          <div class="forecast-top">${d.name}</div>
-          <div class="forecast-bottom">
-            <div class="forecast-iconbig">${emojiSafe}</div>
-            <div class="forecast-right">
-              <div class="forecast-temps">${d.temps || ""}</div>
-              <div class="forecast-condline">
-                <div class="forecast-cond">${d.condition || ""}</div>
-                ${popSafe ? `<div class="forecast-pop">${popSafe}</div>` : ``}
-              </div>
+
+async function loadForecast(){
+  const row = document.getElementById("forecast-row");
+  if (!row) return;
+
+  try{
+    const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
+    if (!res.ok) return;
+
+    const raw = (await res.text()).trim();
+    if (!raw) return;
+
+    const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+
+    const days = [];
+    let i = 0;
+
+    while (i < lines.length && days.length < 3){
+      const name = lines[i++] || "";
+      const line2 = lines[i++] || "";
+      let condition = lines[i++] || "";
+      let pop = "";
+
+      if (!name || !line2) continue;
+
+      if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])){
+        pop = lines[i++];
+      } else {
+        const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
+        if (m){
+          pop = `${m[1]}%`;
+          condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
+        }
+      }
+
+      const parts = line2.split(/\s+/).filter(Boolean);
+      let emoji = "";
+      let temps = "";
+
+      if (parts.length === 1){
+        temps = parts[0];
+      } else if (/^[\d-]/.test(parts[0])){
+        temps = parts.join(" ");
+      } else {
+        emoji = parts[0];
+        temps = parts.slice(1).join(" ");
+      }
+
+      days.push({ name, emoji, temps, condition, pop });
+    }
+
+    row.innerHTML = "";
+
+    for (const d of days){
+      const div = document.createElement("div");
+      div.className = "forecast-day";
+
+      const emojiSafe = d.emoji || "";
+      const popSafe = (d.pop && d.pop.trim() && d.pop.trim() !== "0%") ? d.pop.trim() : "";
+
+      div.innerHTML = `
+        <div class="forecast-top">${d.name}</div>
+        <div class="forecast-bottom">
+          <div class="forecast-iconbig">${emojiSafe}</div>
+          <div class="forecast-right">
+            <div class="forecast-temps">${d.temps || ""}</div>
+            <div class="forecast-condline">
+              <div class="forecast-cond">${d.condition || ""}</div>
+              ${popSafe ? `<div class="forecast-pop">${popSafe}</div>` : ``}
             </div>
           </div>
-        `;
+        </div>
+      `;
 
-        row.appendChild(div);
-      }
-    } catch(e){
-      console.error("Error loading Forecast:", e);
+      row.appendChild(div);
     }
+
+    if (window.twemoji) twemoji.parse(row, { folder: "svg", ext: ".svg" });
+
+  } catch(e){
+    console.error("Error loading Forecast:", e);
   }
+}
 
   // Start everything
   document.addEventListener("DOMContentLoaded", () => {
@@ -1025,6 +1032,7 @@ const emojiFor = (a) => {
   </script>
 </body>
 </html>
+
 
 
 
