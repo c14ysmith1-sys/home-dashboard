@@ -676,6 +676,27 @@ html.rotate90ccw #rotator{
     return Array.from(s)[0] || "";
   }
 
+   function cleanLocation(raw){
+  let s = (raw || "").trim();
+  if (!s) return "";
+
+  // If the location has multiple lines (venue on line 1, address on line 2), keep only line 1.
+  const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  if (lines.length > 1) return lines[0];
+
+  // If venue + address are on the same line, remove the address portion.
+  // Example: "Northview Church - Westfield 1191 W 186th St, Westfield, IN..."
+  // Only strip if the street-number pattern occurs AFTER some text (so pure addresses still show).
+  const addrIdx = s.search(/\b\d{1,6}\b\s+[A-Za-z]/); // "1191 W", "6031 Perry", etc.
+  if (addrIdx > 0){
+    s = s.slice(0, addrIdx).trim();
+    s = s.replace(/[,\-–]\s*$/,"").trim(); // trim trailing punctuation like "-" or ","
+  }
+
+  return s;
+}
+
+
   function extractLeadingEmoji(calName){
     const s = (calName || "").trim();
     if (!s) return "";
@@ -777,7 +798,8 @@ async function loadEvents(){
 
       const title = parts[0] || "";
       const start = parts[1] || "";
-      const loc = parts[2] || "";
+      const locRaw = parts[2] || "";
+const loc = cleanLocation(locRaw);
       const calName = parts[3] || "";
       const parsed = parseStart(start);
 
@@ -1051,6 +1073,7 @@ async function loadForecast(){
   </script>
 </body>
 </html>
+
 
 
 
