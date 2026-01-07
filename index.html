@@ -799,7 +799,7 @@ async function loadEvents(){
 
     for (const line of lines){
       const parts = line.split(" | ").map(p => p.trim());
-      if (parts.length < 2) continue;f
+if (parts.length < 2) continue;
 
       const title = parts[0] || "";
       const start = parts[1] || "";
@@ -858,44 +858,56 @@ calEmoji: calendarEmoji(calName),
     
   } catch(e){
     console.error("Error loading events:", e);
+      container.innerHTML = `<div class="event-title noloc">Events error. Check calendar.txt format.</div>`;
   }
   if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
 
 }
 
-   let __tasksScrollRAF = null;
+let __tasksScrollRAF = null;
 let __tasksScrollPause = null;
 
 function startAutoScrollTasks(){
   const el = document.getElementById("tasks-list");
   if (!el) return;
 
-  // stop any previous run (important because loadTasks runs every 60s)
   if (__tasksScrollRAF) cancelAnimationFrame(__tasksScrollRAF);
   if (__tasksScrollPause) clearTimeout(__tasksScrollPause);
 
-  // reset to top each refresh
   el.scrollTop = 0;
 
-  let dir = 1;                 // 1 = down, -1 = up
-  const speed = 0.35;          // px per frame, tune 0.2–0.6
-  const pauseMs = 1200;        // pause at top/bottom
+  let dir = 1;                       // 1 down, -1 up
+  const speedPxPerSec = 4;           // slower. try 4–10
+  const pauseMs = 2000;              // pause at top/bottom
+  let lastTs = null;
 
-  function step(){
+  function step(ts){
     const max = el.scrollHeight - el.clientHeight;
-    if (max <= 0) return;      // nothing to scroll
+    if (max <= 0) return;
 
-    el.scrollTop += dir * speed;
+    if (lastTs == null) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;     // seconds
+    lastTs = ts;
+
+    el.scrollTop += dir * speedPxPerSec * dt;
 
     if (el.scrollTop >= max - 1){
+      el.scrollTop = max;
       dir = -1;
-      __tasksScrollPause = setTimeout(() => { __tasksScrollRAF = requestAnimationFrame(step); }, pauseMs);
+      lastTs = null;
+      __tasksScrollPause = setTimeout(() => {
+        __tasksScrollRAF = requestAnimationFrame(step);
+      }, pauseMs);
       return;
     }
 
     if (el.scrollTop <= 0){
+      el.scrollTop = 0;
       dir = 1;
-      __tasksScrollPause = setTimeout(() => { __tasksScrollRAF = requestAnimationFrame(step); }, pauseMs);
+      lastTs = null;
+      __tasksScrollPause = setTimeout(() => {
+        __tasksScrollRAF = requestAnimationFrame(step);
+      }, pauseMs);
       return;
     }
 
@@ -904,6 +916,7 @@ function startAutoScrollTasks(){
 
   __tasksScrollRAF = requestAnimationFrame(step);
 }
+
 
    
 async function loadTasks(){
@@ -1123,6 +1136,7 @@ async function loadForecast(){
   </script>
 </body>
 </html>
+
 
 
 
