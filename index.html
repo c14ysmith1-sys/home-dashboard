@@ -378,7 +378,7 @@
   flex: 0 0 auto;
 }
 
-.task-emoji img, .event-emoji img, .forecast-iconbig img{
+.task-emoji img, .event-emoji img, .forecast-iconbig img, img.emoji{
   width: 18px;
   height: 18px;
   vertical-align: -0.15em;
@@ -400,32 +400,27 @@
 }
 
 .event-title{
-  font-weight: 750;
+  font-size: 13px;          /* day header is 14px, so this is slightly smaller */
+  font-weight: 500;         /* regular-ish, not bold */
   color: var(--text-main);
   line-height: 1.2;
 
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;     /* never more than 2 lines */
+  white-space: nowrap;      /* 1 line only */
   overflow: hidden;
-}
-
-.event-title.noloc{
-  font-size: 16px;           /* bigger when no location */
-}
-
-.event-title.hasloc{
-  font-size: 14px;           /* slightly smaller when location exists */
+  text-overflow: ellipsis;
 }
 
 .event-loc{
-  font-size: 12px;
+  font-size: 11px;          /* smaller than title */
+  font-weight: 450;         /* explicitly not bold */
   color: var(--text-muted);
   line-height: 1.2;
 
-  white-space: nowrap;       /* 1 line only */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  max-width: 100%;
 }
 
 .event-time{
@@ -691,6 +686,28 @@ html.rotate90ccw #rotator{
     return g;
   }
 
+   function calendarEmoji(calName){
+  const lead = extractLeadingEmoji(calName);
+  if (lead) return lead;
+
+  const s = (calName || "").toLowerCase();
+
+  if (s.includes("work")) return "💊";
+  if (s.includes("church")) return "⛪️";
+  if (s.includes("valor")) return "🎤";
+  if (s.includes("life group")) return "📚";
+  if (s.includes("vacation")) return "🛳️";
+  if (s.includes("credit")) return "💰";
+  if (s.includes("victoria")) return "👸";
+  if (s.includes("family")) return "👑";
+  if (s.includes("home")) return "🏡";
+  if (s.includes("date night") || s.includes("date")) return "👩‍❤️‍👨";
+  if (s.includes("school")) return "🏫";
+
+  return "";
+}
+
+
   function parseStart(startStr){
     const s = (startStr || "").trim();
     const out = { dateKey:"", dayLabel:"", timeMain:"", timeAmPm:"", allDay:false };
@@ -801,7 +818,7 @@ async function loadEvents(){
         <div class="event-emoji">${ev.calEmoji || ""}</div>
         <div class="event-main">
           <div class="event-top">
-            <div class="event-title ${hasLoc ? "hasloc" : "noloc"}">${ev.title}</div>
+            <div class="event-title">${ev.title}</div>
             ${timeHtml}
           </div>
           ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
@@ -811,11 +828,12 @@ async function loadEvents(){
       container.appendChild(item);
     }
 
-    if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
-
+    
   } catch(e){
     console.error("Error loading events:", e);
   }
+  if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
+
 }
   
    
@@ -894,11 +912,11 @@ async function loadTasks(){
       }
     }
 
-    if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
-
   } catch(e){
     console.error("Error loading tasks:", e);
   }
+  if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
+
 }
 
 
@@ -978,11 +996,12 @@ async function loadForecast(){
       row.appendChild(div);
     }
 
-    if (window.twemoji) twemoji.parse(row, { folder: "svg", ext: ".svg" });
+    
 
   } catch(e){
     console.error("Error loading Forecast:", e);
   }
+  if (window.twemoji) twemoji.parse(row, { folder: "svg", ext: ".svg" });
 }
 
   // Start everything
@@ -1032,6 +1051,7 @@ async function loadForecast(){
   </script>
 </body>
 </html>
+
 
 
 
