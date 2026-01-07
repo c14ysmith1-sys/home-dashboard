@@ -1,18 +1,4 @@
-• Laundry | C/V | Run washer self-clean cycle
-• Pets | C/V | Dog bath
-• Pets | C/V | Trim dog nails
-• Kids | C/V | Restock diapers/wipes
-• Home | V | Mail: sort + trash
-• Home | R | 🗑️ empty small trash
-• Planning | C/V | Family check-in + plan week + budget
-• Planning | C/V | Add appointments/events to calendar
-• Planning | C/V | Update shared shopping list
-• Kids Food | V | Prep snacks for tomorrow
-• Kids Food | V | Prep kids lunches
-• Laundry | V | Wash Clarity clothes
-• Laundry | C/V | Put away clean clothes
-• Bathrooms | V | Wipe guest sink/mirror/counter
-• Bathrooms | V | Wipe master sink/mirror/counter
-• Bathrooms | V | Clean shower
-• Outside | C | Trash cans to curb
-• Planning | V | Check school emails/messages
+• Laundry | C/V | Wash living room blankets
+• Outside | V | Water indoor plants
+• Outside | V | Water outdoor plants
+• Laundry | C/V | Wash bedding (sheets/pillows)
