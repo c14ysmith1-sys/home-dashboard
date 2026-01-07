@@ -679,25 +679,30 @@ html.rotate90ccw #rotator{
     return Array.from(s)[0] || "";
   }
 
-   function cleanLocation(raw){
+function cleanLocation(raw){
   let s = (raw || "").trim();
   if (!s) return "";
 
-  // If the location has multiple lines (venue on line 1, address on line 2), keep only line 1.
   const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
-  if (lines.length > 1) return lines[0];
+  if (lines.length > 1){
+    // If line 1 starts with a street number, it is probably an address. Join line 1 + line 2.
+    if (/^\d/.test(lines[0])) {
+      return `${lines[0]}, ${lines[1]}`; // Aspen: "6031 Perry Worth Rd, Whitestown, IN..."
+    }
+    // Otherwise treat line 1 as a venue and ignore the address lines.
+    return lines[0]; // Northview: keep only "Northview Church - Westfield"
+  }
 
-  // If venue + address are on the same line, remove the address portion.
-  // Example: "Northview Church - Westfield 1191 W 186th St, Westfield, IN..."
-  // Only strip if the street-number pattern occurs AFTER some text (so pure addresses still show).
-  const addrIdx = s.search(/\b\d{1,6}\b\s+[A-Za-z]/); // "1191 W", "6031 Perry", etc.
+  // Single-line venue+address, strip off the address portion if it appears after venue text
+  const addrIdx = s.search(/\b\d{1,6}\b\s+[A-Za-z]/);
   if (addrIdx > 0){
     s = s.slice(0, addrIdx).trim();
-    s = s.replace(/[,\-–]\s*$/,"").trim(); // trim trailing punctuation like "-" or ","
+    s = s.replace(/[,\-–]\s*$/,"").trim();
   }
 
   return s;
 }
+
 
 
   function extractLeadingEmoji(calName){
@@ -784,11 +789,31 @@ async function loadEvents(){
 
     container.innerHTML = "";
 
-    const lines = text
-      .split("\n")
-      .map(l => l.trim())
-      .filter(l => l.length > 0)
-      .slice(0, 10);
+    const rawLines = text
+  .split("\n")
+  .map(l => l.trim())
+  .filter(Boolean);
+
+// Rebuild events that were split across multiple lines (usually from multi-line locations)
+const rebuilt = [];
+const eventStartRe = /\s\|\s*[A-Za-z]{3}\s+\d{1,2},\s*\d{4}\s+(at\s+\d|all\s*day)/i;
+
+let buf = "";
+for (const ln of rawLines){
+  const isEventStart = ln.includes(" | ") && eventStartRe.test(ln);
+
+  if (isEventStart){
+    if (buf) rebuilt.push(buf.trim());
+    buf = ln;
+  } else {
+    // continuation line, append to previous event (location spillover)
+    buf = buf ? (buf + " " + ln) : ln;
+  }
+}
+if (buf) rebuilt.push(buf.trim());
+
+const lines = rebuilt.slice(0, 10);
+
 
     if (lines.length === 0){
       container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
@@ -1136,6 +1161,7 @@ async function loadForecast(){
   </script>
 </body>
 </html>
+
 
 
 
