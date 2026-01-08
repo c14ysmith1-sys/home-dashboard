@@ -833,39 +833,61 @@
       if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
     }
 
-    // Infinite, no-pause, no-bounce auto-scroll for tasks
-    let __tasksRAF = null;
+// Infinite, no-pause, no-bounce auto-scroll for tasks (Fire TV friendly)
+let __tasksTimer = null;
 
-    function stopTasksScroll(){
-      if (__tasksRAF) cancelAnimationFrame(__tasksRAF);
-      __tasksRAF = null;
-    }
+function stopTasksScroll(){
+  if (__tasksTimer) clearInterval(__tasksTimer);
+  __tasksTimer = null;
+}
 
-    function makeTasksInfinite(el){
-      // Remove old clones if any
-      const clones = el.querySelectorAll('[data-clone="1"]');
-      clones.forEach(n => n.remove());
+function makeTasksInfinite(el){
+  // remove old clones
+  el.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
 
-      // Base height before cloning
-      const baseHeight = el.scrollHeight;
-      el.dataset.baseScrollHeight = String(baseHeight);
+  // measure base height BEFORE cloning
+  const base = el.scrollHeight;
+  el.dataset.baseScrollHeight = String(base);
 
-      // Duplicate content once to enable seamless wrap
-      const kids = Array.from(el.children);
-      for (const k of kids){
-        const c = k.cloneNode(true);
-        c.setAttribute("data-clone", "1");
-        el.appendChild(c);
+  // clone once
+  const kids = Array.from(el.children);
+  for (const k of kids){
+    const c = k.cloneNode(true);
+    c.setAttribute("data-clone", "1");
+    el.appendChild(c);
+  }
+
+  el.scrollTop = 0;
+}
+
+function startInfiniteScrollTasks(speedPxPerSec = 4){
+  const el = document.getElementById("tasks-list");
+  if (!el) return;
+
+  stopTasksScroll();
+
+  // Let layout settle (and twemoji images size in) before measuring
+  setTimeout(() => {
+    // If it still cannot scroll, bail
+    if (el.scrollHeight <= el.clientHeight + 1) return;
+
+    makeTasksInfinite(el);
+
+    const base = parseFloat(el.dataset.baseScrollHeight || "0");
+    if (!base || base <= el.clientHeight + 1) return;
+
+    const tickMs = 33; // about 30 fps
+    const pxPerTick = (speedPxPerSec * tickMs) / 1000;
+
+    __tasksTimer = setInterval(() => {
+      el.scrollTop += pxPerTick;
+      if (el.scrollTop >= base){
+        el.scrollTop -= base;
       }
+    }, tickMs);
+  }, 600);
+}
 
-      el.scrollTop = 0;
-    }
-
-    function startInfiniteScrollTasks(speedPxPerSec = 4){
-      const el = document.getElementById("tasks-list");
-      if (!el) return;
-
-      stopTasksScroll();
 
       // If it cannot scroll, do nothing
       if (el.scrollHeight <= el.clientHeight) return;
@@ -976,10 +998,11 @@
         console.error("Error loading tasks:", e);
       }
 
-      if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
+if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
 
-      // Start infinite scroll after render
-      requestAnimationFrame(() => startInfiniteScrollTasks(4));
+// start infinite scroll after render
+startInfiniteScrollTasks(4);
+
     }
 
     async function loadForecast(){
@@ -1111,3 +1134,4 @@
   </script>
 </body>
 </html>
+
