@@ -13,7 +13,7 @@
       --safeBottom: 2px;
       --safeLeft: 2px;
 
-      --eventTimeCol: 72px;   /* tweak 68–80px if you want */
+      --eventTimeCol: 76px;   /* tweak 68–80px if you want */
       
       /* Dark mode */
       --bg: #000;
@@ -771,97 +771,91 @@
     let __tasksLastTs = 0;
     let __tasksPos = 0;
     let __tasksBase = 0;
+    let __lastTasksText = "";
 
-    function stopTasksMarquee(){
-      if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
-      __tasksRaf = null;
-      __tasksLastTs = 0;
-      __tasksPos = 0;
-      __tasksBase = 0;
+   function stopTasksMarquee(){
+  if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
+  __tasksRaf = null;
+  __tasksLastTs = 0;
+  __tasksPos = 0;
+  __tasksBase = 0;
 
-      const inner = document.getElementById("tasks-inner");
-      if (inner) inner.style.transform = "translate3d(0,0,0)";
-    }
+  // Remove the second track if it exists
+  const b = document.getElementById("tasks-inner-b");
+  if (b) b.remove();
 
-    function removeTaskClones(inner){
-      if (!inner) return;
-      inner.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
-    }
+  // Reset track A to normal flow so measurements stay stable
+  const a = document.getElementById("tasks-inner");
+  if (a){
+    a.style.transform = "translate3d(0,0,0)";
+    a.style.position = "";
+    a.style.left = "";
+    a.style.right = "";
+    a.style.top = "";
+  }
+}
+
 
     function startTasksMarquee(speedPxPerSec){
-      const viewport = document.getElementById("tasks-list");
-      const inner = document.getElementById("tasks-inner");
-      if (!viewport || !inner) return;
+  const viewport = document.getElementById("tasks-list");
+  const trackA = document.getElementById("tasks-inner");
+  if (!viewport || !trackA) return;
 
-      stopTasksMarquee();
+  stopTasksMarquee();
 
-setTimeout(() => {
-  // Clear any old clone content you might have added previously
-  removeTaskClones(inner);
+  setTimeout(() => {
+    const viewportH = viewport.clientHeight;
+    const originalH = trackA.scrollHeight;
+    if (originalH <= viewportH + 1) return;
 
-  const viewportH = viewport.clientHeight;
+    viewport.style.position = "relative";
 
-  // If content fits, no scrolling needed
-  const originalH = inner.scrollHeight;
-  if (originalH <= viewportH + 1) return;
+    // Track A absolute
+    trackA.style.position = "absolute";
+    trackA.style.left = "0";
+    trackA.style.right = "0";
+    trackA.style.top = "0";
+    trackA.style.transform = "translate3d(0,0,0)";
 
-  // Make the original inner act as "track A"
-  const trackA = inner;
-  trackA.style.position = "absolute";
-  trackA.style.left = "0";
-  trackA.style.right = "0";
-  trackA.style.top = "0";
+    // Track B clone
+    const trackB = trackA.cloneNode(true);
+    trackB.id = "tasks-inner-b";
+    trackB.style.position = "absolute";
+    trackB.style.left = "0";
+    trackB.style.right = "0";
+    trackB.style.top = "0";
+    trackB.style.transform = "translate3d(0,0,0)";
+    viewport.appendChild(trackB);
 
-  // Create "track B" as a full clone of track A
-  const trackB = trackA.cloneNode(true);
-  trackB.id = "tasks-inner-b";
-  trackB.setAttribute("data-clone", "1");
-  trackB.style.position = "absolute";
-  trackB.style.left = "0";
-  trackB.style.right = "0";
-  trackB.style.top = "0";
+    // Measure once, then run as a "wheel"
+    const H = Math.ceil(trackA.scrollHeight);
 
-  // Ensure viewport is the positioning context
-  viewport.style.position = "relative";
+    let y = 0;
+    __tasksLastTs = 0;
 
-  // Remove any existing B if present, then append fresh B
-  const oldB = document.getElementById("tasks-inner-b");
-  if (oldB) oldB.remove();
-  viewport.appendChild(trackB);
+    function step(ts){
+      if (!__tasksLastTs) __tasksLastTs = ts;
 
-  // Measure track height (after fonts/layout)
-  const H = Math.ceil(trackA.scrollHeight);
+      let dt = (ts - __tasksLastTs) / 1000;
+      __tasksLastTs = ts;
+      dt = Math.min(dt, 0.05);
 
-  let yA = 0;
-  let yB = H; // start B directly below A
-  __tasksLastTs = 0;
+      y -= speedPxPerSec * dt;
 
-  function step(ts){
-    if (!__tasksLastTs) __tasksLastTs = ts;
+      // Wrap y (wheel)
+      if (y <= -H) y += H;
 
-    let dt = (ts - __tasksLastTs) / 1000;
-    __tasksLastTs = ts;
-    dt = Math.min(dt, 0.05); // cap big stalls
+      // Render B always exactly below A (no drift)
+      trackA.style.transform = `translate3d(0,${y}px,0)`;
+      trackB.style.transform = `translate3d(0,${y + H}px,0)`;
 
-    const dy = speedPxPerSec * dt;
-    yA -= dy;
-    yB -= dy;
-
-    // If a track is completely above the viewport, move it under the other track
-    if (yA <= -H) yA = yB + H;
-    if (yB <= -H) yB = yA + H;
-
-    // Use integer pixels to avoid seam shimmer
-    trackA.style.transform = "translate3d(0," + Math.round(yA) + "px,0)";
-    trackB.style.transform = "translate3d(0," + Math.round(yB) + "px,0)";
+      __tasksRaf = requestAnimationFrame(step);
+    }
 
     __tasksRaf = requestAnimationFrame(step);
-  }
+  }, 400);
+}
 
-  __tasksRaf = requestAnimationFrame(step);
-}, 400);
-
-    }
 
     async function loadTasks(){
       const inner = document.getElementById("tasks-inner");
@@ -872,7 +866,13 @@ setTimeout(() => {
         if (!res.ok) return;
 
         const text = await res.text();
-        inner.innerHTML = "";
+
+// If the file hasn't changed, do NOT rebuild or restart marquee (prevents the visible jump)
+if (text === __lastTasksText) return;
+__lastTasksText = text;
+
+inner.innerHTML = "";
+
 
         const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
         if (lines.length === 0){
@@ -1071,6 +1071,7 @@ if (key === "V") return "🐝";
   </script>
 </body>
 </html>
+
 
 
 
