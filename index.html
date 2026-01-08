@@ -8,25 +8,22 @@
 
   <style>
     :root{
-      /* 2px buffer on all sides (adjust if your TV overscans) */
       --safeTop: 2px;
       --safeRight: 2px;
       --safeBottom: 2px;
       --safeLeft: 2px;
 
       /* Dark mode */
-      --bg: #000000;
-      --frame: #000000;
+      --bg: #000;
+      --frame: #000;
       --card: #161616;
+
       --border-soft: rgba(255,255,255,0.18);
-      --accent: rgba(255,255,255,0.70);
-      --accent-soft: rgba(255,255,255,0.20);
       --text-main: #f5f5f5;
       --text-muted: rgba(245,245,245,0.72);
-      --bullet: rgba(255,255,255,0.70);
     }
 
-    *{ box-sizing: border-box; margin:0; padding:0; }
+    *{ box-sizing:border-box; margin:0; padding:0; }
     html, body{ width:100%; height:100%; overflow:hidden; }
     body{
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
@@ -36,127 +33,115 @@
 
     #rotator{
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       overflow: hidden;
     }
 
     #bleed{
-      position: absolute;
-      inset: -6%;
+      position:absolute;
+      inset:-6%;
       background: var(--frame);
-      z-index: 0;
+      z-index:0;
     }
 
     #safe{
-      position: absolute;
-      inset: 0;
+      position:absolute;
+      inset:0;
       padding:
         calc(var(--safeTop) + env(safe-area-inset-top))
         calc(var(--safeRight) + env(safe-area-inset-right))
         calc(var(--safeBottom) + env(safe-area-inset-bottom))
         calc(var(--safeLeft) + env(safe-area-inset-left));
-      z-index: 1;
-      overflow: hidden;
+      z-index:1;
+      overflow:hidden;
     }
 
     .frame{
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 2px;
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-      overflow: hidden;
+      width:100%;
+      height:100%;
+      display:grid;
+      grid-template-rows:auto auto 1fr;
+      gap:2px;
+      overflow:hidden;
     }
 
     /* HEADER */
     .header{
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 2px 0 2px;
-      min-height: 0;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:2px 0 2px;
     }
 
     .time-block{
       display:flex;
-      align-items: baseline;
-      gap: 6px;
-      white-space: nowrap;
-      z-index: 2;
+      align-items:baseline;
+      gap:6px;
+      white-space:nowrap;
+      z-index:2;
     }
 
-    /* Match temp size (42°) and do not bold */
     .time-main{
-      font-size: 40px;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-      line-height: 1;
+      font-size:40px;     /* match temp size */
+      font-weight:500;    /* not bold */
+      line-height:1;
     }
 
     .ampm{
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.6px;
+      font-size:14px;
+      font-weight:650;
+      color:var(--text-muted);
+      letter-spacing:0.6px;
     }
 
-    /* Always centered on full screen regardless of left/right widths */
+    /* Absolute center, always screen-centered */
     .date-center{
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      font-size: 56px;
-      font-weight: 800;
-      line-height: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 70%;
-      padding: 0 6px;
-      z-index: 1;
-      pointer-events: none;
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:56px;
+      font-weight:800;
+      line-height:1;
+      white-space:nowrap;
+      max-width:70%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      z-index:1;
+      pointer-events:none;
     }
 
     .weather-main{
       display:flex;
-      align-items: center;
-      justify-content: flex-end;
-      text-align: right;
-      white-space: nowrap;
-      z-index: 2;
+      align-items:center;
+      justify-content:flex-end;
+      text-align:right;
+      white-space:nowrap;
+      z-index:2;
     }
 
     .weather-temp{
-      font-size: 40px;
-      font-weight: 800;
-      line-height: 1;
+      font-size:40px;
+      font-weight:800;
+      line-height:1;
     }
 
     .weather-line{
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.1;
+      font-size:14px;
+      color:var(--text-muted);
+      line-height:1.1;
     }
 
     /* FORECAST */
     .forecast-row{
-      position: relative;
-      border-top: 1px solid var(--border-soft);
-      border-bottom: 1px solid var(--border-soft);
-      padding: 2px 0 2px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      min-width: 0;
-      overflow: hidden;
+      position:relative;
+      border-top:1px solid var(--border-soft);
+      border-bottom:1px solid var(--border-soft);
+      padding:2px 0 2px;
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+      overflow:hidden;
     }
 
     .forecast-row.has-separators::before{
@@ -165,283 +150,248 @@
       left:0; right:0;
       top:2px; bottom:2px;
       pointer-events:none;
-      background-image:
-        linear-gradient(
-          to right,
-          transparent 0,
-          transparent calc(100% - 1px),
-          rgba(255,255,255,0.18) calc(100% - 1px),
-          rgba(255,255,255,0.18) 100%
-        );
+      background-image: linear-gradient(
+        to right,
+        transparent 0,
+        transparent calc(100% - 1px),
+        rgba(255,255,255,0.18) calc(100% - 1px),
+        rgba(255,255,255,0.18) 100%
+      );
       background-size: calc(100% / 3) 100%;
       background-repeat: repeat;
     }
 
     .forecast-day{
-      min-width: 0;
-      padding: 2px 6px;
-      border-radius: 10px;
-      overflow: hidden;
+      padding:2px 6px;
+      border-radius:10px;
+      overflow:hidden;
+      min-width:0;
     }
 
     .forecast-top{
-      font-weight: 800;
-      font-size: 26px;
-      line-height: 1;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 2px;
+      font-weight:800;
+      font-size:26px;
+      line-height:1;
+      text-align:center;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      margin-bottom:2px;
     }
 
     .forecast-bottom{
       display:flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
+      align-items:center;
+      gap:10px;
+      min-width:0;
     }
 
     .forecast-iconbig{
-      font-size: 28px;
-      line-height: 1;
-      width: 34px;
-      text-align: center;
-      flex: 0 0 auto;
+      font-size:28px;
+      width:34px;
+      text-align:center;
+      flex:0 0 auto;
+      line-height:1;
     }
 
     .forecast-right{
-      min-width: 0;
-      flex: 1 1 auto;
+      flex:1 1 auto;
+      min-width:0;
       display:flex;
-      flex-direction: column;
-      gap: 2px;
+      flex-direction:column;
+      gap:2px;
     }
 
     .forecast-temps{
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.1;
-      white-space: nowrap;
+      font-size:16px;
+      font-weight:800;
+      white-space:nowrap;
+      line-height:1.1;
     }
 
     .forecast-condline{
       display:flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-      min-width: 0;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:8px;
+      min-width:0;
     }
 
     .forecast-cond{
-      font-size: 13px;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 0;
-      flex: 1 1 auto;
+      font-size:13px;
+      color:var(--text-muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      flex:1 1 auto;
+      min-width:0;
     }
 
     .forecast-pop{
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 800;
-      white-space: nowrap;
-      flex: 0 0 auto;
+      font-size:13px;
+      color:var(--text-muted);
+      font-weight:800;
+      white-space:nowrap;
+      flex:0 0 auto;
     }
 
     /* MAIN */
     .main{
       display:grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 2px; /* requested */
-      min-width: 0;
-      overflow: hidden;
+      grid-template-columns:1.2fr 1fr;
+      gap:2px;
+      overflow:hidden;
+      min-width:0;
     }
     .main > *{ min-width:0; }
 
     .card{
-      background: var(--card);
-      border-radius: 16px;
-      padding: 10px 12px;
-      box-shadow: none;
+      background:var(--card);
+      border-radius:16px;
+      padding:10px 12px;
       display:flex;
-      flex-direction: column;
-      min-height: 0;
-      overflow: hidden;
+      flex-direction:column;
+      min-height:0;
+      overflow:hidden;
     }
 
     .card-header{
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      text-align: center;
-      text-decoration: underline;
-      text-underline-offset: 6px;
+      font-size:16px;
+      font-weight:800;
+      margin-bottom:6px;
+      text-align:center;
+      text-decoration:underline;
+      text-underline-offset:6px;
       text-decoration-color: rgba(255,255,255,0.55);
+      flex: 0 0 auto;     /* header never scrolls */
     }
 
     /* EVENTS */
-    #events-card .events-list{
+    #events-list{
       overflow:auto;
       min-height:0;
-      flex: 1 1 auto;
-      padding-right: 6px;
+      flex:1 1 auto;
+      padding-right:6px;
       display:flex;
-      flex-direction: column;
-      gap: 10px;
+      flex-direction:column;
+      gap:10px;
     }
 
     .events-day{
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text-main);
-      text-align: left;
-      margin-top: 2px;
+      font-size:14px;
+      font-weight:800;
+      margin-top:2px;
     }
 
     .event-item{
       display:grid;
-      grid-template-columns: 22px 1fr auto;
-      column-gap: 10px;
+      grid-template-columns:22px 1fr auto;
+      column-gap:10px;
       align-items:start;
-      font-size: 14px;
-      min-width: 0;
+      min-width:0;
     }
 
     .event-emoji{
-      width: 22px;
-      text-align: center;
-      font-size: 18px;
-      line-height: 1;
-      margin-top: 2px;
-      flex: 0 0 auto;
-    }
-
-    .event-main{
-      min-width: 0;
-      display:flex;
-      flex-direction: column;
-      gap: 4px;
+      width:22px;
+      text-align:center;
+      font-size:18px;
+      line-height:1;
+      margin-top:2px;
     }
 
     .event-top{
       display:grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
+      grid-template-columns:1fr auto;
+      gap:10px;
       align-items:start;
-      min-width: 0;
+      min-width:0;
     }
 
     .event-title{
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-main);
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size:13px;
+      font-weight:500;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      line-height:1.2;
+      min-width:0;
     }
 
     .event-loc{
-      font-size: 11px;
-      font-weight: 450;
-      color: var(--text-muted);
-      line-height: 1.2;
-      display: block;
-      min-width: 0;
-      max-width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      overflow-wrap: normal;
-      word-break: normal;
+      font-size:11px;
+      font-weight:450;
+      color:var(--text-muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      line-height:1.2;
     }
 
     .event-time{
       display:flex;
-      align-items: baseline;
-      justify-content: flex-end;
-      white-space: nowrap;
+      align-items:baseline;
+      justify-content:flex-end;
+      white-space:nowrap;
     }
 
-    /* Make event time same size as day header (14px), keep bold */
     .event-time-main{
-      font-size: 14px;
-      font-weight: 850;
-      line-height: 1;
+      font-size:14px;    /* match day header */
+      font-weight:850;
+      line-height:1;
     }
 
     .event-time-ampm{
-      font-size: 9px;
-      font-weight: 850;
-      color: var(--text-muted);
-      line-height: 1;
-      margin-left: 0;
-    }
-
-    .event-time-allday{
-      font-size: 12px;
-      font-weight: 850;
-      color: var(--text-main);
+      font-size:9px;
+      font-weight:850;
+      color:var(--text-muted);
+      line-height:1;
+      margin-left:0;
     }
 
     /* TASKS */
-    .tasks-list{
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
-      min-width: 0;
+    #tasks-list{
       overflow:auto;
       min-height:0;
-      flex: 1 1 auto;
-      padding-right: 6px;
+      flex:1 1 auto;
+      padding-right:6px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      scrollbar-width:none;
     }
-
-    /* hide scrollbars */
-    #tasks-list::-webkit-scrollbar{ width: 0; height: 0; }
-    #tasks-list{ scrollbar-width: none; }
+    #tasks-list::-webkit-scrollbar{ width:0; height:0; }
 
     .task-location{
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-top: 2px;
+      font-size:14px;
+      font-weight:800;
+      margin-top:2px;
     }
 
     .task-line{
       display:flex;
       align-items:flex-start;
-      gap: 8px;
-      padding-left: 0; /* no indent */
-      min-width: 0;
+      gap:8px;
+      padding-left:0; /* no indent */
+      min-width:0;
     }
 
     .task-emoji{
-      width: 22px;
-      text-align: center;
-      flex: 0 0 auto;
-      font-size: 18px;
-      line-height: 1;
-      margin-top: 1px;
+      width:22px;
+      text-align:center;
+      flex:0 0 auto;
+      font-size:18px;
+      line-height:1;
+      margin-top:1px;
     }
 
     .task-text{
-      min-width: 0;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-      font-size: 14px;
+      font-size:14px;
+      min-width:0;
+      overflow-wrap:anywhere;
+      word-break:break-word;
     }
 
-    /* Twemoji svg sizing */
-    .task-emoji img, .event-emoji img, .forecast-iconbig img, img.emoji{
-      width: 18px;
-      height: 18px;
-      vertical-align: -0.15em;
-    }
-
-    /* Rotation options */
+    /* Rotation */
     html.rotate90cw #rotator{
       width: 100vh;
       height: 100vw;
@@ -455,11 +405,23 @@
       transform: rotate(-90deg) translate(-100%, 0);
     }
 
-    /* Compact mode */
-    html.compact .date-center{ font-size: 28px; }
+    /* Debug overlay */
+    #debugBox{
+      position:fixed;
+      left:6px;
+      right:6px;
+      bottom:6px;
+      background:rgba(255,0,0,0.18);
+      border:1px solid rgba(255,0,0,0.35);
+      color:#fff;
+      font: 12px/1.25 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      padding:8px;
+      border-radius:10px;
+      z-index:9999;
+      display:none;
+      white-space:pre-wrap;
+    }
   </style>
-
-  <script defer src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -490,18 +452,12 @@
         <main class="main">
           <section class="card" id="events-card">
             <div class="card-header">Upcoming Events</div>
-
-            <div class="events-list" id="events-list">
-              <div class="event-title noloc">Loading events…</div>
-            </div>
+            <div id="events-list"><div class="event-title">Loading events…</div></div>
           </section>
 
           <section class="card" id="tasks-card">
             <div class="card-header">Today’s Tasks</div>
-
-            <div class="tasks-list" id="tasks-list">
-              <div class="task-text">Loading tasks…</div>
-            </div>
+            <div id="tasks-list"><div class="task-text">Loading tasks…</div></div>
           </section>
         </main>
 
@@ -509,55 +465,62 @@
     </div>
   </div>
 
+  <div id="debugBox"></div>
+
   <script>
-    // Rotation: bottom of TV is on the right, so we want CW
-    const FORCE_ROTATION = "cw"; // "ccw" or "cw"
+    // On-screen JS error reporting (so you see the actual issue on TV)
+    (function(){
+      const box = document.getElementById("debugBox");
+      function show(msg){
+        box.style.display = "block";
+        box.textContent = msg;
+      }
+      window.addEventListener("error", (e) => {
+        show("JS ERROR:\n" + (e.message || "Unknown") + "\n" + (e.filename || "") + ":" + (e.lineno || "") );
+      });
+      window.addEventListener("unhandledrejection", (e) => {
+        show("PROMISE ERROR:\n" + (e.reason ? String(e.reason) : "Unknown"));
+      });
+    })();
+
+    const FORCE_ROTATION = "cw"; // "cw" or "ccw"
 
     function applyLayoutMode(){
       document.documentElement.classList.remove("rotate90cw", "rotate90ccw");
-      if (FORCE_ROTATION === "cw") {
-        document.documentElement.classList.add("rotate90cw");
-      } else {
-        document.documentElement.classList.add("rotate90ccw");
-      }
-      const portraitWidth = window.innerWidth;
-      document.documentElement.classList.toggle("compact", portraitWidth < 900);
+      document.documentElement.classList.add(FORCE_ROTATION === "cw" ? "rotate90cw" : "rotate90ccw");
     }
-
     window.addEventListener("resize", applyLayoutMode);
 
-    function pad2(n){ return n.toString().padStart(2, "0"); }
+    function pad2(n){ return String(n).padStart(2, "0"); }
 
     function formatTime12(now){
       let h = now.getHours();
       const m = now.getMinutes();
-      const ampm = h >= 12 ? "PM" : "AM";
+      const ap = h >= 12 ? "PM" : "AM";
       h = h % 12;
       if (h === 0) h = 12;
-      return { time: `${h}:${pad2(m)}`, ampm };
+      return { time: h + ":" + pad2(m), ampm: ap };
     }
 
     function formatDateShort(now){
       const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
       const mos  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      return `${dows[now.getDay()]}, ${mos[now.getMonth()]} ${now.getDate()}`;
+      return dows[now.getDay()] + ", " + mos[now.getMonth()] + " " + now.getDate();
     }
 
     function updateClock(){
       const now = new Date();
-      const { time, ampm } = formatTime12(now);
-      document.getElementById("clock").textContent = time;
-      document.getElementById("ampm").textContent = ampm;
+      const t = formatTime12(now);
+      document.getElementById("clock").textContent = t.time;
+      document.getElementById("ampm").textContent = t.ampm;
       document.getElementById("date-center").textContent = formatDateShort(now);
     }
 
-    // Smooth temperature color across a blue -> cyan -> green -> yellow -> orange -> red spectrum
-    function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
-    function lerp(a, b, t){ return a + (b - a) * t; }
+    function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+    function lerp(a,b,t){ return a + (b-a)*t; }
 
+    // Smooth gradient mapping in HSL across temperature range
     function tempToHsl(tempF){
-      // Breakpoints with hues (HSL): deep blue -> teal -> green -> yellow -> orange -> red
-      // You can adjust these later if you want it "cooler" or "hotter" overall.
       const pts = [
         { t: -10, h: 220, s: 95, l: 55 },
         { t:  20, h: 205, s: 95, l: 55 },
@@ -570,32 +533,28 @@
         { t: 110, h: 350, s: 95, l: 55 }
       ];
 
-      const tf = clamp(tempF, pts[0].t, pts[pts.length - 1].t);
-
+      const tf = clamp(tempF, pts[0].t, pts[pts.length-1].t);
       let i = 0;
-      while (i < pts.length - 1 && tf > pts[i+1].t) i++;
+      while (i < pts.length-1 && tf > pts[i+1].t) i++;
 
-      const a = pts[i];
-      const b = pts[i+1];
+      const a = pts[i], b = pts[i+1];
       const span = (b.t - a.t) || 1;
       const u = clamp((tf - a.t) / span, 0, 1);
 
-      // Interpolate hue and keep s/l smooth
-      const h = lerp(a.h, b.h, u);
-      const s = lerp(a.s, b.s, u);
-      const l = lerp(a.l, b.l, u);
-
-      return { h, s, l };
+      return {
+        h: lerp(a.h, b.h, u),
+        s: lerp(a.s, b.s, u),
+        l: lerp(a.l, b.l, u)
+      };
     }
 
-    function applyTempColorFromDom(){
+    function applyTempColor(){
       const el = document.getElementById("weather-temp");
-      if (!el) return;
       const m = (el.textContent || "").match(/-?\d+/);
       if (!m) return;
       const tempF = parseInt(m[0], 10);
-      const { h, s, l } = tempToHsl(tempF);
-      el.style.color = `hsl(${h} ${s}% ${l}%)`;
+      const c = tempToHsl(tempF);
+      el.style.color = "hsl(" + c.h + " " + c.s + "% " + c.l + "%)";
     }
 
     async function loadWeather(){
@@ -608,36 +567,23 @@
         const tempMatch = text.match(/(-?\d+)\s*°/);
         const feelsMatch = text.match(/Feels\s*like[:\s]*(-?\d+)\s*°/i);
 
-        if (tempMatch) document.getElementById("weather-temp").textContent = `${tempMatch[1]}°`;
-        if (feelsMatch) document.getElementById("weather-line").textContent = `Feels like ${feelsMatch[1]}°`;
+        if (tempMatch) document.getElementById("weather-temp").textContent = tempMatch[1] + "°";
+        if (feelsMatch) document.getElementById("weather-line").textContent = "Feels like " + feelsMatch[1] + "°";
 
-        applyTempColorFromDom();
+        applyTempColor();
       } catch(e){
-        console.error("Error loading weather:", e);
+        console.log(e);
       }
     }
 
     function ordinal(n){
       const v = n % 100;
-      if (v >= 11 && v <= 13) return `${n}th`;
+      if (v >= 11 && v <= 13) return n + "th";
       const last = n % 10;
-      if (last === 1) return `${n}st`;
-      if (last === 2) return `${n}nd`;
-      if (last === 3) return `${n}rd`;
-      return `${n}th`;
-    }
-
-    function firstGrapheme(str){
-      const s = (str || "").trim();
-      if (!s) return "";
-      if (typeof Intl !== "undefined" && Intl.Segmenter){
-        const seg = new Intl.Segmenter(undefined, { granularity: "grapheme" });
-        for (const part of seg.segment(s)){
-          return part.segment;
-        }
-        return "";
-      }
-      return Array.from(s)[0] || "";
+      if (last === 1) return n + "st";
+      if (last === 2) return n + "nd";
+      if (last === 3) return n + "rd";
+      return n + "th";
     }
 
     function cleanLocation(raw){
@@ -646,9 +592,7 @@
 
       const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
       if (lines.length > 1){
-        if (/^\d/.test(lines[0])) {
-          return `${lines[0]}, ${lines[1]}`;
-        }
+        if (/^\d/.test(lines[0])) return lines[0] + ", " + lines[1];
         return lines[0];
       }
 
@@ -657,35 +601,24 @@
         s = s.slice(0, addrIdx).trim();
         s = s.replace(/[,\-–]\s*$/,"").trim();
       }
-
       return s;
     }
 
-    function extractLeadingEmoji(calName){
-      const s = (calName || "").trim();
-      if (!s) return "";
-      const g = firstGrapheme(s);
-      if (/[\p{L}\p{N}]/u.test(g)) return "";
-      return g;
-    }
-
     function calendarEmoji(calName){
-      const lead = extractLeadingEmoji(calName);
-      if (lead) return lead;
+      const s = (calName || "").trim();
+      const low = s.toLowerCase();
 
-      const s = (calName || "").toLowerCase();
-      if (s.includes("us holidays") || s.includes("u.s. holidays") || s.includes("holidays")) return "🇺🇸";
-      if (s.includes("work")) return "💊";
-      if (s.includes("church")) return "⛪️";
-      if (s.includes("valor")) return "🎤";
-      if (s.includes("life group")) return "📚";
-      if (s.includes("vacation")) return "🛳️";
-      if (s.includes("credit")) return "💰";
-      if (s.includes("victoria")) return "👸";
-      if (s.includes("family")) return "👨‍👩‍👧‍👦";
-      if (s.includes("home")) return "🏡";
-      if (s.includes("date night") || s.includes("date")) return "👩‍❤️‍👨";
-      if (s.includes("school")) return "🏫";
+      // If calendar name starts with an emoji, use it
+      const first = Array.from(s)[0] || "";
+      if (first && !(/[A-Za-z0-9]/.test(first))) return first;
+
+      if (low.includes("holidays")) return "🇺🇸";
+      if (low.includes("work")) return "💊";
+      if (low.includes("church")) return "⛪️";
+      if (low.includes("victoria")) return "👸";
+      if (low.includes("family")) return "👨‍👩‍👧‍👦";
+      if (low.includes("home")) return "🏡";
+      if (low.includes("school")) return "🏫";
       return "📅";
     }
 
@@ -708,8 +641,8 @@
       const dows = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       const mosFull = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-      out.dateKey = `${yearNum}-${monthIdx+1}-${dayNum}`;
-      out.dayLabel = `${dows[dt.getDay()]} - ${mosFull[monthIdx]} ${ordinal(dayNum)}`;
+      out.dateKey = yearNum + "-" + (monthIdx+1) + "-" + dayNum;
+      out.dayLabel = dows[dt.getDay()] + " - " + mosFull[monthIdx] + " " + ordinal(dayNum);
 
       if (/all\s*day/i.test(s)){
         out.allDay = true;
@@ -718,39 +651,30 @@
 
       const timeM = s.match(/at\s+(\d{1,2}):(\d{2})\s*(AM|PM)/i);
       if (timeM){
-        const h = parseInt(timeM[1], 10);
-        const mm = timeM[2];
-        const ap = timeM[3].toUpperCase();
-        out.timeMain = `${h}:${mm}`;
-        out.timeAmPm = ap;
+        out.timeMain = parseInt(timeM[1], 10) + ":" + timeM[2];
+        out.timeAmPm = timeM[3].toUpperCase();
       }
-
       return out;
     }
 
     async function loadEvents(){
       const container = document.getElementById("events-list");
-      if (!container) return;
-
       try{
         const res = await fetch("calendar.txt", { cache: "no-store" });
         if (!res.ok) return;
-        const text = await res.text();
 
+        const text = await res.text();
         container.innerHTML = "";
 
-        const rawLines = text
-          .split("\n")
-          .map(l => l.trim())
-          .filter(Boolean);
+        const rawLines = text.split("\n").map(l => l.trim()).filter(Boolean);
 
         const rebuilt = [];
         const eventStartRe = /\s\|\s*[A-Za-z]{3}\s+\d{1,2},\s*\d{4}\s+(at\s+\d|all\s*day)/i;
-
         let buf = "";
+
         for (const ln of rawLines){
-          const isEventStart = ln.includes(" | ") && eventStartRe.test(ln);
-          if (isEventStart){
+          const isStart = ln.includes(" | ") && eventStartRe.test(ln);
+          if (isStart){
             if (buf) rebuilt.push(buf.trim());
             buf = ln;
           } else {
@@ -760,9 +684,8 @@
         if (buf) rebuilt.push(buf.trim());
 
         const lines = rebuilt.slice(0, 10);
-
         if (lines.length === 0){
-          container.innerHTML = `<div class="event-title noloc">No events scheduled.</div>`;
+          container.innerHTML = '<div class="event-title">No events scheduled.</div>';
           return;
         }
 
@@ -773,14 +696,13 @@
 
           const title = parts[0] || "";
           const start = parts[1] || "";
-          const locRaw = parts[2] || "";
-          const loc = cleanLocation(locRaw);
+          const loc = cleanLocation(parts[2] || "");
           const calName = parts[3] || "";
           const parsed = parseStart(start);
 
           events.push({
-            title,
-            loc,
+            title: title,
+            loc: loc,
             calEmoji: calendarEmoji(calName),
             dateKey: parsed.dateKey,
             dayLabel: parsed.dayLabel,
@@ -795,153 +717,103 @@
         for (const ev of events){
           if (ev.dateKey && ev.dateKey !== lastKey){
             lastKey = ev.dateKey;
-
             const day = document.createElement("div");
             day.className = "events-day";
             day.textContent = ev.dayLabel || "";
-            if (day.textContent) container.appendChild(day);
+            container.appendChild(day);
           }
 
-          const hasLoc = !!(ev.loc && ev.loc.trim());
           const timeHtml = ev.allDay
-            ? `<div class="event-time"><div class="event-time-allday">All day</div></div>`
+            ? '<div class="event-time"><div class="event-time-main">All day</div></div>'
             : (ev.timeMain
-                ? `<div class="event-time"><div class="event-time-main">${ev.timeMain}</div><div class="event-time-ampm">${ev.timeAmPm}</div></div>`
-                : `<div class="event-time"></div>`);
+                ? '<div class="event-time"><div class="event-time-main">' + ev.timeMain + '</div><div class="event-time-ampm">' + ev.timeAmPm + '</div></div>'
+                : '<div class="event-time"></div>');
 
           const item = document.createElement("div");
           item.className = "event-item";
-          item.innerHTML = `
-            <div class="event-emoji">${ev.calEmoji || ""}</div>
-            <div class="event-main">
-              <div class="event-top">
-                <div class="event-title">${ev.title}</div>
-                ${timeHtml}
-              </div>
-              ${hasLoc ? `<div class="event-loc">${ev.loc}</div>` : ``}
-            </div>
-            <div></div>
-          `;
+          item.innerHTML =
+            '<div class="event-emoji">' + (ev.calEmoji || "") + '</div>' +
+            '<div>' +
+              '<div class="event-top">' +
+                '<div class="event-title">' + ev.title + '</div>' +
+                timeHtml +
+              '</div>' +
+              (ev.loc ? '<div class="event-loc">' + ev.loc + '</div>' : '') +
+            '</div>' +
+            '<div></div>';
+
           container.appendChild(item);
         }
-
       } catch(e){
-        console.error("Error loading events:", e);
-        container.innerHTML = `<div class="event-title noloc">Events error. Check calendar.txt format.</div>`;
+        console.log(e);
       }
-
-      if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
     }
 
-// Infinite, no-pause, no-bounce auto-scroll for tasks (Fire TV friendly)
-let __tasksTimer = null;
+    /* Fire TV Silk friendly infinite tasks scroll */
+    let __tasksTimer = null;
 
-function stopTasksScroll(){
-  if (__tasksTimer) clearInterval(__tasksTimer);
-  __tasksTimer = null;
-}
+    function stopTasksScroll(){
+      if (__tasksTimer) clearInterval(__tasksTimer);
+      __tasksTimer = null;
+    }
 
-function makeTasksInfinite(el){
-  // remove old clones
-  el.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
+    function makeTasksInfinite(el){
+      el.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
 
-  // measure base height BEFORE cloning
-  const base = el.scrollHeight;
-  el.dataset.baseScrollHeight = String(base);
+      const base = el.scrollHeight;
+      el.dataset.baseScrollHeight = String(base);
 
-  // clone once
-  const kids = Array.from(el.children);
-  for (const k of kids){
-    const c = k.cloneNode(true);
-    c.setAttribute("data-clone", "1");
-    el.appendChild(c);
-  }
-
-  el.scrollTop = 0;
-}
-
-function startInfiniteScrollTasks(speedPxPerSec = 4){
-  const el = document.getElementById("tasks-list");
-  if (!el) return;
-
-  stopTasksScroll();
-
-  // Let layout settle (and twemoji images size in) before measuring
-  setTimeout(() => {
-    // If it still cannot scroll, bail
-    if (el.scrollHeight <= el.clientHeight + 1) return;
-
-    makeTasksInfinite(el);
-
-    const base = parseFloat(el.dataset.baseScrollHeight || "0");
-    if (!base || base <= el.clientHeight + 1) return;
-
-    const tickMs = 33; // about 30 fps
-    const pxPerTick = (speedPxPerSec * tickMs) / 1000;
-
-    __tasksTimer = setInterval(() => {
-      el.scrollTop += pxPerTick;
-      if (el.scrollTop >= base){
-        el.scrollTop -= base;
+      const kids = Array.from(el.children);
+      for (const k of kids){
+        const c = k.cloneNode(true);
+        c.setAttribute("data-clone","1");
+        el.appendChild(c);
       }
-    }, tickMs);
-  }, 600);
-}
+      el.scrollTop = 0;
+    }
 
+    function startInfiniteScrollTasks(speedPxPerSec){
+      const el = document.getElementById("tasks-list");
+      if (!el) return;
 
-      // If it cannot scroll, do nothing
-      if (el.scrollHeight <= el.clientHeight) return;
+      stopTasksScroll();
 
-      makeTasksInfinite(el);
+      setTimeout(() => {
+        if (el.scrollHeight <= el.clientHeight + 1) return;
 
-      let lastTs = null;
+        makeTasksInfinite(el);
 
-      function step(ts){
         const base = parseFloat(el.dataset.baseScrollHeight || "0");
-        if (!base || base <= el.clientHeight) return;
+        if (!base || base <= el.clientHeight + 1) return;
 
-        if (lastTs == null) lastTs = ts;
-        const dt = (ts - lastTs) / 1000;
-        lastTs = ts;
+        const tickMs = 33;
+        const pxPerTick = (speedPxPerSec * tickMs) / 1000;
 
-        el.scrollTop += speedPxPerSec * dt;
-
-        // Wrap seamlessly
-        if (el.scrollTop >= base){
-          el.scrollTop -= base;
-        }
-
-        __tasksRAF = requestAnimationFrame(step);
-      }
-
-      __tasksRAF = requestAnimationFrame(step);
+        __tasksTimer = setInterval(() => {
+          el.scrollTop += pxPerTick;
+          if (el.scrollTop >= base) el.scrollTop -= base;
+        }, tickMs);
+      }, 800);
     }
 
     async function loadTasks(){
       const container = document.getElementById("tasks-list");
-      if (!container) return;
-
       stopTasksScroll();
 
       try{
         const res = await fetch("dashboard.txt", { cache: "no-store" });
         if (!res.ok) return;
-        const text = await res.text();
 
+        const text = await res.text();
         container.innerHTML = "";
 
-        const lines = text
-          .split("\n")
-          .map(l => l.trim())
-          .filter(l => l.length > 0);
-
+        const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
         if (lines.length === 0){
-          container.innerHTML = `<div class="task-text">No tasks for today.</div>`;
+          container.innerHTML = '<div class="task-text">No tasks for today.</div>';
           return;
         }
 
         const byLocation = new Map();
-
         for (const line of lines){
           const parts = line.split(" | ").map(p => p.trim());
           if (parts.length < 3) continue;
@@ -951,21 +823,24 @@ function startInfiniteScrollTasks(speedPxPerSec = 4){
           const task = parts.slice(2).join(" | ");
 
           if (!byLocation.has(location)) byLocation.set(location, []);
-          byLocation.get(location).push({ assigneeRaw, task });
+          byLocation.get(location).push({ assigneeRaw: assigneeRaw, task: task });
         }
 
-        const emojiFor = (a) => {
-          const key = a.replace(/\s+/g, "").toUpperCase();
+        function emojiFor(a){
+          const key = a.replace(/\s+/g,"").toUpperCase();
           if (key === "C") return "🐧";
           if (key === "V") return "🦩";
           if (key === "C/V") return "👫";
           if (key === "R") return "🦄";
           return "";
-        };
+        }
 
-        const assigneeOrder = ["C", "V", "C/V", "R"];
+        const order = ["C","V","C/V","R"];
 
-        for (const [location, items] of byLocation.entries()){
+        for (const entry of byLocation.entries()){
+          const location = entry[0];
+          const items = entry[1];
+
           const locDiv = document.createElement("div");
           locDiv.className = "task-location";
           locDiv.textContent = location;
@@ -973,51 +848,42 @@ function startInfiniteScrollTasks(speedPxPerSec = 4){
 
           const groups = new Map();
           for (const it of items){
-            const key = it.assigneeRaw.replace(/\s+/g, "").toUpperCase();
+            const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
             if (!groups.has(key)) groups.set(key, []);
             groups.get(key).push(it.task);
           }
 
-          for (const a of assigneeOrder){
+          for (const a of order){
             const tasks = groups.get(a);
             if (!tasks || tasks.length === 0) continue;
 
             for (const t of tasks){
               const row = document.createElement("div");
               row.className = "task-line";
-              row.innerHTML = `
-                <div class="task-emoji">${emojiFor(a)}</div>
-                <div class="task-text">${t}</div>
-              `;
+              row.innerHTML =
+                '<div class="task-emoji">' + emojiFor(a) + '</div>' +
+                '<div class="task-text">' + t + '</div>';
               container.appendChild(row);
             }
           }
         }
 
+        startInfiniteScrollTasks(4);
       } catch(e){
-        console.error("Error loading tasks:", e);
+        console.log(e);
       }
-
-if (window.twemoji) twemoji.parse(container, { folder: "svg", ext: ".svg" });
-
-// start infinite scroll after render
-startInfiniteScrollTasks(4);
-
     }
 
     async function loadForecast(){
       const row = document.getElementById("forecast-row");
-      if (!row) return;
-
       try{
-        const res = await fetch(`prediction.txt?cb=${Date.now()}`, { cache: "no-store" });
+        const res = await fetch("prediction.txt?cb=" + Date.now(), { cache: "no-store" });
         if (!res.ok) return;
 
         const raw = (await res.text()).trim();
         if (!raw) return;
 
         const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
-
         const days = [];
         let i = 0;
 
@@ -1029,12 +895,12 @@ startInfiniteScrollTasks(4);
 
           if (!name || !line2) continue;
 
-          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])){
+          if (i < lines.length && /^\d+(\.\d+)?\s*%$/.test(lines[i])) {
             pop = lines[i++];
           } else {
             const m = condition.match(/(\d+(\.\d+)?)\s*%$/);
             if (m){
-              pop = `${m[1]}%`;
+              pop = m[1] + "%";
               condition = condition.replace(/\s*\d+(\.\d+)?\s*%$/, "").trim();
             }
           }
@@ -1052,43 +918,36 @@ startInfiniteScrollTasks(4);
             temps = parts.slice(1).join(" ");
           }
 
-          days.push({ name, emoji, temps, condition, pop });
+          days.push({ name:name, emoji:emoji, temps:temps, condition:condition, pop:pop });
         }
 
         row.innerHTML = "";
-
         for (const d of days){
           const div = document.createElement("div");
           div.className = "forecast-day";
 
-          const emojiSafe = d.emoji || "";
-          const popSafe = (d.pop && d.pop.trim() && d.pop.trim() !== "0%") ? d.pop.trim() : "";
+          const popSafe = (d.pop && d.pop !== "0%") ? d.pop : "";
 
-          div.innerHTML = `
-            <div class="forecast-top">${d.name}</div>
-            <div class="forecast-bottom">
-              <div class="forecast-iconbig">${emojiSafe}</div>
-              <div class="forecast-right">
-                <div class="forecast-temps">${d.temps || ""}</div>
-                <div class="forecast-condline">
-                  <div class="forecast-cond">${d.condition || ""}</div>
-                  ${popSafe ? `<div class="forecast-pop">${popSafe}</div>` : ``}
-                </div>
-              </div>
-            </div>
-          `;
+          div.innerHTML =
+            '<div class="forecast-top">' + d.name + '</div>' +
+            '<div class="forecast-bottom">' +
+              '<div class="forecast-iconbig">' + (d.emoji || "") + '</div>' +
+              '<div class="forecast-right">' +
+                '<div class="forecast-temps">' + (d.temps || "") + '</div>' +
+                '<div class="forecast-condline">' +
+                  '<div class="forecast-cond">' + (d.condition || "") + '</div>' +
+                  (popSafe ? '<div class="forecast-pop">' + popSafe + '</div>' : '') +
+                '</div>' +
+              '</div>' +
+            '</div>';
 
           row.appendChild(div);
         }
-
       } catch(e){
-        console.error("Error loading Forecast:", e);
+        console.log(e);
       }
-
-      if (window.twemoji) twemoji.parse(row, { folder: "svg", ext: ".svg" });
     }
 
-    // Start everything
     document.addEventListener("DOMContentLoaded", () => {
       applyLayoutMode();
 
@@ -1105,33 +964,5 @@ startInfiniteScrollTasks(4);
       setInterval(loadTasks, 60000);
     });
   </script>
-
-  <script>
-    (async () => {
-      let wakeLock = null;
-
-      async function requestWakeLock(){
-        try{
-          if ("wakeLock" in navigator){
-            wakeLock = await navigator.wakeLock.request("screen");
-          }
-        } catch(e){
-          // ignore
-        }
-      }
-
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") requestWakeLock();
-      });
-
-      await requestWakeLock();
-
-      setInterval(() => {
-        window.scrollBy(0, 1);
-        window.scrollBy(0, -1);
-      }, 30000);
-    })();
-  </script>
 </body>
 </html>
-
