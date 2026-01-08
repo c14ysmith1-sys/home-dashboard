@@ -31,8 +31,18 @@
       color: var(--text-main);
     }
 
-    #rotator{ position: fixed; inset: 0; overflow: hidden; }
-    #bleed{ position:absolute; inset:-6%; background: var(--frame); z-index:0; }
+    #rotator{
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    #bleed{
+      position:absolute;
+      inset:-6%;
+      background: var(--frame);
+      z-index:0;
+    }
 
     #safe{
       position:absolute;
@@ -71,9 +81,21 @@
       white-space:nowrap;
       z-index:2;
     }
-    .time-main{ font-size:40px; font-weight:500; line-height:1; }
-    .ampm{ font-size:14px; font-weight:650; color:var(--text-muted); letter-spacing:0.6px; }
 
+    .time-main{
+      font-size:40px;     /* match temp size */
+      font-weight:500;    /* not bold */
+      line-height:1;
+    }
+
+    .ampm{
+      font-size:14px;
+      font-weight:650;
+      color:var(--text-muted);
+      letter-spacing:0.6px;
+    }
+
+    /* Absolute center, always screen-centered */
     .date-center{
       position:absolute;
       left:50%;
@@ -97,8 +119,18 @@
       white-space:nowrap;
       z-index:2;
     }
-    .weather-temp{ font-size:40px; font-weight:800; line-height:1; }
-    .weather-line{ font-size:14px; color:var(--text-muted); line-height:1.1; }
+
+    .weather-temp{
+      font-size:40px;
+      font-weight:800;
+      line-height:1;
+    }
+
+    .weather-line{
+      font-size:14px;
+      color:var(--text-muted);
+      line-height:1.1;
+    }
 
     /* FORECAST */
     .forecast-row{
@@ -111,6 +143,7 @@
       gap:10px;
       overflow:hidden;
     }
+
     .forecast-row.has-separators::before{
       content:"";
       position:absolute;
@@ -127,7 +160,14 @@
       background-size: calc(100% / 3) 100%;
       background-repeat: repeat;
     }
-    .forecast-day{ padding:2px 6px; border-radius:10px; overflow:hidden; min-width:0; }
+
+    .forecast-day{
+      padding:2px 6px;
+      border-radius:10px;
+      overflow:hidden;
+      min-width:0;
+    }
+
     .forecast-top{
       font-weight:800;
       font-size:26px;
@@ -138,11 +178,45 @@
       text-overflow:ellipsis;
       margin-bottom:2px;
     }
-    .forecast-bottom{ display:flex; align-items:center; gap:10px; min-width:0; }
-    .forecast-iconbig{ font-size:28px; width:34px; text-align:center; flex:0 0 auto; line-height:1; }
-    .forecast-right{ flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:2px; }
-    .forecast-temps{ font-size:16px; font-weight:800; white-space:nowrap; line-height:1.1; }
-    .forecast-condline{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; min-width:0; }
+
+    .forecast-bottom{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .forecast-iconbig{
+      font-size:28px;
+      width:34px;
+      text-align:center;
+      flex:0 0 auto;
+      line-height:1;
+    }
+
+    .forecast-right{
+      flex:1 1 auto;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .forecast-temps{
+      font-size:16px;
+      font-weight:800;
+      white-space:nowrap;
+      line-height:1.1;
+    }
+
+    .forecast-condline{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:8px;
+      min-width:0;
+    }
+
     .forecast-cond{
       font-size:13px;
       color:var(--text-muted);
@@ -152,7 +226,14 @@
       flex:1 1 auto;
       min-width:0;
     }
-    .forecast-pop{ font-size:13px; color:var(--text-muted); font-weight:800; white-space:nowrap; flex:0 0 auto; }
+
+    .forecast-pop{
+      font-size:13px;
+      color:var(--text-muted);
+      font-weight:800;
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
 
     /* MAIN */
     .main{
@@ -173,8 +254,6 @@
       min-height:0;
       overflow:hidden;
     }
-    /* extra right padding to prevent time clipping (events) */
-    #events-card{ padding:10px 18px 10px 12px; }
 
     .card-header{
       font-size:16px;
@@ -184,7 +263,7 @@
       text-decoration:underline;
       text-underline-offset:6px;
       text-decoration-color: rgba(255,255,255,0.55);
-      flex: 0 0 auto;
+      flex: 0 0 auto;     /* header never scrolls */
     }
 
     /* EVENTS */
@@ -192,13 +271,17 @@
       overflow:auto;
       min-height:0;
       flex:1 1 auto;
-      padding-right:18px;  /* stronger right buffer for times */
+      padding-right:10px;  /* extra right safety so time never clips */
       display:flex;
       flex-direction:column;
       gap:10px;
     }
 
-    .events-day{ font-size:14px; font-weight:800; margin-top:2px; }
+    .events-day{
+      font-size:14px;
+      font-weight:800;
+      margin-top:2px;
+    }
 
     .event-item{
       display:grid;
@@ -216,6 +299,7 @@
       margin-top:2px;
     }
 
+    /* changed from grid to flex to prevent time clipping */
     .event-top{
       display:flex;
       align-items:flex-start;
@@ -250,19 +334,30 @@
       justify-content:flex-end;
       white-space:nowrap;
       flex: 0 0 auto;
-      min-width:58px;     /* ensure 4:00PM fits */
-      padding-right:6px;  /* inside-buffer so last char never clips */
+      min-width:52px;      /* reserve width for 11:30AM style */
+      padding-left:2px;
     }
 
-    .event-time-main{ font-size:14px; font-weight:850; line-height:1; }
-    .event-time-ampm{ font-size:9px; font-weight:850; color:var(--text-muted); line-height:1; margin-left:0; }
+    .event-time-main{
+      font-size:14px;    /* match day header */
+      font-weight:850;
+      line-height:1;
+    }
 
-    /* TASKS: CSS marquee loop (Silk-friendly) */
+    .event-time-ampm{
+      font-size:9px;
+      font-weight:850;
+      color:var(--text-muted);
+      line-height:1;
+      margin-left:0;
+    }
+
+    /* TASKS (marquee loop instead of scrollTop, Silk-friendly) */
     #tasks-list{
-      overflow:hidden;
+      overflow:hidden;     /* viewport */
       min-height:0;
       flex:1 1 auto;
-      padding-right:10px;
+      padding-right:10px;  /* match events safety */
       position:relative;
     }
 
@@ -272,16 +367,13 @@
       gap:8px;
       will-change: transform;
       transform: translate3d(0,0,0);
-      --marqueeDist: 0px;
-      animation: none;
     }
 
-    @keyframes tasksMarquee{
-      from{ transform: translate3d(0,0,0); }
-      to{ transform: translate3d(0, calc(-1 * var(--marqueeDist)), 0); }
+    .task-location{
+      font-size:14px;
+      font-weight:800;
+      margin-top:2px;
     }
-
-    .task-location{ font-size:14px; font-weight:800; margin-top:2px; }
 
     .task-line{
       display:flex;
@@ -303,7 +395,11 @@
       justify-content:center;
     }
 
-    .emoji-icon{ width:18px; height:18px; display:block; }
+    .emoji-icon{
+      width:18px;
+      height:18px;
+      display:block;
+    }
 
     .task-text{
       font-size:14px;
@@ -391,9 +487,13 @@
   <div id="debugBox"></div>
 
   <script>
+    // On-screen JS error reporting (so you see the actual issue on TV)
     (function(){
       const box = document.getElementById("debugBox");
-      function show(msg){ box.style.display = "block"; box.textContent = msg; }
+      function show(msg){
+        box.style.display = "block";
+        box.textContent = msg;
+      }
       window.addEventListener("error", (e) => {
         show("JS ERROR:\n" + (e.message || "Unknown") + "\n" + (e.filename || "") + ":" + (e.lineno || "") );
       });
@@ -438,6 +538,7 @@
     function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
     function lerp(a,b,t){ return a + (b-a)*t; }
 
+    // Smooth gradient mapping in HSL across temperature range
     function tempToHsl(tempF){
       const pts = [
         { t: -10, h: 220, s: 95, l: 55 },
@@ -459,7 +560,11 @@
       const span = (b.t - a.t) || 1;
       const u = clamp((tf - a.t) / span, 0, 1);
 
-      return { h: lerp(a.h, b.h, u), s: lerp(a.s, b.s, u), l: lerp(a.l, b.l, u) };
+      return {
+        h: lerp(a.h, b.h, u),
+        s: lerp(a.s, b.s, u),
+        l: lerp(a.l, b.l, u)
+      };
     }
 
     function applyTempColor(){
@@ -485,7 +590,9 @@
         if (feelsMatch) document.getElementById("weather-line").textContent = "Feels like " + feelsMatch[1] + "°";
 
         applyTempColor();
-      } catch(e){ console.log(e); }
+      } catch(e){
+        console.log(e);
+      }
     }
 
     function ordinal(n){
@@ -520,6 +627,7 @@
       const s = (calName || "").trim();
       const low = s.toLowerCase();
 
+      // If calendar name starts with an emoji, use it
       const first = Array.from(s)[0] || "";
       if (first && !(/[A-Za-z0-9]/.test(first))) return first;
 
@@ -654,16 +762,30 @@
 
           container.appendChild(item);
         }
-      } catch(e){ console.log(e); }
+      } catch(e){
+        console.log(e);
+      }
     }
 
-    /* TASKS: CSS marquee setup */
+    /* TASKS: Silk-friendly looping marquee */
+    let __tasksRaf = null;
+    let __tasksLastTs = 0;
+    let __tasksPos = 0;
+    let __tasksBase = 0;
+
     function stopTasksMarquee(){
+      if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
+      __tasksRaf = null;
+      __tasksLastTs = 0;
+      __tasksPos = 0;
+      __tasksBase = 0;
+
       const inner = document.getElementById("tasks-inner");
+      if (inner) inner.style.transform = "translate3d(0,0,0)";
+    }
+
+    function removeTaskClones(inner){
       if (!inner) return;
-      inner.style.animation = "none";
-      inner.style.transform = "translate3d(0,0,0)";
-      inner.style.setProperty("--marqueeDist", "0px");
       inner.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
     }
 
@@ -674,14 +796,18 @@
 
       stopTasksMarquee();
 
+      // Let layout settle (fonts, etc.)
       setTimeout(() => {
+        removeTaskClones(inner);
+
         const vh = viewport.clientHeight;
         const originalKids = Array.from(inner.children);
         if (originalKids.length === 0) return;
 
         const contentH = inner.scrollHeight;
-        if (contentH <= vh + 1) return;
+        if (contentH <= vh + 1) return; // no need to scroll
 
+        // Clone children once
         const originalCount = originalKids.length;
         for (let i = 0; i < originalCount; i++){
           const c = originalKids[i].cloneNode(true);
@@ -689,14 +815,28 @@
           inner.appendChild(c);
         }
 
+        // Base distance = offset to first clone (includes the natural gap)
         const firstClone = inner.children[originalCount];
-        const base = firstClone ? firstClone.offsetTop : contentH;
-        if (!base || base <= vh + 1) return;
+        __tasksBase = firstClone ? firstClone.offsetTop : contentH;
+        if (!__tasksBase || __tasksBase <= vh + 1) return;
 
-        inner.style.setProperty("--marqueeDist", base + "px");
-        const duration = Math.max(1, base / speedPxPerSec);
-        inner.style.animation = "tasksMarquee " + duration + "s linear infinite";
-      }, 350);
+        __tasksPos = 0;
+        __tasksLastTs = 0;
+
+        function step(ts){
+          if (!__tasksLastTs) __tasksLastTs = ts;
+          const dt = (ts - __tasksLastTs) / 1000;
+          __tasksLastTs = ts;
+
+          __tasksPos += (speedPxPerSec * dt);
+          if (__tasksPos >= __tasksBase) __tasksPos -= __tasksBase;
+
+          inner.style.transform = "translate3d(0," + (-__tasksPos) + "px,0)";
+          __tasksRaf = requestAnimationFrame(step);
+        }
+
+        __tasksRaf = requestAnimationFrame(step);
+      }, 400);
     }
 
     async function loadTasks(){
@@ -729,24 +869,14 @@
           byLocation.get(location).push({ assigneeRaw: assigneeRaw, task: task });
         }
 
-        // Flamingo fallback for Fire TV emoji font gaps
+        // Inline flamingo fallback for Fire TV emoji font gaps
         const FLAMINGO_SVG =
           "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Cpath%20fill%3D%27%23ff6aa2%27%20d%3D%27M44%2010c-6%200-10%204-10%2010%200%204%202%207%205%209-6%203-11%208-13%2015-2%207-1%2014-1%2014h6s0-7%202-13c2-6%206-10%2012-12%204-1%208-4%208-11%200-7-4-12-9-12z%27/%3E%3Cpath%20fill%3D%27%23ff6aa2%27%20d%3D%27M28%2054c0%204-2%208-6%208h-2v-4h2c2%200%202-2%202-4h4z%27/%3E%3Ccircle%20cx%3D%2741%27%20cy%3D%2716%27%20r%3D%272%27%20fill%3D%27%23000%27/%3E%3Cpath%20d%3D%27M45%2017l10%202-10%202z%27%20fill%3D%27%23ffb000%27/%3E%3C/svg%3E";
 
-        function normalizeAssignee(raw){
-          let k = (raw || "").trim();
-          k = k.replace(/\\/g,"/"); // in case your shortcut outputs slashes
-          // map emoji inputs to letters if they show up
-          k = k.replace(/🦩/g,"V").replace(/🐧/g,"C").replace(/👫/g,"C/V").replace(/🦄/g,"R");
-          k = k.replace(/\s+/g,"").toUpperCase();
-          if (k === "CV" || k === "VC") k = "C/V";
-          if (k === "V/C") k = "C/V";
-          return k;
-        }
-
-        function assigneeIconHTML(key){
+        function emojiHTML(a){
+          const key = a.replace(/\s+/g,"").toUpperCase();
           if (key === "C") return "🐧";
-          if (key === "V") return "<img class='emoji-icon' alt='V' src='" + FLAMINGO_SVG + "'>";
+          if (key === "V") return "<img class='emoji-icon' alt='🦩' src='" + FLAMINGO_SVG + "'>";
           if (key === "C/V") return "👫";
           if (key === "R") return "🦄";
           return "";
@@ -754,7 +884,10 @@
 
         const order = ["C","V","C/V","R"];
 
-        for (const [location, items] of byLocation.entries()){
+        for (const entry of byLocation.entries()){
+          const location = entry[0];
+          const items = entry[1];
+
           const locDiv = document.createElement("div");
           locDiv.className = "task-location";
           locDiv.textContent = location;
@@ -762,7 +895,7 @@
 
           const groups = new Map();
           for (const it of items){
-            const key = normalizeAssignee(it.assigneeRaw);
+            const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
             if (!groups.has(key)) groups.set(key, []);
             groups.get(key).push(it.task);
           }
@@ -775,7 +908,7 @@
               const row = document.createElement("div");
               row.className = "task-line";
               row.innerHTML =
-                "<div class='task-emoji'>" + assigneeIconHTML(a) + "</div>" +
+                "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
                 "<div class='task-text'>" + t + "</div>";
               inner.appendChild(row);
             }
@@ -783,7 +916,9 @@
         }
 
         startTasksMarquee(4);
-      } catch(e){ console.log(e); }
+      } catch(e){
+        console.log(e);
+      }
     }
 
     async function loadForecast(){
@@ -855,7 +990,9 @@
 
           row.appendChild(div);
         }
-      } catch(e){ console.log(e); }
+      } catch(e){
+        console.log(e);
+      }
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -873,6 +1010,43 @@
       setInterval(loadEvents, 60000);
       setInterval(loadTasks, 60000);
     });
+
+      /* ===== KEEP COMPUTER AWAKE (prevents idle sleep on many PCs) =====
+         Paste near the end of your <script>, before </script>
+      */
+      (function keepAwake(){
+        const WAKE_INTERVAL_MS = 60 * 1000; // 1 minute
+        const TINY_TICK_MS = 250;           // low-impact timer keeps JS event loop active
+      
+        // 1) Nudge the page very slightly (no visible jump)
+        setInterval(() => {
+          window.scrollBy(0, 1);
+          window.scrollBy(0, -1);
+        }, WAKE_INTERVAL_MS);
+      
+        // 2) Keep a lightweight timer running (helps some systems treat as "active")
+        setInterval(() => {}, TINY_TICK_MS);
+      
+        // 3) Keep a silent audio context alive (helps on some laptops)
+        //    This may require a user gesture the first time on some browsers.
+        try{
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC){
+            const ctx = new AC();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            gain.gain.value = 0.00001; // effectively silent
+            osc.frequency.value = 20;  // near-subsonic
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+      
+            // if browser suspended it, try to resume periodically
+            setInterval(() => { if (ctx.state === "suspended") ctx.resume().catch(()=>{}); }, 5000);
+          }
+        } catch(e){}
+      })();
+
   </script>
 </body>
 </html>
