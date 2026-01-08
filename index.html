@@ -261,7 +261,7 @@
       overflow:auto;
       min-height:0;
       flex:1 1 auto;
-      padding-right:10px;  /* extra right safety so time never clips */
+      padding-right:18px;  /* extra right safety so time never clips */
       display:flex;
       flex-direction:column;
       gap:10px;
@@ -320,13 +320,20 @@
     }
 
     .event-time{
-  justify-self:end;
-  width: var(--eventTimeCol);
   display:flex;
+  align-items:baseline;
   justify-content:flex-end;
   white-space:nowrap;
-  font-variant-numeric: tabular-nums;
+
+  flex: 0 0 76px;     /* fixed column so all times align */
+  width: 76px;
+  min-width: 76px;
+
+  padding-left: 6px;
+  padding-right: 6px; /* prevents last digit clipping on Fire TV */
+  box-sizing: border-box;
 }
+
 
 
 
@@ -1039,6 +1046,7 @@ if (key === "V") return "🐝";
   </script>
 </body>
 </html>
+
 
 
 
