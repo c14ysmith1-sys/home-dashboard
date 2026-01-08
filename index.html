@@ -859,13 +859,24 @@
 
     async function loadTasks(){
       const inner = document.getElementById("tasks-inner");
-      stopTasksMarquee();
 
       try{
         const res = await fetch("dashboard.txt", { cache: "no-store" });
         if (!res.ok) return;
 
         const text = await res.text();
+const normalized = text.trimEnd(); // prevents restarts from harmless trailing newline changes
+
+if (normalized === __lastTasksText) {
+  // No changes, keep current marquee running
+  return;
+}
+__lastTasksText = normalized;
+
+// Only stop/rebuild when the file actually changed
+stopTasksMarquee();
+inner.innerHTML = "";
+
 
 // If the file hasn't changed, do NOT rebuild or restart marquee (prevents the visible jump)
 if (text === __lastTasksText) return;
@@ -874,7 +885,7 @@ __lastTasksText = text;
 inner.innerHTML = "";
 
 
-        const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+        const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
         if (lines.length === 0){
           inner.innerHTML = '<div class="task-text">No tasks for today.</div>';
           return;
@@ -1071,6 +1082,7 @@ if (key === "V") return "🐝";
   </script>
 </body>
 </html>
+
 
 
 
