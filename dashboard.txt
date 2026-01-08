@@ -11,7 +11,7 @@ Kitchen | C/V | Pantry: toss expired food
 Kitchen | V | Wipe dining table
 Kitchen | C | Clean sink
 Kitchen | C/V | Deep clean oven
-Kids Food | R | 🥪🫧 wash lunch containers
+Kids Food | R | 🥪🧼wash lunch containers
 Kids Food | V | Wash kids water bottles
 Kids Food | C/V | Clean high chair
 Floors | C/V | Wipe switches + door handles
@@ -41,7 +41,7 @@ Home | R | ⬆️🧺 pick up stairs/hall items
 Home | R | 👕🧺 clothes off floor to hamper
 Outside | C/V | Bring in packages
 Deep Clean | C | Clean washing machine filter + run tub clean
-Kitchen | R | 🍽️➡️🫧 collect dishes to sink
+Kitchen | R | 🍽️➡️🧼 collect dishes to sink
 Pets | V | Brush cats
 Planning | C/V | Review calendar for
 Kitchen | V | Wipe fridge handles/doors
