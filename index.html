@@ -271,7 +271,7 @@
       overflow:auto;
       min-height:0;
       flex:1 1 auto;
-      padding-right:6px;
+      padding-right:10px;  /* extra right safety so time never clips */
       display:flex;
       flex-direction:column;
       gap:10px;
@@ -285,7 +285,7 @@
 
     .event-item{
       display:grid;
-      grid-template-columns:22px 1fr auto;
+      grid-template-columns:22px 1fr;
       column-gap:10px;
       align-items:start;
       min-width:0;
@@ -299,11 +299,11 @@
       margin-top:2px;
     }
 
+    /* changed from grid to flex to prevent time clipping */
     .event-top{
-      display:grid;
-      grid-template-columns:1fr auto;
+      display:flex;
+      align-items:flex-start;
       gap:10px;
-      align-items:start;
       min-width:0;
     }
 
@@ -315,6 +315,7 @@
       text-overflow:ellipsis;
       line-height:1.2;
       min-width:0;
+      flex: 1 1 auto;
     }
 
     .event-loc{
@@ -332,6 +333,9 @@
       align-items:baseline;
       justify-content:flex-end;
       white-space:nowrap;
+      flex: 0 0 auto;
+      min-width:52px;      /* reserve width for 11:30AM style */
+      padding-left:2px;
     }
 
     .event-time-main{
@@ -348,18 +352,22 @@
       margin-left:0;
     }
 
-    /* TASKS */
+    /* TASKS (marquee loop instead of scrollTop, Silk-friendly) */
     #tasks-list{
-      overflow:auto;
+      overflow:hidden;     /* viewport */
       min-height:0;
       flex:1 1 auto;
-      padding-right:6px;
+      padding-right:10px;  /* match events safety */
+      position:relative;
+    }
+
+    #tasks-inner{
       display:flex;
       flex-direction:column;
       gap:8px;
-      scrollbar-width:none;
+      will-change: transform;
+      transform: translate3d(0,0,0);
     }
-    #tasks-list::-webkit-scrollbar{ width:0; height:0; }
 
     .task-location{
       font-size:14px;
@@ -371,7 +379,7 @@
       display:flex;
       align-items:flex-start;
       gap:8px;
-      padding-left:0; /* no indent */
+      padding-left:0;
       min-width:0;
     }
 
@@ -382,6 +390,15 @@
       font-size:18px;
       line-height:1;
       margin-top:1px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .emoji-icon{
+      width:18px;
+      height:18px;
+      display:block;
     }
 
     .task-text{
@@ -457,7 +474,9 @@
 
           <section class="card" id="tasks-card">
             <div class="card-header">Today’s Tasks</div>
-            <div id="tasks-list"><div class="task-text">Loading tasks…</div></div>
+            <div id="tasks-list">
+              <div id="tasks-inner"><div class="task-text">Loading tasks…</div></div>
+            </div>
           </section>
         </main>
 
@@ -739,8 +758,7 @@
                 timeHtml +
               '</div>' +
               (ev.loc ? '<div class="event-loc">' + ev.loc + '</div>' : '') +
-            '</div>' +
-            '<div></div>';
+            '</div>';
 
           container.appendChild(item);
         }
@@ -749,67 +767,92 @@
       }
     }
 
-    /* Fire TV Silk friendly infinite tasks scroll */
-    let __tasksTimer = null;
+    /* TASKS: Silk-friendly looping marquee */
+    let __tasksRaf = null;
+    let __tasksLastTs = 0;
+    let __tasksPos = 0;
+    let __tasksBase = 0;
 
-    function stopTasksScroll(){
-      if (__tasksTimer) clearInterval(__tasksTimer);
-      __tasksTimer = null;
+    function stopTasksMarquee(){
+      if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
+      __tasksRaf = null;
+      __tasksLastTs = 0;
+      __tasksPos = 0;
+      __tasksBase = 0;
+
+      const inner = document.getElementById("tasks-inner");
+      if (inner) inner.style.transform = "translate3d(0,0,0)";
     }
 
-    function makeTasksInfinite(el){
-      el.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
-
-      const base = el.scrollHeight;
-      el.dataset.baseScrollHeight = String(base);
-
-      const kids = Array.from(el.children);
-      for (const k of kids){
-        const c = k.cloneNode(true);
-        c.setAttribute("data-clone","1");
-        el.appendChild(c);
-      }
-      el.scrollTop = 0;
+    function removeTaskClones(inner){
+      if (!inner) return;
+      inner.querySelectorAll('[data-clone="1"]').forEach(n => n.remove());
     }
 
-    function startInfiniteScrollTasks(speedPxPerSec){
-      const el = document.getElementById("tasks-list");
-      if (!el) return;
+    function startTasksMarquee(speedPxPerSec){
+      const viewport = document.getElementById("tasks-list");
+      const inner = document.getElementById("tasks-inner");
+      if (!viewport || !inner) return;
 
-      stopTasksScroll();
+      stopTasksMarquee();
 
+      // Let layout settle (fonts, etc.)
       setTimeout(() => {
-        if (el.scrollHeight <= el.clientHeight + 1) return;
+        removeTaskClones(inner);
 
-        makeTasksInfinite(el);
+        const vh = viewport.clientHeight;
+        const originalKids = Array.from(inner.children);
+        if (originalKids.length === 0) return;
 
-        const base = parseFloat(el.dataset.baseScrollHeight || "0");
-        if (!base || base <= el.clientHeight + 1) return;
+        const contentH = inner.scrollHeight;
+        if (contentH <= vh + 1) return; // no need to scroll
 
-        const tickMs = 33;
-        const pxPerTick = (speedPxPerSec * tickMs) / 1000;
+        // Clone children once
+        const originalCount = originalKids.length;
+        for (let i = 0; i < originalCount; i++){
+          const c = originalKids[i].cloneNode(true);
+          c.setAttribute("data-clone","1");
+          inner.appendChild(c);
+        }
 
-        __tasksTimer = setInterval(() => {
-          el.scrollTop += pxPerTick;
-          if (el.scrollTop >= base) el.scrollTop -= base;
-        }, tickMs);
-      }, 800);
+        // Base distance = offset to first clone (includes the natural gap)
+        const firstClone = inner.children[originalCount];
+        __tasksBase = firstClone ? firstClone.offsetTop : contentH;
+        if (!__tasksBase || __tasksBase <= vh + 1) return;
+
+        __tasksPos = 0;
+        __tasksLastTs = 0;
+
+        function step(ts){
+          if (!__tasksLastTs) __tasksLastTs = ts;
+          const dt = (ts - __tasksLastTs) / 1000;
+          __tasksLastTs = ts;
+
+          __tasksPos += (speedPxPerSec * dt);
+          if (__tasksPos >= __tasksBase) __tasksPos -= __tasksBase;
+
+          inner.style.transform = "translate3d(0," + (-__tasksPos) + "px,0)";
+          __tasksRaf = requestAnimationFrame(step);
+        }
+
+        __tasksRaf = requestAnimationFrame(step);
+      }, 400);
     }
 
     async function loadTasks(){
-      const container = document.getElementById("tasks-list");
-      stopTasksScroll();
+      const inner = document.getElementById("tasks-inner");
+      stopTasksMarquee();
 
       try{
         const res = await fetch("dashboard.txt", { cache: "no-store" });
         if (!res.ok) return;
 
         const text = await res.text();
-        container.innerHTML = "";
+        inner.innerHTML = "";
 
         const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
         if (lines.length === 0){
-          container.innerHTML = '<div class="task-text">No tasks for today.</div>';
+          inner.innerHTML = '<div class="task-text">No tasks for today.</div>';
           return;
         }
 
@@ -826,10 +869,14 @@
           byLocation.get(location).push({ assigneeRaw: assigneeRaw, task: task });
         }
 
-        function emojiFor(a){
+        // Inline flamingo fallback for Fire TV emoji font gaps
+        const FLAMINGO_SVG =
+          "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Cpath%20fill%3D%27%23ff6aa2%27%20d%3D%27M44%2010c-6%200-10%204-10%2010%200%204%202%207%205%209-6%203-11%208-13%2015-2%207-1%2014-1%2014h6s0-7%202-13c2-6%206-10%2012-12%204-1%208-4%208-11%200-7-4-12-9-12z%27/%3E%3Cpath%20fill%3D%27%23ff6aa2%27%20d%3D%27M28%2054c0%204-2%208-6%208h-2v-4h2c2%200%202-2%202-4h4z%27/%3E%3Ccircle%20cx%3D%2741%27%20cy%3D%2716%27%20r%3D%272%27%20fill%3D%27%23000%27/%3E%3Cpath%20d%3D%27M45%2017l10%202-10%202z%27%20fill%3D%27%23ffb000%27/%3E%3C/svg%3E";
+
+        function emojiHTML(a){
           const key = a.replace(/\s+/g,"").toUpperCase();
           if (key === "C") return "🐧";
-          if (key === "V") return "🦩";
+          if (key === "V") return "<img class='emoji-icon' alt='🦩' src='" + FLAMINGO_SVG + "'>";
           if (key === "C/V") return "👫";
           if (key === "R") return "🦄";
           return "";
@@ -844,7 +891,7 @@
           const locDiv = document.createElement("div");
           locDiv.className = "task-location";
           locDiv.textContent = location;
-          container.appendChild(locDiv);
+          inner.appendChild(locDiv);
 
           const groups = new Map();
           for (const it of items){
@@ -861,14 +908,14 @@
               const row = document.createElement("div");
               row.className = "task-line";
               row.innerHTML =
-                '<div class="task-emoji">' + emojiFor(a) + '</div>' +
-                '<div class="task-text">' + t + '</div>';
-              container.appendChild(row);
+                "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
+                "<div class='task-text'>" + t + "</div>";
+              inner.appendChild(row);
             }
           }
         }
 
-        startInfiniteScrollTasks(4);
+        startTasksMarquee(4);
       } catch(e){
         console.log(e);
       }
