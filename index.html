@@ -858,103 +858,95 @@
 
 
     async function loadTasks(){
-      const inner = document.getElementById("tasks-inner");
+  const inner = document.getElementById("tasks-inner");
 
-      try{
-        const res = await fetch("dashboard.txt", { cache: "no-store" });
-        if (!res.ok) return;
+  try{
+    const res = await fetch("dashboard.txt", { cache: "no-store" });
+    if (!res.ok) return;
 
-        const text = await res.text();
-const normalized = text.trimEnd(); // prevents restarts from harmless trailing newline changes
+    const text = await res.text();
+    const normalized = text.replace(/\r\n/g, "\n").trimEnd();
 
-if (normalized === __lastTasksText) {
-  // No changes, keep current marquee running
-  return;
-}
-__lastTasksText = normalized;
+    // No changes, keep current marquee running
+    if (normalized === __lastTasksText) return;
 
-// Only stop/rebuild when the file actually changed
-stopTasksMarquee();
-inner.innerHTML = "";
+    // Mark as seen (prevents constant rebuilds)
+    __lastTasksText = normalized;
 
+    // Only stop/rebuild when file actually changed
+    stopTasksMarquee();
+    inner.innerHTML = "";
 
-// If the file hasn't changed, do NOT rebuild or restart marquee (prevents the visible jump)
-if (text === __lastTasksText) return;
-__lastTasksText = text;
+    const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
+    if (lines.length === 0){
+      inner.innerHTML = "<div class='task-text'>No tasks for today.</div>";
+      return;
+    }
 
-inner.innerHTML = "";
+    const byLocation = new Map();
+    for (const line of lines){
+      const parts = line.split(/\s*\|\s*/).map(p => p.trim());
+      if (parts.length < 3) continue;
 
+      const location = parts[0];
+      const assigneeRaw = parts[1];
+      const task = parts.slice(2).join(" | ");
 
-        const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
-        if (lines.length === 0){
-          inner.innerHTML = '<div class="task-text">No tasks for today.</div>';
-          return;
+      if (!byLocation.has(location)) byLocation.set(location, []);
+      byLocation.get(location).push({ assigneeRaw, task });
+    }
+
+    // If nothing matched the expected format, show a message instead of a blank box
+    if (byLocation.size === 0){
+      inner.innerHTML =
+        "<div class='task-text'>No tasks parsed. Expected: Location | Assignee | Task</div>";
+      return;
+    }
+
+    function emojiHTML(a){
+      const key = a.replace(/\s+/g,"").toUpperCase();
+      if (key === "C") return "🐧";
+      if (key === "V") return "🐝";
+      if (key === "C/V") return "👫";
+      if (key === "R") return "🦄";
+      return "";
+    }
+
+    const order = ["C","V","C/V","R"];
+
+    for (const [location, items] of byLocation.entries()){
+      const locDiv = document.createElement("div");
+      locDiv.className = "task-location";
+      locDiv.textContent = location;
+      inner.appendChild(locDiv);
+
+      const groups = new Map();
+      for (const it of items){
+        const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(it.task);
+      }
+
+      for (const a of order){
+        const tasks = groups.get(a);
+        if (!tasks || tasks.length === 0) continue;
+
+        for (const t of tasks){
+          const row = document.createElement("div");
+          row.className = "task-line";
+          row.innerHTML =
+            "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
+            "<div class='task-text'>" + t + "</div>";
+          inner.appendChild(row);
         }
-
-        const byLocation = new Map();
-        for (const line of lines){
-          const parts = line.split(" | ").map(p => p.trim());
-          if (parts.length < 3) continue;
-
-          const location = parts[0];
-          const assigneeRaw = parts[1];
-          const task = parts.slice(2).join(" | ");
-
-          if (!byLocation.has(location)) byLocation.set(location, []);
-          byLocation.get(location).push({ assigneeRaw: assigneeRaw, task: task });
-        }
-
-        // Inline flamingo fallback for Fire TV emoji font gaps
-        const FLAMINGO_SVG =
-          "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Cpath%20fill%3D%27%23ff6aa2%27%20d%3D%27M44%2010c-6%200-10%204-10%2010%200%204%202%207%205%209-6%203-11%208-13%2015-2%207-1%2014-1%2014h6s0-7%202-13c2-6%206-10%2012-12%204-1%208-4%208-11%200-7-4-12-9-12z%27/%3E%3Cpath%20fill%3D%27%23ff6aa2%27%20d%3D%27M28%2054c0%204-2%208-6%208h-2v-4h2c2%200%202-2%202-4h4z%27/%3E%3Ccircle%20cx%3D%2741%27%20cy%3D%2716%27%20r%3D%272%27%20fill%3D%27%23000%27/%3E%3Cpath%20d%3D%27M45%2017l10%202-10%202z%27%20fill%3D%27%23ffb000%27/%3E%3C/svg%3E";
-
-        function emojiHTML(a){
-          const key = a.replace(/\s+/g,"").toUpperCase();
-          if (key === "C") return "🐧";
-if (key === "V") return "🐝";
-          if (key === "C/V") return "👫";
-          if (key === "R") return "🦄";
-          return "";
-        }
-
-        const order = ["C","V","C/V","R"];
-
-        for (const entry of byLocation.entries()){
-          const location = entry[0];
-          const items = entry[1];
-
-          const locDiv = document.createElement("div");
-          locDiv.className = "task-location";
-          locDiv.textContent = location;
-          inner.appendChild(locDiv);
-
-          const groups = new Map();
-          for (const it of items){
-            const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
-            if (!groups.has(key)) groups.set(key, []);
-            groups.get(key).push(it.task);
-          }
-
-          for (const a of order){
-            const tasks = groups.get(a);
-            if (!tasks || tasks.length === 0) continue;
-
-            for (const t of tasks){
-              const row = document.createElement("div");
-              row.className = "task-line";
-              row.innerHTML =
-                "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
-                "<div class='task-text'>" + t + "</div>";
-              inner.appendChild(row);
-            }
-          }
-        }
-
-        startTasksMarquee(4);
-      } catch(e){
-        console.log(e);
       }
     }
+
+    startTasksMarquee(4);
+  } catch(e){
+    console.log(e);
+  }
+}
 
     async function loadForecast(){
       const row = document.getElementById("forecast-row");
@@ -1082,6 +1074,7 @@ if (key === "V") return "🐝";
   </script>
 </body>
 </html>
+
 
 
 
