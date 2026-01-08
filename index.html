@@ -814,21 +814,32 @@
           inner.appendChild(c);
         }
 
-        // Base distance = offset to first clone (includes the natural gap)
-        const firstClone = inner.children[originalCount];
-        __tasksBase = firstClone ? firstClone.offsetTop : contentH;
-        if (!__tasksBase || __tasksBase <= vh + 1) return;
+        // Add a small spacer so the bottom gets a moment before looping
+const SPACER_PX = 32; // increase if you want more linger at the bottom
+
+const spacer = document.createElement("div");
+spacer.setAttribute("data-clone","1");
+spacer.style.height = SPACER_PX + "px";
+inner.appendChild(spacer);
+
+// Wrap distance = original content height + spacer
+__tasksBase = contentH + SPACER_PX;
+if (!__tasksBase || __tasksBase <= vh + 1) return;
+
 
         __tasksPos = 0;
         __tasksLastTs = 0;
 
         function step(ts){
           if (!__tasksLastTs) __tasksLastTs = ts;
-          const dt = (ts - __tasksLastTs) / 1000;
+          let dt = (ts - __tasksLastTs) / 1000;
+dt = Math.min(dt, 0.05); // cap at 50ms so it can’t jump on frame stalls
+
           __tasksLastTs = ts;
 
           __tasksPos += (speedPxPerSec * dt);
-          if (__tasksPos >= __tasksBase) __tasksPos -= __tasksBase;
+          while (__tasksPos >= __tasksBase) __tasksPos -= __tasksBase;
+
 
           inner.style.transform = "translate3d(0," + (-__tasksPos) + "px,0)";
           __tasksRaf = requestAnimationFrame(step);
@@ -1046,6 +1057,7 @@ if (key === "V") return "🐝";
   </script>
 </body>
 </html>
+
 
 
 
