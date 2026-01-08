@@ -13,6 +13,8 @@
       --safeBottom: 2px;
       --safeLeft: 2px;
 
+      --eventTimeCol: 72px;   /* tweak 68–80px if you want */
+      
       /* Dark mode */
       --bg: #000;
       --frame: #000;
@@ -289,11 +291,12 @@
 
     /* changed from grid to flex to prevent time clipping */
     .event-top{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      min-width:0;
-    }
+  display:grid;
+  grid-template-columns: minmax(0,1fr) var(--eventTimeCol);
+  align-items:start;
+  column-gap:10px;
+}
+
 
     .event-title{
       font-size:13px;
@@ -317,15 +320,14 @@
     }
 
     .event-time{
+  justify-self:end;
+  width: var(--eventTimeCol);
   display:flex;
-  align-items:baseline;
   justify-content:flex-end;
   white-space:nowrap;
-  flex:0 0 auto;
-  min-width:68px;     /* was 52 */
-  padding-left:6px;   /* was 2 */
-  padding-right:6px;  /* add this */
+  font-variant-numeric: tabular-nums;
 }
+
 
 
     .event-time-main{
@@ -1037,6 +1039,7 @@ if (key === "V") return "🐝";
   </script>
 </body>
 </html>
+
 
 
 
