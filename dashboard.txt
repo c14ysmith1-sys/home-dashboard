@@ -5,7 +5,6 @@ Kitchen | V | Wipe counters
 Kitchen | V | Wipe stove top
 Kitchen | V | Clean microwave
 Kitchen | C | Empty kitchen trash
-Kitchen | C | Empty kitchen trash
 Kitchen | C/V | Clear kitchen surfaces
 Kitchen | C/V | Pantry: toss expired food
 Kitchen | V | Wipe dining table
