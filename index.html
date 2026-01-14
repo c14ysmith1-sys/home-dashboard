@@ -13,8 +13,8 @@
       --safeBottom: 2px;
       --safeLeft: 2px;
 
-      --eventTimeCol: 76px;   /* tweak 68–80px if you want */
-      
+      --eventTimeCol: 84px;
+
       /* Dark mode */
       --bg: #000;
       --frame: #000;
@@ -85,8 +85,8 @@
     }
 
     .time-main{
-      font-size:40px;     /* match temp size */
-      font-weight:500;    /* not bold */
+      font-size:40px;
+      font-weight:500;
       line-height:1;
     }
 
@@ -147,9 +147,9 @@
     }
 
     /* separators between boxes only (no outer right edge) */
-.forecast-day:not(:first-child){
-  border-left:1px solid var(--border-soft);
-}
+    .forecast-day:not(:first-child){
+      border-left:1px solid var(--border-soft);
+    }
 
     .forecast-day{
       padding:2px 6px;
@@ -253,18 +253,34 @@
       text-decoration:underline;
       text-underline-offset:6px;
       text-decoration-color: rgba(255,255,255,0.55);
-      flex: 0 0 auto;     /* header never scrolls */
+      flex: 0 0 auto;
     }
 
-    /* EVENTS */
-    #events-list{
-      overflow:auto;
-      min-height:0;
+    /* EVENTS + PRIORITY (no scrollbars, hard clip) */
+    #events-body{
+      position:relative;
       flex:1 1 auto;
-      padding-right:18px;  /* extra right safety so time never clips */
+      min-height:0;
+      overflow:hidden;
+    }
+
+    #events-viewport{
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      overflow:hidden;
+      padding-right:12px; /* right safety so nothing hits the wall */
+    }
+
+    #events-list{
+      min-height:0;
       display:flex;
       flex-direction:column;
       gap:10px;
+      overflow:hidden;
+      min-width:0;
     }
 
     .events-day{
@@ -280,6 +296,7 @@
       align-items:start;
       min-width:0;
     }
+    .event-item > div{ min-width:0; }
 
     .event-emoji{
       width:22px;
@@ -289,14 +306,13 @@
       margin-top:2px;
     }
 
-    /* changed from grid to flex to prevent time clipping */
     .event-top{
-  display:grid;
-  grid-template-columns: minmax(0,1fr) var(--eventTimeCol);
-  align-items:start;
-  column-gap:10px;
-}
-
+      display:grid;
+      grid-template-columns: minmax(0,1fr) var(--eventTimeCol);
+      align-items:start;
+      column-gap:10px;
+      min-width:0;
+    }
 
     .event-title{
       font-size:13px;
@@ -306,7 +322,6 @@
       text-overflow:ellipsis;
       line-height:1.2;
       min-width:0;
-      flex: 1 1 auto;
     }
 
     .event-loc{
@@ -317,28 +332,27 @@
       overflow:hidden;
       text-overflow:ellipsis;
       line-height:1.2;
+      min-width:0;
     }
 
     .event-time{
-  display:flex;
-  align-items:baseline;
-  justify-content:flex-end;
-  white-space:nowrap;
+      display:flex;
+      align-items:baseline;
+      justify-content:flex-end;
+      white-space:nowrap;
 
-  flex: 0 0 76px;     /* fixed column so all times align */
-  width: 76px;
-  min-width: 76px;
+      width: var(--eventTimeCol);
+      min-width: var(--eventTimeCol);
 
-  padding-left: 6px;
-  padding-right: 6px; /* prevents last digit clipping on Fire TV */
-  box-sizing: border-box;
-}
+      padding-left: 6px;
+      padding-right: 10px; /* extra Fire TV safety */
+      box-sizing: border-box;
 
-
-
+      overflow:visible;
+    }
 
     .event-time-main{
-      font-size:14px;    /* match day header */
+      font-size:14px;
       font-weight:850;
       line-height:1;
     }
@@ -351,21 +365,80 @@
       margin-left:0;
     }
 
-    /* TASKS (marquee loop instead of scrollTop, Silk-friendly) */
+    /* Priority panel inside Events card */
+    #priority-panel{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      display:none; /* only show when real text exists */
+      overflow:hidden;
+    }
+
+    #priority-inner{
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end; /* header sits right above the list at the bottom */
+      gap:6px;
+    }
+
+    #priority-header{
+      font-size:16px;
+      font-weight:800;
+      text-align:center;
+      text-decoration:underline;
+      text-underline-offset:6px;
+      text-decoration-color: rgba(255,255,255,0.55);
+      margin:0;
+      padding:0;
+    }
+
+    #priority-list{
+      list-style-type: disc;
+      list-style-position: outside;
+      padding-left:18px;
+      margin:0;
+      display:flex;
+      flex-direction:column;
+      gap:8px; /* tighter like Today’s Tasks */
+      min-width:0;
+    }
+
+    #priority-list li{
+      font-size:14px;
+      line-height:1.2;
+      color:var(--text-main);
+      min-width:0;
+
+      display:-webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* TASKS (wheel marquee, no jump) */
     #tasks-list{
-      overflow:hidden;     /* viewport */
+      overflow:hidden;
       min-height:0;
       flex:1 1 auto;
-      padding-right:10px;  /* match events safety */
-      position:relative;
+      padding-right:10px;
+      position:relative; /* viewport for wheel */
+    }
+
+    #tasks-wheel{
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      will-change: transform;
+      transform: translate3d(0,0,0);
     }
 
     #tasks-inner{
       display:flex;
       flex-direction:column;
       gap:8px;
-      will-change: transform;
-      transform: translate3d(0,0,0);
     }
 
     .task-location{
@@ -392,12 +465,6 @@
       display:flex;
       align-items:center;
       justify-content:center;
-    }
-
-    .emoji-icon{
-      width:18px;
-      height:18px;
-      display:block;
     }
 
     .task-text{
@@ -463,18 +530,32 @@
           </div>
         </header>
 
-        <section class="forecast-row has-separators" id="forecast-row"></section>
+        <section class="forecast-row" id="forecast-row"></section>
 
         <main class="main">
           <section class="card" id="events-card">
             <div class="card-header">Upcoming Events</div>
-            <div id="events-list"><div class="event-title">Loading events…</div></div>
+
+            <div id="events-body">
+              <div id="events-viewport">
+                <div id="events-list"><div class="event-title">Loading events…</div></div>
+              </div>
+
+              <div id="priority-panel" aria-label="Priority Tasks">
+                <div id="priority-inner">
+                  <div id="priority-header">Priority Tasks</div>
+                  <ul id="priority-list"></ul>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section class="card" id="tasks-card">
             <div class="card-header">Today’s Tasks</div>
             <div id="tasks-list">
-              <div id="tasks-inner"><div class="task-text">Loading tasks…</div></div>
+              <div id="tasks-wheel">
+                <div id="tasks-inner"><div class="task-text">Loading tasks…</div></div>
+              </div>
             </div>
           </section>
         </main>
@@ -604,29 +685,10 @@
       return n + "th";
     }
 
-    function cleanLocation(raw){
-      let s = (raw || "").trim();
-      if (!s) return "";
-
-      const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
-      if (lines.length > 1){
-        if (/^\d/.test(lines[0])) return lines[0] + ", " + lines[1];
-        return lines[0];
-      }
-
-      const addrIdx = s.search(/\b\d{1,6}\b\s+[A-Za-z]/);
-      if (addrIdx > 0){
-        s = s.slice(0, addrIdx).trim();
-        s = s.replace(/[,\-–]\s*$/,"").trim();
-      }
-      return s;
-    }
-
     function calendarEmoji(calName){
       const s = (calName || "").trim();
       const low = s.toLowerCase();
 
-      // If calendar name starts with an emoji, use it
       const first = Array.from(s)[0] || "";
       if (first && !(/[A-Za-z0-9]/.test(first))) return first;
 
@@ -675,6 +737,205 @@
       return out;
     }
 
+    function stripZip(s){
+      return (s || "")
+        .replace(/\b\d{5}(?:-\d{4})?\b/g, "")
+        .replace(/\s{2,}/g, " ")
+        .replace(/\s+,/g, ",")
+        .trim();
+    }
+
+    function normalizeCountryUS(s){
+      return (s || "")
+        .replace(/\bUnited States of America\b/ig, "United States")
+        .replace(/\bU\.S\.A\.\b/ig, "United States")
+        .replace(/\bUSA\b/ig, "United States")
+        .replace(/\bU\.S\.\b/ig, "United States")
+        .replace(/\bUS\b/ig, "United States");
+    }
+
+    function tidyCommas(s){
+      return (s || "")
+        .replace(/,\s*,+/g, ",")
+        .replace(/,\s*$/g, "")
+        .trim();
+    }
+
+    function isIndianaToken(tok){
+      const t = (tok || "").trim().toUpperCase();
+      return t === "IN" || t === "INDIANA";
+    }
+
+    function twoLetterState(tok){
+      const t = (tok || "").trim().toUpperCase();
+      return /^[A-Z]{2}$/.test(t) ? t : "";
+    }
+
+    function extractCityFromAddressPrefix(prefix){
+      // prefix like "16125 Creeks Bend Ct Westfield" or "1191 W. 86th St Indianapolis"
+      const p = (prefix || "").trim();
+      if (!p) return "";
+
+      const suffixRe = /\b(St|Street|Rd|Road|Dr|Drive|Ct|Court|Ave|Avenue|Blvd|Boulevard|Ln|Lane|Pkwy|Parkway|Way|Pl|Place|Ter|Terrace|Cir|Circle|Trl|Trail)\b\.?\s+(.+)$/i;
+      const m = p.match(suffixRe);
+      if (m && m[2]) return m[2].trim();
+
+      const parts = p.split(/\s+/).filter(Boolean);
+      if (parts.length === 0) return "";
+      return parts[parts.length - 1];
+    }
+
+    function compactAddress(prefix){
+      // "16125 Creeks Bend Ct Westfield" -> "16125 Creeks Bend Ct, Westfield"
+      const p = (prefix || "").trim();
+      if (!p) return "";
+
+      const city = extractCityFromAddressPrefix(p);
+      if (!city) return p;
+
+      const idx = p.lastIndexOf(city);
+      if (idx <= 0) return p;
+
+      const street = p.slice(0, idx).trim().replace(/[,\-]\s*$/,"").trim();
+      if (!street) return city;
+      return street + ", " + city;
+    }
+
+    function cleanLocation(raw){
+      let s = (raw || "").trim();
+      if (!s) return "";
+
+      s = normalizeCountryUS(s);
+
+      const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      const venue = lines.length > 1 ? lines[0] : "";
+      const addrLine = lines.length > 1 ? lines.slice(1).join(" ") : lines[0];
+
+      let addr = tidyCommas(stripZip(addrLine));
+
+      // Split by commas to detect state/country tokens
+      let parts = addr.split(",").map(p => stripZip(p.trim())).filter(Boolean);
+
+      const hasUS = parts.some(p => /^United States$/i.test(p));
+      let country = "";
+      const canadaIdx = parts.findIndex(p => /^Canada$/i.test(p));
+      if (canadaIdx >= 0) country = "Canada";
+
+      // Find state token (US)
+      let state = "";
+      for (let i = parts.length - 1; i >= 0; i--){
+        const tok = parts[i];
+        const st = twoLetterState(tok);
+        if (st){
+          state = st;
+          break;
+        }
+        if (/^Indiana$/i.test(tok)){
+          state = "IN";
+          break;
+        }
+      }
+
+      // If Canada, show "City, Canada" (drop province if present)
+      if (country === "Canada"){
+        // Try to get city from the first segment (usually contains street+city)
+        const firstSeg = parts[0] || "";
+        const city = extractCityFromAddressPrefix(firstSeg) || "";
+        const cityOut = city ? (city + ", Canada") : "Canada";
+        return venue ? (venue + ", " + cityOut) : cityOut;
+      }
+
+      // US logic
+      if (hasUS){
+        parts = parts.filter(p => !/^United States$/i.test(p));
+      }
+
+      // Indiana: drop state token entirely
+      const inIndiana = state === "IN" || parts.some(isIndianaToken);
+      if (inIndiana){
+        parts = parts.filter(p => !isIndianaToken(p));
+        // Build compact street+city from first segment where possible
+        const firstSeg = parts[0] || "";
+        const addrOut = /^\d/.test(firstSeg) ? compactAddress(firstSeg) : firstSeg;
+        return venue ? (venue + ", " + (extractCityFromAddressPrefix(firstSeg) || addrOut || "")) : (addrOut || "");
+      }
+
+      // Other US state: keep City, ST (and optionally compact address if no venue)
+      if (state){
+        // remove any full-state name tokens, keep the two-letter state
+        parts = parts.filter(p => !/^[A-Za-z ]+$/.test(p) || !isIndianaToken(p));
+        const firstSeg = parts[0] || "";
+        const city = extractCityFromAddressPrefix(firstSeg) || "";
+        const cityState = city ? (city + ", " + state) : state;
+        return venue ? (venue + ", " + cityState) : cityState;
+      }
+
+      // Fallback: just return cleaned, clipped by CSS
+      const fallback = tidyCommas(stripZip(addr));
+      return venue ? (venue + ", " + fallback) : fallback;
+    }
+
+    function layoutEventsAndPriority(){
+      const viewport = document.getElementById("events-viewport");
+      const priority = document.getElementById("priority-panel");
+      if (!viewport || !priority) return;
+
+      // Reserve space for priority panel by shrinking the visible events viewport
+      if (priority.style.display === "none"){
+        viewport.style.bottom = "0px";
+      } else {
+        const h = priority.offsetHeight || 0;
+        viewport.style.bottom = h + "px";
+      }
+
+      clipEventsToViewport();
+    }
+
+    function clipEventsToViewport(){
+      const viewport = document.getElementById("events-viewport");
+      const list = document.getElementById("events-list");
+      if (!viewport || !list) return;
+
+      const kids = Array.from(list.children);
+      kids.forEach(el => { el.style.display = ""; });
+
+      const vh = viewport.clientHeight;
+
+      // Hide first element that would be clipped, plus everything after it
+      let cutIndex = kids.length;
+      for (let i = 0; i < kids.length; i++){
+        const el = kids[i];
+        const bottom = el.offsetTop + el.offsetHeight;
+        if (bottom > vh){
+          cutIndex = i;
+          break;
+        }
+      }
+      for (let i = cutIndex; i < kids.length; i++){
+        kids[i].style.display = "none";
+      }
+
+      // Hide orphan day headers (a header with no visible event-item under it)
+      for (let i = 0; i < kids.length; i++){
+        const el = kids[i];
+        if (el.style.display === "none") continue;
+        if (!el.classList.contains("events-day")) continue;
+
+        let hasVisibleEvent = false;
+        for (let j = i + 1; j < kids.length; j++){
+          const nxt = kids[j];
+          if (nxt.classList.contains("events-day")) break;
+          if (nxt.style.display !== "none" && nxt.classList.contains("event-item")){
+            hasVisibleEvent = true;
+            break;
+          }
+        }
+        if (!hasVisibleEvent){
+          el.style.display = "none";
+        }
+      }
+    }
+
     async function loadEvents(){
       const container = document.getElementById("events-list");
       try{
@@ -704,6 +965,7 @@
         const lines = rebuilt.slice(0, 10);
         if (lines.length === 0){
           container.innerHTML = '<div class="event-title">No events scheduled.</div>';
+          layoutEventsAndPriority();
           return;
         }
 
@@ -714,13 +976,13 @@
 
           const title = parts[0] || "";
           const start = parts[1] || "";
-          const loc = cleanLocation(parts[2] || "");
+          const locRaw = parts[2] || "";
           const calName = parts[3] || "";
           const parsed = parseStart(start);
 
           events.push({
             title: title,
-            loc: loc,
+            loc: cleanLocation(locRaw),
             calEmoji: calendarEmoji(calName),
             dateKey: parsed.dateKey,
             dayLabel: parsed.dayLabel,
@@ -761,192 +1023,226 @@
 
           container.appendChild(item);
         }
+
+        // After events are rendered, clip them based on current priority height
+        requestAnimationFrame(layoutEventsAndPriority);
       } catch(e){
         console.log(e);
       }
     }
 
-    /* TASKS: Silk-friendly looping marquee */
+    /* ===== Priority Tasks ===== */
+    let __lastPriorityText = "";
+
+    async function loadPriority(){
+      const panel = document.getElementById("priority-panel");
+      const list = document.getElementById("priority-list");
+      if (!panel || !list) return;
+
+      try{
+        const res = await fetch("priority.txt", { cache: "no-store" });
+        if (!res.ok) return;
+
+        const text = (await res.text()).replace(/\r\n/g, "\n").trimEnd();
+
+        // If unchanged, do nothing
+        if (text === __lastPriorityText) return;
+        __lastPriorityText = text;
+
+        // Parse lines
+        const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+
+        // Empty: hide section completely
+        if (lines.length === 0){
+          panel.style.display = "none";
+          list.innerHTML = "";
+          requestAnimationFrame(layoutEventsAndPriority);
+          return;
+        }
+
+        // Build up to 8 tasks
+        list.innerHTML = "";
+        const take = lines.slice(0, 8);
+        for (const t of take){
+          const li = document.createElement("li");
+          li.textContent = t;
+          list.appendChild(li);
+        }
+
+        panel.style.display = "block";
+        requestAnimationFrame(layoutEventsAndPriority);
+      } catch(e){
+        console.log(e);
+      }
+    }
+
+    /* TASKS: wheel marquee (no jump) */
     let __tasksRaf = null;
     let __tasksLastTs = 0;
-    let __tasksPos = 0;
-    let __tasksBase = 0;
+    let __tasksY = 0;
+    let __tasksH = 0;
     let __lastTasksText = "";
 
-   function stopTasksMarquee(){
-  if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
-  __tasksRaf = null;
-  __tasksLastTs = 0;
-  __tasksPos = 0;
-  __tasksBase = 0;
+    function ensureTasksWheel(){
+      const viewport = document.getElementById("tasks-list");
+      const wheel = document.getElementById("tasks-wheel");
+      const trackA = document.getElementById("tasks-inner");
+      if (!viewport || !wheel || !trackA) return null;
+      return { viewport, wheel, trackA };
+    }
 
-  // Remove the second track if it exists
-  const b = document.getElementById("tasks-inner-b");
-  if (b) b.remove();
+    function stopTasksMarquee(){
+      if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
+      __tasksRaf = null;
+      __tasksLastTs = 0;
+      __tasksY = 0;
+      __tasksH = 0;
 
-  // Reset track A to normal flow so measurements stay stable
-  const a = document.getElementById("tasks-inner");
-  if (a){
-    a.style.transform = "translate3d(0,0,0)";
-    a.style.position = "";
-    a.style.left = "";
-    a.style.right = "";
-    a.style.top = "";
-  }
-}
+      const parts = ensureTasksWheel();
+      if (!parts) return;
 
+      const { wheel } = parts;
+      wheel.style.transform = "translate3d(0,0,0)";
+
+      const b = document.getElementById("tasks-inner-b");
+      if (b) b.remove();
+    }
 
     function startTasksMarquee(speedPxPerSec){
-  const viewport = document.getElementById("tasks-list");
-  const trackA = document.getElementById("tasks-inner");
-  if (!viewport || !trackA) return;
+      const parts = ensureTasksWheel();
+      if (!parts) return;
 
-  stopTasksMarquee();
+      const { viewport, wheel, trackA } = parts;
 
-  setTimeout(() => {
-    const viewportH = viewport.clientHeight;
-    const originalH = trackA.scrollHeight;
-    if (originalH <= viewportH + 1) return;
+      stopTasksMarquee();
 
-    viewport.style.position = "relative";
+      // Let layout settle
+      setTimeout(() => {
+        const viewportH = viewport.clientHeight;
+        const originalH = trackA.scrollHeight;
 
-    // Track A absolute
-    trackA.style.position = "absolute";
-    trackA.style.left = "0";
-    trackA.style.right = "0";
-    trackA.style.top = "0";
-    trackA.style.transform = "translate3d(0,0,0)";
+        if (originalH <= viewportH + 1) return;
 
-    // Track B clone
-    const trackB = trackA.cloneNode(true);
-    trackB.id = "tasks-inner-b";
-    trackB.style.position = "absolute";
-    trackB.style.left = "0";
-    trackB.style.right = "0";
-    trackB.style.top = "0";
-    trackB.style.transform = "translate3d(0,0,0)";
-    viewport.appendChild(trackB);
+        // Clone B and stack it under A inside the wheel
+        const trackB = trackA.cloneNode(true);
+        trackB.id = "tasks-inner-b";
+        wheel.appendChild(trackB);
 
-    // Measure once, then run as a "wheel"
-    const H = Math.ceil(trackA.scrollHeight);
+        // Measure exact height of one track after clone is in DOM
+        __tasksH = Math.ceil(trackA.getBoundingClientRect().height);
 
-    let y = 0;
-    __tasksLastTs = 0;
+        __tasksY = 0;
+        __tasksLastTs = 0;
 
-    function step(ts){
-      if (!__tasksLastTs) __tasksLastTs = ts;
+        function step(ts){
+          if (!__tasksLastTs) __tasksLastTs = ts;
 
-      let dt = (ts - __tasksLastTs) / 1000;
-      __tasksLastTs = ts;
-      dt = Math.min(dt, 0.05);
+          let dt = (ts - __tasksLastTs) / 1000;
+          __tasksLastTs = ts;
+          dt = Math.min(dt, 0.05);
 
-      y -= speedPxPerSec * dt;
+          __tasksY -= speedPxPerSec * dt;
 
-      // Wrap y (wheel)
-      if (y <= -H) y += H;
+          // Wrap seamlessly
+          if (__tasksY <= -__tasksH) __tasksY += __tasksH;
 
-      // Render B always exactly below A (no drift)
-      trackA.style.transform = `translate3d(0,${y}px,0)`;
-      trackB.style.transform = `translate3d(0,${y + H}px,0)`;
+          const yRender = Math.round(__tasksY);
+          wheel.style.transform = "translate3d(0," + yRender + "px,0)";
 
-      __tasksRaf = requestAnimationFrame(step);
+          __tasksRaf = requestAnimationFrame(step);
+        }
+
+        __tasksRaf = requestAnimationFrame(step);
+      }, 300);
     }
-
-    __tasksRaf = requestAnimationFrame(step);
-  }, 400);
-}
-
 
     async function loadTasks(){
-  const inner = document.getElementById("tasks-inner");
+      const inner = document.getElementById("tasks-inner");
 
-  try{
-    const res = await fetch("dashboard.txt", { cache: "no-store" });
-    if (!res.ok) return;
+      try{
+        const res = await fetch("dashboard.txt", { cache: "no-store" });
+        if (!res.ok) return;
 
-    const text = await res.text();
-    const normalized = text.replace(/\r\n/g, "\n").trimEnd();
+        const text = await res.text();
+        const normalized = text.replace(/\r\n/g, "\n").trimEnd();
 
-    // No changes, keep current marquee running
-    if (normalized === __lastTasksText) return;
+        // No changes, keep current marquee running
+        if (normalized === __lastTasksText) return;
 
-    // Mark as seen (prevents constant rebuilds)
-    __lastTasksText = normalized;
+        __lastTasksText = normalized;
 
-    // Only stop/rebuild when file actually changed
-    stopTasksMarquee();
-    inner.innerHTML = "";
+        stopTasksMarquee();
+        inner.innerHTML = "";
 
-    const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
-    if (lines.length === 0){
-      inner.innerHTML = "<div class='task-text'>No tasks for today.</div>";
-      return;
-    }
-
-    const byLocation = new Map();
-    for (const line of lines){
-      const parts = line.split(/\s*\|\s*/).map(p => p.trim());
-      if (parts.length < 3) continue;
-
-      const location = parts[0];
-      const assigneeRaw = parts[1];
-      const task = parts.slice(2).join(" | ");
-
-      if (!byLocation.has(location)) byLocation.set(location, []);
-      byLocation.get(location).push({ assigneeRaw, task });
-    }
-
-    // If nothing matched the expected format, show a message instead of a blank box
-    if (byLocation.size === 0){
-      inner.innerHTML =
-        "<div class='task-text'>No tasks parsed. Expected: Location | Assignee | Task</div>";
-      return;
-    }
-
-    function emojiHTML(a){
-      const key = a.replace(/\s+/g,"").toUpperCase();
-      if (key === "C") return "🐧";
-      if (key === "V") return "🐝";
-      if (key === "C/V") return "👫";
-      if (key === "R") return "🦄";
-      return "";
-    }
-
-    const order = ["C","V","C/V","R"];
-
-    for (const [location, items] of byLocation.entries()){
-      const locDiv = document.createElement("div");
-      locDiv.className = "task-location";
-      locDiv.textContent = location;
-      inner.appendChild(locDiv);
-
-      const groups = new Map();
-      for (const it of items){
-        const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(it.task);
-      }
-
-      for (const a of order){
-        const tasks = groups.get(a);
-        if (!tasks || tasks.length === 0) continue;
-
-        for (const t of tasks){
-          const row = document.createElement("div");
-          row.className = "task-line";
-          row.innerHTML =
-            "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
-            "<div class='task-text'>" + t + "</div>";
-          inner.appendChild(row);
+        const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
+        if (lines.length === 0){
+          inner.innerHTML = "<div class='task-text'>No tasks for today.</div>";
+          return;
         }
+
+        const byLocation = new Map();
+        for (const line of lines){
+          const parts = line.split(/\s*\|\s*/).map(p => p.trim());
+          if (parts.length < 3) continue;
+
+          const location = parts[0];
+          const assigneeRaw = parts[1];
+          const task = parts.slice(2).join(" | ");
+
+          if (!byLocation.has(location)) byLocation.set(location, []);
+          byLocation.get(location).push({ assigneeRaw, task });
+        }
+
+        if (byLocation.size === 0){
+          inner.innerHTML =
+            "<div class='task-text'>No tasks parsed. Expected: Location | Assignee | Task</div>";
+          return;
+        }
+
+        function emojiHTML(a){
+          const key = a.replace(/\s+/g,"").toUpperCase();
+          if (key === "C") return "🐧";
+          if (key === "V") return "🐝";
+          if (key === "C/V") return "👫";
+          if (key === "R") return "🦄";
+          return "";
+        }
+
+        const order = ["C","V","C/V","R"];
+
+        for (const [location, items] of byLocation.entries()){
+          const locDiv = document.createElement("div");
+          locDiv.className = "task-location";
+          locDiv.textContent = location;
+          inner.appendChild(locDiv);
+
+          const groups = new Map();
+          for (const it of items){
+            const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(it.task);
+          }
+
+          for (const a of order){
+            const tasks = groups.get(a);
+            if (!tasks || tasks.length === 0) continue;
+
+            for (const t of tasks){
+              const row = document.createElement("div");
+              row.className = "task-line";
+              row.innerHTML =
+                "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
+                "<div class='task-text'>" + t + "</div>";
+              inner.appendChild(row);
+            }
+          }
+        }
+
+        startTasksMarquee(4);
+      } catch(e){
+        console.log(e);
       }
     }
-
-    startTasksMarquee(4);
-  } catch(e){
-    console.log(e);
-  }
-}
 
     async function loadForecast(){
       const row = document.getElementById("forecast-row");
@@ -1029,59 +1325,16 @@
       loadWeather();
       loadForecast();
       loadEvents();
+      loadPriority();
       loadTasks();
 
       setInterval(updateClock, 15000);
       setInterval(loadWeather, 300000);
       setInterval(loadForecast, 1800000);
       setInterval(loadEvents, 60000);
+      setInterval(loadPriority, 60000);
       setInterval(loadTasks, 60000);
     });
-
-    /* ===== KEEP AWAKE (safer) ===== */
-(function keepAwakeSafe(){
-  // Prefer Wake Lock API (best, lowest risk)
-  let wakeLock = null;
-
-  async function requestWakeLock(){
-    try{
-      if ("wakeLock" in navigator && navigator.wakeLock && navigator.wakeLock.request){
-        wakeLock = await navigator.wakeLock.request("screen");
-      }
-    } catch(e){
-      // ignore (not supported or blocked)
-    }
-  }
-
-  // Re-request when tab becomes visible again
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") requestWakeLock();
-  });
-
-  requestWakeLock();
-
-  // Low-impact “activity” ping (no AudioContext, no tight timers)
-  setInterval(() => {
-    try{
-      // tiny scroll nudge, then undo
-      window.scrollBy(0, 1);
-      window.scrollBy(0, -1);
-    } catch(e){}
-  }, 120000); // every 2 minutes
-})();
-
-
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
