@@ -1076,84 +1076,64 @@
     }
 
     /* TASKS: wheel marquee (no jump) */
-    let __tasksRaf = null;
-    let __tasksLastTs = 0;
-    let __tasksY = 0;
-    let __tasksH = 0;
-    let __lastTasksText = "";
+let __tasksRaf = null;
+let __tasksLastTs = 0;
+let __tasksY = 0;
 
-    function ensureTasksWheel(){
-      const viewport = document.getElementById("tasks-list");
-      const wheel = document.getElementById("tasks-wheel");
-      const trackA = document.getElementById("tasks-inner");
-      if (!viewport || !wheel || !trackA) return null;
-      return { viewport, wheel, trackA };
+function stopTasksMarquee(){
+  if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
+  __tasksRaf = null;
+  __tasksLastTs = 0;
+  __tasksY = 0;
+
+  const wheel = document.getElementById("tasks-wheel");
+  if (wheel) wheel.style.transform = "translate3d(0,0,0)";
+}
+
+function startTasksMarquee(speedPxPerSec){
+  const viewport = document.getElementById("tasks-list");
+  const wheel = document.getElementById("tasks-wheel");
+  const track = document.getElementById("tasks-inner");
+  if (!viewport || !wheel || !track) return;
+
+  stopTasksMarquee();
+
+  setTimeout(() => {
+    const viewportH = viewport.clientHeight;
+    const totalH = track.scrollHeight;
+    if (totalH <= viewportH + 1) return;
+
+    __tasksLastTs = 0;
+    __tasksY = 0;
+
+    function step(ts){
+      if (!__tasksLastTs) __tasksLastTs = ts;
+
+      let dt = (ts - __tasksLastTs) / 1000;
+      __tasksLastTs = ts;
+      dt = Math.min(dt, 0.05);
+
+      __tasksY -= speedPxPerSec * dt;
+
+      // While the first element is fully off screen, move it to bottom.
+      // This makes a true infinite wheel with no jump point.
+      while (track.firstElementChild){
+        const first = track.firstElementChild;
+        const h = first.getBoundingClientRect().height;
+        if (!h || (__tasksY > -h)) break;
+
+        __tasksY += h;
+        track.appendChild(first);
+      }
+
+      wheel.style.transform = "translate3d(0," + Math.round(__tasksY) + "px,0)";
+      __tasksRaf = requestAnimationFrame(step);
     }
 
-    function stopTasksMarquee(){
-      if (__tasksRaf) cancelAnimationFrame(__tasksRaf);
-      __tasksRaf = null;
-      __tasksLastTs = 0;
-      __tasksY = 0;
-      __tasksH = 0;
+    __tasksRaf = requestAnimationFrame(step);
+  }, 400);
+}
 
-      const parts = ensureTasksWheel();
-      if (!parts) return;
-
-      const { wheel } = parts;
-      wheel.style.transform = "translate3d(0,0,0)";
-
-      const b = document.getElementById("tasks-inner-b");
-      if (b) b.remove();
-    }
-
-    function startTasksMarquee(speedPxPerSec){
-      const parts = ensureTasksWheel();
-      if (!parts) return;
-
-      const { viewport, wheel, trackA } = parts;
-
-      stopTasksMarquee();
-
-      // Let layout settle
-      setTimeout(() => {
-        const viewportH = viewport.clientHeight;
-        const originalH = trackA.scrollHeight;
-
-        if (originalH <= viewportH + 1) return;
-
-        // Clone B and stack it under A inside the wheel
-        const trackB = trackA.cloneNode(true);
-        trackB.id = "tasks-inner-b";
-        wheel.appendChild(trackB);
-
-        // Measure exact height of one track after clone is in DOM
-        __tasksH = Math.ceil(trackA.getBoundingClientRect().height);
-
-        __tasksY = 0;
-        __tasksLastTs = 0;
-
-        function step(ts){
-          if (!__tasksLastTs) __tasksLastTs = ts;
-
-          let dt = (ts - __tasksLastTs) / 1000;
-          __tasksLastTs = ts;
-          dt = Math.min(dt, 0.05);
-
-          __tasksY -= speedPxPerSec * dt;
-
-          // Wrap seamlessly
-          if (__tasksY <= -__tasksH) __tasksY += __tasksH;
-
-          const yRender = Math.round(__tasksY);
-          wheel.style.transform = "translate3d(0," + yRender + "px,0)";
-
-          __tasksRaf = requestAnimationFrame(step);
-        }
-
-        __tasksRaf = requestAnimationFrame(step);
-      }, 300);
-    }
 
     async function loadTasks(){
       const inner = document.getElementById("tasks-inner");
@@ -1163,7 +1143,12 @@
         if (!res.ok) return;
 
         const text = await res.text();
-        const normalized = text.replace(/\r\n/g, "\n").trimEnd();
+        const normalized = text
+  .replace(/\r\n/g, "\n")
+  .replace(/\uFEFF/g, "")          // remove BOM if present
+  .replace(/[ \t]+$/gm, "")        // trim trailing spaces per line
+  .trim();
+
 
         // No changes, keep current marquee running
         if (normalized === __lastTasksText) return;
@@ -1317,24 +1302,50 @@
       }
     }
 
+    // ===== KEEP AWAKE (no scrolling) =====
+function startKeepAwake(){
+  let wakeLock = null;
+
+  async function request(){
+    try{
+      if ("wakeLock" in navigator && navigator.wakeLock?.request){
+        wakeLock = await navigator.wakeLock.request("screen");
+      }
+    } catch(e){
+      // ignore
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") request();
+  });
+
+  request();
+
+  // Re-try occasionally in case the lock gets released by the OS
+  setInterval(() => {
+    if (document.visibilityState === "visible" && !wakeLock) request();
+  }, 60000);
+}
+
     document.addEventListener("DOMContentLoaded", () => {
       applyLayoutMode();
-
       updateClock();
       loadWeather();
       loadForecast();
       loadEvents();
       loadPriority();
       loadTasks();
-
       setInterval(updateClock, 15000);
       setInterval(loadWeather, 300000);
       setInterval(loadForecast, 1800000);
       setInterval(loadEvents, 60000);
       setInterval(loadPriority, 60000);
       setInterval(loadTasks, 60000);
+      startKeepAwake();
     });
   </script>
 </body>
 </html>
+
 
