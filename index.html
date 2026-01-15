@@ -434,7 +434,7 @@
   align-items:flex-start;
   gap:8px;
   min-width:0;
-  margin-bottom:6px;
+  margin-bottom:2px;
 }
 
 .pinned-row:last-child{ margin-bottom:0; }
@@ -1199,7 +1199,17 @@ function startTasksMarquee(speedPxPerSec){
   return map[key] || "•";
 }
 
-    
+ function taskEmojiOnly(s){
+  const str = (s || "").trim();
+  if (!str) return "";
+
+  // Capture leading emoji sequence (includes ZWJ and variation selectors)
+  const m = str.match(/^([\p{Extended_Pictographic}\uFE0F\u200D]+(?:\s*[\p{Extended_Pictographic}\uFE0F\u200D]+)*)/u);
+
+  // If it starts with emojis, return only that. If not, return the original text.
+  return m ? m[1].trim() : str;
+}
+   
 
 async function loadTasks(){
   const inner = document.getElementById("tasks-inner");
@@ -1257,21 +1267,41 @@ async function loadTasks(){
 }
 
 
-    // Render pinned section
-    if (pinned.length > 0){
-      pinnedBox.style.display = "block";
+   // Render pinned section (Clarity) - NO TEXT, but grouped by location A-Z
+if (pinned.length > 0){
+  pinnedBox.style.display = "block";
+  pinnedBox.innerHTML = "";
 
-      for (const it of pinned){
-        const row = document.createElement("div");
-        row.className = "pinned-row";
-        row.innerHTML =
-          "<div class='pinned-emoji'>🦄</div>" +
-          "<div class='pinned-text'>" + it.location + ": " + it.task + "</div>";
-        pinnedBox.appendChild(row);
-      }
-    } else {
-      pinnedBox.style.display = "none";
+  // Group by location
+  const pinnedByLoc = new Map();
+  for (const it of pinned){
+    const loc = it.location || "";
+    if (!pinnedByLoc.has(loc)) pinnedByLoc.set(loc, []);
+    pinnedByLoc.get(loc).push(it.task);
+  }
+
+  // Alphabetical locations
+  const locs = Array.from(pinnedByLoc.keys()).sort((a,b)=>a.localeCompare(b));
+
+  let firstGroup = true;
+
+  for (const loc of locs){
+    firstGroup = false;
+
+    for (const t of pinnedByLoc.get(loc)){
+      const row = document.createElement("div");
+      row.className = "pinned-row";
+      row.innerHTML =
+        "<div class='pinned-emoji'>🦄</div>" +
+        "<div class='pinned-text'>" + taskEmojiOnly(t) + "</div>";
+      pinnedBox.appendChild(row);
     }
+  }
+} else {
+  pinnedBox.style.display = "none";
+}
+
+
 
     // Render scrolling tasks (everything except Clarity)
     if (byLocation.size === 0){
@@ -1281,7 +1311,10 @@ async function loadTasks(){
 
     const order = ["C","V","C/V"];
 
-    for (const [location, items] of byLocation.entries()){
+    const locations = Array.from(byLocation.keys()).sort((a,b)=>a.localeCompare(b));
+      for (const location of locations){
+      const items = byLocation.get(location);
+
       const locDiv = document.createElement("div");
       locDiv.className = "task-location";
       locDiv.textContent = location;
@@ -1437,6 +1470,7 @@ function startKeepAwake(){
   </script>
 </body>
 </html>
+
 
 
 
