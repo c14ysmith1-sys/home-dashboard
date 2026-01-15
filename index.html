@@ -414,6 +414,50 @@
 }
 #priority-list li:last-child{ margin-bottom:0; }
 
+#tasks-pinned{
+  display:none;            /* hidden when Clarity has 0 tasks */
+  flex:0 0 auto;
+  padding:2px 0 8px 0;
+  margin-bottom:8px;
+  border-bottom:1px solid var(--border-soft);
+  overflow:hidden;
+}
+
+.pinned-title{
+  font-size:14px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.pinned-row{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  min-width:0;
+  margin-bottom:6px;
+}
+
+.pinned-row:last-child{ margin-bottom:0; }
+
+.pinned-emoji{
+  width:22px;
+  text-align:center;
+  flex:0 0 auto;
+  font-size:18px;
+  line-height:1;
+  margin-top:1px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.pinned-text{
+  font-size:14px;
+  min-width:0;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
 
     /* TASKS (wheel marquee, no jump) */
     #tasks-list{
@@ -550,6 +594,7 @@
 
           <section class="card" id="tasks-card">
             <div class="card-header">Today’s Tasks</div>
+            <div id="tasks-pinned" aria-label="Pinned chores"></div>
             <div id="tasks-list">
               <div id="tasks-wheel">
                 <div id="tasks-inner"><div class="task-text">Loading tasks…</div></div>
@@ -1029,9 +1074,18 @@
       }
     }
 
-    /* ===== Priority Tasks ===== */
-    let __lastPriorityText = "";
-    let __lastTasksText = "";
+  /* ===== Priority Tasks ===== */
+let __lastPriorityText = "";
+
+/* ===== Tasks ===== */
+let __lastTasksText = "";
+const CLARITY_KEYS = new Set(["R"]);
+
+function isClarityAssignee(raw){
+  const key = (raw || "").replace(/\s+/g,"").toUpperCase();
+  return CLARITY_KEYS.has(key);
+}
+
 
     async function loadPriority(){
       const panel = document.getElementById("priority-panel");
@@ -1134,9 +1188,23 @@ function startTasksMarquee(speedPxPerSec){
   }, 400);
 }
 
+    function emojiHTML(a){
+  const key = (a || "").toUpperCase();
+  const map = {
+    "C": "🐧",   // or whatever you want for you
+    "V": "🐝",   // your bee for wife
+    "C/V": "👫", // both
+    "R": "🦄"    // Clarity (though you no longer show R in the scrolling list)
+  };
+  return map[key] || "•";
+}
+
+    
 
 async function loadTasks(){
   const inner = document.getElementById("tasks-inner");
+  const pinnedBox = document.getElementById("tasks-pinned");
+  if (!inner || !pinnedBox) return;
 
   try{
     const res = await fetch("dashboard.txt?cb=" + Date.now(), { cache: "no-store" });
@@ -1154,85 +1222,104 @@ async function loadTasks(){
       .replace(/[ \t]+$/gm, "")
       .trim();
 
-        // No changes, keep current marquee running
-        if (normalized === __lastTasksText) return;
+    // No changes, keep current marquee running
+    if (normalized === __lastTasksText) return;
+    __lastTasksText = normalized;
 
-        __lastTasksText = normalized;
+    stopTasksMarquee();
+    inner.innerHTML = "";
+    pinnedBox.innerHTML = "";
 
-        stopTasksMarquee();
-        inner.innerHTML = "";
+    const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
+    if (lines.length === 0){
+      pinnedBox.style.display = "none";
+      inner.innerHTML = "<div class='task-text'>No tasks for today.</div>";
+      return;
+    }
 
-        const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
-        if (lines.length === 0){
-          inner.innerHTML = "<div class='task-text'>No tasks for today.</div>";
-          return;
-        }
+    const pinned = [];            // Clarity tasks (R)
+    const byLocation = new Map(); // everything else
 
-        const byLocation = new Map();
-        for (const line of lines){
-          const parts = line.split(/\s*\|\s*/).map(p => p.trim());
-          if (parts.length < 3) continue;
+    for (const line of lines){
+  const parts = line.split(/\s*\|\s*/).map(p => p.trim());
+  if (parts.length < 3) continue;
 
-          const location = parts[0];
-          const assigneeRaw = parts[1];
-          const task = parts.slice(2).join(" | ");
+  const location = (parts[0] || "").replace(/^[•\-]\s*/,"");
+  const assigneeRaw = parts[1] || "";
+  const task = parts.slice(2).join(" | ");
 
-          if (!byLocation.has(location)) byLocation.set(location, []);
-          byLocation.get(location).push({ assigneeRaw, task });
-        }
-
-        if (byLocation.size === 0){
-          inner.innerHTML =
-            "<div class='task-text'>No tasks parsed. Expected: Location | Assignee | Task</div>";
-          return;
-        }
-
-        function emojiHTML(a){
-          const key = a.replace(/\s+/g,"").toUpperCase();
-          if (key === "C") return "🐧";
-          if (key === "V") return "🐝";
-          if (key === "C/V") return "👫";
-          if (key === "R") return "🦄";
-          return "";
-        }
-
-        const order = ["C","V","C/V","R"];
-
-        for (const [location, items] of byLocation.entries()){
-          const locDiv = document.createElement("div");
-          locDiv.className = "task-location";
-          locDiv.textContent = location;
-          inner.appendChild(locDiv);
-
-          const groups = new Map();
-          for (const it of items){
-            const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
-            if (!groups.has(key)) groups.set(key, []);
-            groups.get(key).push(it.task);
-          }
-
-          for (const a of order){
-            const tasks = groups.get(a);
-            if (!tasks || tasks.length === 0) continue;
-
-            for (const t of tasks){
-              const row = document.createElement("div");
-              row.className = "task-line";
-              row.innerHTML =
-                "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
-                "<div class='task-text'>" + t + "</div>";
-              inner.appendChild(row);
-            }
-          }
-        }
-
-        startTasksMarquee(4);
-} catch(e){
-  const inner = document.getElementById("tasks-inner");
-  if (inner) inner.innerHTML = "<div class='task-text'>Tasks error: " + (e?.message || e) + "</div>";
+  if (isClarityAssignee(assigneeRaw)){
+    pinned.push({ location, task });
+  } else {
+    if (!byLocation.has(location)) byLocation.set(location, []);
+    byLocation.get(location).push({ assigneeRaw, task });
+  }
 }
 
+
+    // Render pinned section
+    if (pinned.length > 0){
+      pinnedBox.style.display = "block";
+
+      const title = document.createElement("div");
+      title.className = "pinned-title";
+      title.textContent = "Clarity: " + pinned.length + " chores left";
+      pinnedBox.appendChild(title);
+
+      for (const it of pinned){
+        const row = document.createElement("div");
+        row.className = "pinned-row";
+        row.innerHTML =
+          "<div class='pinned-emoji'>🦄</div>" +
+          "<div class='pinned-text'>" + it.location + ": " + it.task + "</div>";
+        pinnedBox.appendChild(row);
+      }
+    } else {
+      pinnedBox.style.display = "none";
     }
+
+    // Render scrolling tasks (everything except Clarity)
+    if (byLocation.size === 0){
+      inner.innerHTML = "<div class='task-text'>No other tasks.</div>";
+      return;
+    }
+
+    const order = ["C","V","C/V"];
+
+    for (const [location, items] of byLocation.entries()){
+      const locDiv = document.createElement("div");
+      locDiv.className = "task-location";
+      locDiv.textContent = location;
+      inner.appendChild(locDiv);
+
+      const groups = new Map();
+      for (const it of items){
+        const key = it.assigneeRaw.replace(/\s+/g,"").toUpperCase();
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(it.task);
+      }
+
+      for (const a of order){
+        const tasks = groups.get(a);
+        if (!tasks || tasks.length === 0) continue;
+
+        for (const t of tasks){
+          const row = document.createElement("div");
+          row.className = "task-line";
+          row.innerHTML =
+            "<div class='task-emoji'>" + emojiHTML(a) + "</div>" +
+            "<div class='task-text'>" + t + "</div>";
+          inner.appendChild(row);
+        }
+      }
+    }
+
+    startTasksMarquee(4);
+  } catch(e){
+    inner.innerHTML =
+      "<div class='task-text'>Tasks error: " + (e?.message || e) + "</div>";
+  }
+}
 
     async function loadForecast(){
       const row = document.getElementById("forecast-row");
@@ -1316,9 +1403,10 @@ function startKeepAwake(){
     try{
       if ("wakeLock" in navigator && navigator.wakeLock?.request){
         wakeLock = await navigator.wakeLock.request("screen");
+        wakeLock.addEventListener("release", () => { wakeLock = null; });
       }
     } catch(e){
-      // ignore
+      wakeLock = null;
     }
   }
 
@@ -1328,11 +1416,12 @@ function startKeepAwake(){
 
   request();
 
-  // Re-try occasionally in case the lock gets released by the OS
+  // retry only when visible and only if we do not currently hold a lock
   setInterval(() => {
     if (document.visibilityState === "visible" && !wakeLock) request();
   }, 60000);
 }
+
 
     document.addEventListener("DOMContentLoaded", () => {
       applyLayoutMode();
