@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <title>Home Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="refresh" content="1800" />
 
   <style>
     :root{
@@ -1032,6 +1031,7 @@
 
     /* ===== Priority Tasks ===== */
     let __lastPriorityText = "";
+    let __lastTasksText = "";
 
     async function loadPriority(){
       const panel = document.getElementById("priority-panel");
@@ -1227,9 +1227,11 @@ async function loadTasks(){
         }
 
         startTasksMarquee(4);
-      } catch(e){
-        console.log(e);
-      }
+} catch(e){
+  const inner = document.getElementById("tasks-inner");
+  if (inner) inner.innerHTML = "<div class='task-text'>Tasks error: " + (e?.message || e) + "</div>";
+}
+
     }
 
     async function loadForecast(){
