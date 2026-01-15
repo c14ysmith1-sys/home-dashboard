@@ -1261,11 +1261,6 @@ async function loadTasks(){
     if (pinned.length > 0){
       pinnedBox.style.display = "block";
 
-      const title = document.createElement("div");
-      title.className = "pinned-title";
-      title.textContent = "Clarity: " + pinned.length + " chores left";
-      pinnedBox.appendChild(title);
-
       for (const it of pinned){
         const row = document.createElement("div");
         row.className = "pinned-row";
@@ -1442,6 +1437,7 @@ function startKeepAwake(){
   </script>
 </body>
 </html>
+
 
 
 
