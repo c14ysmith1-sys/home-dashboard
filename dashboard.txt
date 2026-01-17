@@ -10,7 +10,7 @@ Kitchen | C/V | Pantry: toss expired food
 Kitchen | V | Wipe dining table
 Kitchen | C | Clean sink
 Kitchen | C/V | Deep clean oven
-Kids Food | R | 🧼 🥪 🍱 wash lunch containers
+Kids Food | R | 👩‍🍳 🧼 🥪 🍱 wash lunch containers
 Kids Food | V | Wash kids water bottles
 Kids Food | C/V | Clean high chair
 Floors | C/V | Wipe switches + door handles
@@ -21,7 +21,7 @@ Pets | C | Wash pet food/water bowls
 Pets | C | Scoop boxes + Refill food
 Pets | V | Flea/tick/heartworm meds
 Pets | C | Vacuum litter area
-Pets | R | 🐶 🍽️  feed Chester
+Pets | R | 👩‍🍳 🐶 🍽️  feed Chester
 Pets | C/V | Walk dog
 Pets | C | Pick up dog poop
 Pets | V | Vacuum dog bed
@@ -37,10 +37,10 @@ Car | C | Wash Victoria’s car
 Car | C/V | Check windshield washer fluid
 Home | R | 🚪 👟 👚 🎒 reset entryway (shoes/coats/bags)
 Home | R | ⤴️ 🧺 🧸 pick up stairs/hall items
-Home | R | 👚➡️ 🧺 clothes off floor to hamper
+Home | R | 🛏️ 👚➡️ 🧺 clothes off floor to hamper
 Outside | C/V | Bring in packages
 Deep Clean | C | Clean washing machine filter + run tub clean
-Kitchen | R | 🍽️ ➡️ 🧼🚰 collect dishes to sink
+Kitchen | R | 👩‍🍳 🍽️ ➡️ 🧼🚰 collect dishes to sink
 Pets | V | Brush cats
 Planning | C/V | Review calendar for
 Kitchen | V | Wipe fridge handles/doors
@@ -55,18 +55,18 @@ Kitchen | V | Replace/sanitize sponge
 Laundry | C | Wash Clay clothes
 Laundry | C | Wash towels
 Laundry | C/V | Wash and replace hand towels
-Bathrooms | R | 🧽  ⤴️🚰  🛁 wipe sink + toothbrush holder
+Bathrooms | R | ⤴️ 🧽 🚰  🛁 wipe sink + toothbrush holder
 Bathrooms | R | 🧻 🔁  🚽 replace toilet paper
 Bathrooms | V | Restock soap/shampoo/kids bath
 Bathrooms | V | Wipe bath tub after use
 Floors | C/V | Run robot vacuum
-Pets | R | 🐾💧🥣 refill pet water bowls
-Pets | R | 🐱 ⛲ fill cat fountain
+Pets | R | 👩‍🍳 🐾💧🥣 refill pet water bowls
+Pets | R | 👩‍🍳 🐱 ⛲ fill cat fountain
 Pets | C/V | Refill dog food
 Kids | V | Repack diaper/toddler bag
 Kids | C/V | Trim Clarity nails
 Kids | C/V | Trim Eloise nails
-Kids | R | 🧽 💺 ✍️ wipe kids play table
+Kids | R | ⤴️ 🧽 💺 ✍️ wipe kids play table
 Outside | V | Sweep porch/entry
 Laundry | C/V | Run washer self-clean cycle
 Pets | C/V | Dog bath
