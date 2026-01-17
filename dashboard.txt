@@ -55,7 +55,7 @@ Kitchen | V | Replace/sanitize sponge
 Laundry | C | Wash Clay clothes
 Laundry | C | Wash towels
 Laundry | C/V | Wash and replace hand towels
-Bathrooms | R | 🧽 🚰  🪥 🛁 wipe sink + toothbrush holder
+Bathrooms | R | 🧽  ⤴️🚰  🛁 wipe sink + toothbrush holder
 Bathrooms | R | 🧻 🔁  🚽 replace toilet paper
 Bathrooms | V | Restock soap/shampoo/kids bath
 Bathrooms | V | Wipe bath tub after use
