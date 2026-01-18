@@ -1,6 +1,6 @@
 Sunday
 ☁️ 23°F / 10°F
-Mostly Cloudy   0 %
+Cloudy   0.13 %
 Monday
 💨 20°F / 5°F
 Windy   0 %
@@ -8,7 +8,7 @@ Tuesday
 ☀️ 25°F / 5°F
 Mostly Clear   0 %
 Wednesday
-💨 37°F / 19°F
+💨 37°F / 20°F
 Windy   0 %
 Thursday
 ☁️ 27°F / 18°F
@@ -17,14 +17,14 @@ Friday
 ☁️ 30°F / 11°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 14°F / 2°F
+☁️ 15°F / 2°F
 Mostly Cloudy   0 %
 Sunday
-❄️ 18°F / 0°F
-Snow   0.46 %
+❄️ 18°F / -0°F
+Snow   0.45 %
 Monday
 ❄️ 20°F / 14°F
-Snow   0.61 %
+Snow   0.6 %
 Tuesday
 ☀️ 32°F / 6°F
 Mostly Clear   0 %
