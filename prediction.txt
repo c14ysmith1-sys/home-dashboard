@@ -3,10 +3,10 @@ Monday
 Mostly Cloudy   0 %
 Tuesday
 ☀️ 25°F / 6°F
-Clear   0 %
+Mostly Clear   0 %
 Wednesday
 💨 39°F / 22°F
-Windy   0 %
+Windy   0.29 %
 Thursday
 ☀️ 30°F / 20°F
 Mostly Clear   0 %
