@@ -8,8 +8,8 @@ Friday
 ☁️ 21°F / -0°F
 Mostly Cloudy   0 %
 Saturday
-❄️ 13°F / -1°F
-Snow   0.52 %
+❄️ 12°F / -0°F
+Heavy Snow   0.49 %
 Sunday
 ❄️ 17°F / 9°F
 Snow   0.8 %
@@ -17,7 +17,7 @@ Monday
 ☁️ 12°F / 5°F
 Mostly Cloudy   0 %
 Tuesday
-☁️ 20°F / 3°F
+☁️ 23°F / 2°F
 Partly Cloudy   0 %
 Wednesday
 ☁️ 19°F / 3°F
