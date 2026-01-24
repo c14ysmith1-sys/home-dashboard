@@ -3,13 +3,13 @@ Saturday
 Heavy Snow   1 %
 Sunday
 ❄️ 15°F / 9°F
-Heavy Snow   0.95 %
+Heavy Snow   0.96 %
 Monday
 ☀️ 9°F / -4°F
 Mostly Clear   0 %
 Tuesday
-☁️ 20°F / 0°F
-Mostly Cloudy   0 %
+💨 19°F / 0°F
+Windy   0 %
 Wednesday
 ☁️ 13°F / -4°F
 Mostly Cloudy   0 %
@@ -17,14 +17,14 @@ Thursday
 ☁️ 11°F / -2°F
 Partly Cloudy   0 %
 Friday
-☁️ 12°F / -4°F
+☁️ 13°F / -4°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 16°F / -1°F
-Partly Cloudy   0 %
+☁️ 16°F / 1°F
+Mostly Cloudy   0 %
 Sunday
-☁️ 21°F / 5°F
-Partly Cloudy   0 %
+☁️ 20°F / 3°F
+Mostly Cloudy   0 %
 Monday
-☁️ 24°F / 9°F
+☁️ 25°F / 4°F
 Mostly Cloudy   0 %
