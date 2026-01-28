@@ -1,6 +1,6 @@
 Wednesday
-☁️ 15°F / -3°F
-Partly Cloudy   0 %
+☀️ 15°F / -2°F
+Mostly Clear   0 %
 Thursday
 ☁️ 15°F / -6°F
 Cloudy   0 %
@@ -8,7 +8,7 @@ Friday
 ☁️ 13°F / -5°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 15°F / -1°F
+☁️ 15°F / -2°F
 Mostly Cloudy   0 %
 Sunday
 ☁️ 22°F / 8°F
