@@ -1,11 +1,11 @@
 Thursday
 ☁️ 17°F / -3°F
-Mostly Cloudy   0 %
+Partly Cloudy   0 %
 Friday
 ☁️ 16°F / -2°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 16°F / -2°F
+☁️ 16°F / -1°F
 Mostly Cloudy   0 %
 Sunday
 ☁️ 24°F / 2°F
@@ -18,7 +18,7 @@ Tuesday
 Cloudy   0 %
 Wednesday
 ☁️ 29°F / 18°F
-Cloudy   0.36 %
+Cloudy   0.47 %
 Thursday
 ☁️ 32°F / 16°F
 Mostly Cloudy   0 %
