@@ -1,6 +1,6 @@
 Saturday
-☁️ 18°F / -1°F
-Cloudy   0 %
+❄️ 18°F / -1°F
+Snow   0.97 %
 Sunday
 ☁️ 24°F / 0°F
 Mostly Cloudy   0 %
@@ -8,7 +8,7 @@ Monday
 ☁️ 30°F / 13°F
 Cloudy   0 %
 Tuesday
-☁️ 29°F / 19°F
+☁️ 28°F / 19°F
 Mostly Cloudy   0 %
 Wednesday
 ☁️ 22°F / 12°F
