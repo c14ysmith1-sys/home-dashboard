@@ -5,8 +5,8 @@ Monday
 ☁️ 30°F / 12°F
 Cloudy   0 %
 Tuesday
-☁️ 28°F / 17°F
-Cloudy   0 %
+❄️ 28°F / 17°F
+Snow   0.59 %
 Wednesday
 ☁️ 21°F / 8°F
 Partly Cloudy   0 %
@@ -27,4 +27,4 @@ Monday
 Mostly Cloudy   0 %
 Tuesday
 ❄️ 41°F / 30°F
-Wintry Mix   0.36 %
+Flurries   0.36 %
