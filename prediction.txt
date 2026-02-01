@@ -8,7 +8,7 @@ Tuesday
 ☁️ 28°F / 18°F
 Cloudy   0 %
 Wednesday
-☁️ 21°F / 10°F
+☁️ 22°F / 11°F
 Partly Cloudy   0 %
 Thursday
 ☁️ 24°F / 10°F
@@ -26,5 +26,5 @@ Monday
 ☁️ 32°F / 18°F
 Mostly Cloudy   0 %
 Tuesday
-☁️ 35°F / 22°F
+☁️ 36°F / 22°F
 Mostly Cloudy   0 %
