@@ -2,7 +2,7 @@ Monday
 ☁️ 29°F / 17°F
 Cloudy   0 %
 Tuesday
-☁️ 28°F / 18°F
+☁️ 28°F / 17°F
 Cloudy   0 %
 Wednesday
 ☁️ 21°F / 10°F
@@ -27,4 +27,4 @@ Tuesday
 Partly Cloudy   0 %
 Wednesday
 ☁️ 50°F / 38°F
-Cloudy   0.22 %
+Cloudy   0.19 %
