@@ -2,29 +2,29 @@ Monday
 ☁️ 29°F / 17°F
 Cloudy   0 %
 Tuesday
-☁️ 28°F / 17°F
+☁️ 29°F / 17°F
 Cloudy   0 %
 Wednesday
-☁️ 21°F / 10°F
-Mostly Cloudy   0 %
+☁️ 21°F / 9°F
+Partly Cloudy   0 %
 Thursday
 ☁️ 25°F / 9°F
 Mostly Cloudy   0 %
 Friday
-☁️ 36°F / 22°F
-Mostly Cloudy   0 %
+☁️ 36°F / 21°F
+Cloudy   0 %
 Saturday
-☁️ 24°F / 14°F
+☁️ 27°F / 15°F
 Partly Cloudy   0 %
 Sunday
-☁️ 31°F / 19°F
+☁️ 32°F / 19°F
 Partly Cloudy   0 %
 Monday
-☀️ 36°F / 21°F
+☀️ 37°F / 22°F
 Mostly Clear   0 %
 Tuesday
-☁️ 40°F / 19°F
-Partly Cloudy   0 %
+☁️ 43°F / 23°F
+Mostly Cloudy   0 %
 Wednesday
-☁️ 50°F / 38°F
-Cloudy   0.19 %
+☁️ 52°F / 43°F
+Cloudy   0.25 %
