@@ -1,15 +1,15 @@
 Thursday
-❄️ 24°F / 15°F
-Snow   0.88 %
+☁️ 24°F / 15°F
+Cloudy   0 %
 Friday
 ❄️ 34°F / 19°F
-Wintry Mix   0.72 %
+Snow   0.72 %
 Saturday
 ☁️ 23°F / 11°F
 Partly Cloudy   0 %
 Sunday
-☁️ 27°F / 15°F
-Mostly Cloudy   0 %
+☁️ 26°F / 15°F
+Cloudy   0 %
 Monday
 ☁️ 35°F / 19°F
 Mostly Cloudy   0 %
@@ -18,7 +18,7 @@ Tuesday
 Mostly Cloudy   0 %
 Wednesday
 ❄️ 41°F / 30°F
-Wintry Mix   0.43 %
+Snow   0.42 %
 Thursday
 ☁️ 37°F / 29°F
 Mostly Cloudy   0 %
