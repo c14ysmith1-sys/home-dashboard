@@ -11,20 +11,20 @@ Monday
 ☁️ 36°F / 19°F
 Mostly Cloudy   0 %
 Tuesday
-☁️ 44°F / 30°F
-Mostly Cloudy   0 %
+☁️ 44°F / 31°F
+Partly Cloudy   0 %
 Wednesday
-❄️ 40°F / 31°F
-Wintry Mix   0.45 %
+❄️ 38°F / 31°F
+Wintry Mix   0.41 %
 Thursday
-☁️ 36°F / 28°F
-Mostly Cloudy   0 %
+❄️ 36°F / 29°F
+Wintry Mix   0.44 %
 Friday
-☁️ 37°F / 26°F
+☁️ 36°F / 26°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 40°F / 26°F
-Partly Cloudy   0 %
+☁️ 31°F / 24°F
+Partly Cloudy   0.23 %
 Sunday
-☁️ 44°F / 28°F
-Cloudy   0 %
+☁️ 34°F / 21°F
+Mostly Cloudy   0 %
