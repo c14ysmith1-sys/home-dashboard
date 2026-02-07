@@ -109,3 +109,4 @@ Deep Clean | C | Clean dishwasher filter + run clean cycle
 Deep Clean | C/V | Clean vents + return air grates
 Deep Clean | C | Wipe ceiling fans
 Deep Clean | C | Test smoke detectors
+Deep Clean | C/V | Rotate/flip mattresses
