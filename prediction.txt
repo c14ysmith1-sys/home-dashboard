@@ -1,14 +1,14 @@
 Saturday
-☁️ 50°F / 31°F
-Mostly Cloudy   0 %
+🌧️ 49°F / 31°F
+Drizzle   0.6 %
 Sunday
 🌧️ 54°F / 37°F
 Rain   0.91 %
 Monday
-☁️ 56°F / 33°F
+☁️ 56°F / 34°F
 Mostly Cloudy   0 %
 Tuesday
-☁️ 54°F / 38°F
+☁️ 55°F / 38°F
 Cloudy   0 %
 Wednesday
 🌧️ 67°F / 47°F
@@ -18,7 +18,7 @@ Thursday
 Drizzle   0.31 %
 Friday
 🌧️ 52°F / 35°F
-Rain   0.53 %
+Rain   0.54 %
 Saturday
 ☁️ 39°F / 28°F
 Mostly Cloudy   0 %
