@@ -14,7 +14,7 @@ Thursday
 🌧️ 60°F / 43°F
 Rain   0.5 %
 Friday
-🌧️ 57°F / 39°F
+🌧️ 56°F / 40°F
 Drizzle   0.67 %
 Saturday
 ☁️ 42°F / 32°F
@@ -23,7 +23,7 @@ Sunday
 ☁️ 32°F / 26°F
 Mostly Cloudy   0 %
 Monday
-☀️ 36°F / 22°F
+☀️ 36°F / 23°F
 Mostly Clear   0 %
 Tuesday
 ☀️ 39°F / 21°F
