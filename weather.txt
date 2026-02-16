@@ -1,2 +1,2 @@
-42°
-Feels like: 35°
+55°
+Feels like: 45°
