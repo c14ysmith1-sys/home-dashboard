@@ -3,13 +3,13 @@ Tuesday
 Cloudy   0 %
 Wednesday
 🌧️ 66°F / 47°F
-Drizzle   0.51 %
+Drizzle   0.53 %
 Thursday
-🌧️ 63°F / 44°F
+🌧️ 64°F / 45°F
 Drizzle   0.61 %
 Friday
 🌧️ 54°F / 32°F
-Drizzle   0.4 %
+Drizzle   0.42 %
 Saturday
 ☁️ 41°F / 26°F
 Partly Cloudy   0 %
