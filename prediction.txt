@@ -1,6 +1,6 @@
 Monday
-❄️ 29°F / 18°F
-Snow   1 %
+☁️ 29°F / 18°F
+Cloudy   0.71 %
 Tuesday
 💨 37°F / 18°F
 Windy   0 %
@@ -9,7 +9,7 @@ Wednesday
 Partly Cloudy   0 %
 Thursday
 ❄️ 41°F / 29°F
-Snow   0.67 %
+Snow   0.7 %
 Friday
 ☀️ 53°F / 26°F
 Clear   0 %
@@ -20,11 +20,11 @@ Sunday
 ☁️ 40°F / 29°F
 Cloudy   0 %
 Monday
-❄️ 42°F / 24°F
-Snow   0.52 %
+❄️ 41°F / 24°F
+Snow   0.53 %
 Tuesday
 ☁️ 40°F / 21°F
-Mostly Cloudy   0.26 %
+Partly Cloudy   0.27 %
 Wednesday
 ❄️ 48°F / 30°F
-Snow   0.45 %
+Snow   0.46 %
