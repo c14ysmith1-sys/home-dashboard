@@ -9,19 +9,19 @@ Saturday
 Partly Cloudy   0.26 %
 Sunday
 ☁️ 37°F / 26°F
-Mostly Cloudy   0.2 %
+Mostly Cloudy   0.19 %
 Monday
 ☀️ 43°F / 23°F
-Mostly Clear   0.29 %
+Mostly Clear   0.28 %
 Tuesday
-🌧️ 49°F / 28°F
-Rain   0.52 %
+🌧️ 50°F / 28°F
+Rain   0.5 %
 Wednesday
 🌧️ 59°F / 38°F
-Rain   0.82 %
+Rain   0.83 %
 Thursday
-🌧️ 64°F / 52°F
-Drizzle   0.58 %
+🌧️ 64°F / 51°F
+Drizzle   0.59 %
 Friday
 🌧️ 67°F / 55°F
 Drizzle   0.56 %
