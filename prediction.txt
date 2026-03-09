@@ -1,6 +1,6 @@
 Monday
-☀️ 69°F / 42°F
-Clear   0 %
+☀️ 69°F / 43°F
+Mostly Clear   0 %
 Tuesday
 ☁️ 75°F / 62°F
 Mostly Cloudy   0 %
@@ -8,8 +8,8 @@ Wednesday
 ⛈️ 68°F / 37°F
 Thunderstorm   0.93 %
 Thursday
-☀️ 48°F / 31°F
-Mostly Clear   0 %
+☀️ 47°F / 31°F
+Clear   0 %
 Friday
 💨 55°F / 39°F
 Windy   0 %
