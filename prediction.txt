@@ -3,10 +3,10 @@ Friday
 Windy   0 %
 Saturday
 ☁️ 48°F / 31°F
-Mostly Cloudy   0 %
+Cloudy   0 %
 Sunday
 🌧️ 68°F / 41°F
-Rain   0.57 %
+Rain   0.56 %
 Monday
 🌧️ 60°F / 17°F
 Rain   0.82 %
