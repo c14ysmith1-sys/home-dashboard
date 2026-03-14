@@ -1,30 +1,30 @@
 Saturday
-☁️ 50°F / 32°F
+☁️ 50°F / 33°F
 Cloudy   0 %
 Sunday
 🌧️ 69°F / 42°F
-Rain   0.73 %
+Rain   0.74 %
 Monday
-🌧️ 49°F / 21°F
+🌧️ 50°F / 20°F
 Rain   0.79 %
 Tuesday
 ☁️ 29°F / 15°F
 Partly Cloudy   0 %
 Wednesday
-❄️ 46°F / 22°F
-Snow   0.4 %
+❄️ 45°F / 22°F
+Snow   0.44 %
 Thursday
 ☁️ 59°F / 36°F
-Mostly Cloudy   0 %
+Partly Cloudy   0 %
 Friday
-☁️ 63°F / 37°F
+☁️ 61°F / 35°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 67°F / 44°F
+☁️ 63°F / 35°F
 Partly Cloudy   0 %
 Sunday
-🌧️ 48°F / 34°F
-Drizzle   0.32 %
+☁️ 46°F / 31°F
+Partly Cloudy   0 %
 Monday
-☁️ 60°F / 32°F
+☁️ 55°F / 37°F
 Partly Cloudy   0 %
