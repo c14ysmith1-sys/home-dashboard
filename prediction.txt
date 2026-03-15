@@ -1,17 +1,17 @@
 Sunday
 🌧️ 71°F / 43°F
-Rain   0.86 %
+Heavy Rain   0.92 %
 Monday
-🌧️ 58°F / 19°F
-Rain   0.91 %
+🌧️ 58°F / 20°F
+Rain   0.92 %
 Tuesday
 ☁️ 27°F / 14°F
-Mostly Cloudy   0 %
+Partly Cloudy   0 %
 Wednesday
-❄️ 45°F / 23°F
-Snow   0.39 %
+❄️ 46°F / 23°F
+Snow   0.44 %
 Thursday
-☁️ 61°F / 37°F
+☁️ 60°F / 37°F
 Partly Cloudy   0 %
 Friday
 ☁️ 66°F / 40°F
