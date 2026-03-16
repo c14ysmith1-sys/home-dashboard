@@ -6,21 +6,21 @@ Tuesday
 Mostly Cloudy   0 %
 Wednesday
 ☁️ 47°F / 23°F
-Mostly Cloudy   0 %
+Mostly Cloudy   0.27 %
 Thursday
-☁️ 60°F / 36°F
+☁️ 57°F / 36°F
 Mostly Cloudy   0 %
 Friday
-☁️ 69°F / 43°F
+☁️ 68°F / 42°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 72°F / 50°F
-Partly Cloudy   0 %
-Sunday
 ☀️ 73°F / 50°F
 Mostly Clear   0 %
+Sunday
+☁️ 68°F / 45°F
+Partly Cloudy   0 %
 Monday
-☁️ 59°F / 36°F
+☁️ 47°F / 35°F
 Mostly Cloudy   0 %
 Tuesday
 ☁️ 54°F / 31°F
