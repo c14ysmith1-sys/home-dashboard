@@ -1,12 +1,12 @@
 Monday
 ❄️ 56°F / 21°F
-Wintry Mix   0.95 %
+Wintry Mix   0.96 %
 Tuesday
-☁️ 26°F / 15°F
+☁️ 25°F / 15°F
 Mostly Cloudy   0 %
 Wednesday
 ☁️ 47°F / 23°F
-Mostly Cloudy   0.27 %
+Mostly Cloudy   0 %
 Thursday
 ☁️ 60°F / 36°F
 Mostly Cloudy   0 %
@@ -27,4 +27,4 @@ Tuesday
 Mostly Cloudy   0 %
 Wednesday
 🌧️ 63°F / 43°F
-Drizzle   0.34 %
+Drizzle   0.32 %
