@@ -1,26 +1,26 @@
 Tuesday
-❄️ 28°F / 16°F
-Snow   0.97 %
+❄️ 27°F / 16°F
+Snow   0.37 %
 Wednesday
-☁️ 46°F / 24°F
+☁️ 46°F / 23°F
 Mostly Cloudy   0.22 %
 Thursday
-🌧️ 57°F / 35°F
+🌧️ 57°F / 36°F
 Drizzle   0.47 %
 Friday
 ☁️ 65°F / 41°F
 Mostly Cloudy   0 %
 Saturday
-☁️ 74°F / 47°F
+☁️ 73°F / 47°F
 Partly Cloudy   0 %
 Sunday
-☁️ 69°F / 44°F
+☁️ 69°F / 43°F
 Partly Cloudy   0.26 %
 Monday
-☁️ 45°F / 28°F
+☁️ 44°F / 29°F
 Mostly Cloudy   0 %
 Tuesday
-☁️ 50°F / 25°F
+☁️ 50°F / 30°F
 Partly Cloudy   0 %
 Wednesday
 ☁️ 59°F / 34°F
