@@ -1,12 +1,12 @@
 Tuesday
-☁️ 27°F / 15°F
+☁️ 26°F / 15°F
 Mostly Cloudy   0 %
 Wednesday
 ☁️ 45°F / 22°F
 Mostly Cloudy   0 %
 Thursday
-🌧️ 56°F / 36°F
-Drizzle   0.35 %
+🌧️ 57°F / 36°F
+Drizzle   0.4 %
 Friday
 ☁️ 68°F / 42°F
 Mostly Cloudy   0 %
@@ -18,7 +18,7 @@ Sunday
 Partly Cloudy   0 %
 Monday
 🌧️ 47°F / 33°F
-Drizzle   0.33 %
+Drizzle   0.35 %
 Tuesday
 ☁️ 52°F / 32°F
 Partly Cloudy   0 %
