@@ -1,8 +1,8 @@
 Wednesday
-🌧️ 47°F / 22°F
-Rain   1 %
+☁️ 47°F / 22°F
+Mostly Cloudy   0 %
 Thursday
-☁️ 61°F / 36°F
+☁️ 61°F / 35°F
 Partly Cloudy   0 %
 Friday
 ☁️ 69°F / 45°F
@@ -14,8 +14,8 @@ Sunday
 ☁️ 69°F / 41°F
 Partly Cloudy   0.26 %
 Monday
-🌧️ 51°F / 35°F
-Drizzle   0.32 %
+☁️ 51°F / 35°F
+Mostly Cloudy   0 %
 Tuesday
 ☁️ 54°F / 33°F
 Mostly Cloudy   0 %
