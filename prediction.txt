@@ -1,5 +1,5 @@
 Monday
-☁️ 44°F / 31°F
+☁️ 43°F / 30°F
 Mostly Cloudy   0 %
 Tuesday
 ☁️ 52°F / 28°F
@@ -9,7 +9,7 @@ Wednesday
 Mostly Cloudy   0 %
 Thursday
 🌧️ 80°F / 56°F
-Rain   0.69 %
+Rain   0.71 %
 Friday
 🌧️ 59°F / 31°F
 Rain   0.75 %
@@ -23,8 +23,8 @@ Monday
 ☀️ 67°F / 42°F
 Mostly Clear   0 %
 Tuesday
-⛈️ 72°F / 54°F
-Thunderstorm   0.64 %
+🌧️ 72°F / 54°F
+Rain   0.63 %
 Wednesday
 🌧️ 68°F / 60°F
 Rain   0.44 %
