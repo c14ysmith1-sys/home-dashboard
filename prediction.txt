@@ -9,22 +9,22 @@ Wednesday
 Mostly Cloudy   0 %
 Thursday
 🌧️ 80°F / 56°F
-Rain   0.71 %
+Rain   0.69 %
 Friday
 🌧️ 59°F / 31°F
-Rain   0.76 %
+Rain   0.75 %
 Saturday
-☀️ 48°F / 28°F
+☀️ 49°F / 27°F
 Clear   0 %
 Sunday
 ☁️ 57°F / 34°F
 Partly Cloudy   0 %
 Monday
-☁️ 67°F / 42°F
-Partly Cloudy   0.24 %
+☀️ 67°F / 42°F
+Mostly Clear   0 %
 Tuesday
-🌧️ 69°F / 53°F
-Rain   0.64 %
+⛈️ 72°F / 54°F
+Thunderstorm   0.64 %
 Wednesday
-🌧️ 68°F / 55°F
+🌧️ 68°F / 60°F
 Rain   0.44 %
