@@ -3,10 +3,10 @@ Monday
 Windy   0 %
 Tuesday
 ⛈️ 77°F / 62°F
-Thunderstorm   0.47 %
+Thunderstorm   0.48 %
 Wednesday
 ⛈️ 66°F / 52°F
-Thunderstorm   0.87 %
+Thunderstorm   0.86 %
 Thursday
 🌧️ 74°F / 52°F
 Rain   0.83 %
