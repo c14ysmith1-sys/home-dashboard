@@ -111,3 +111,4 @@ Deep Clean | C | Wipe ceiling fans
 Deep Clean | C | Test smoke detectors
 Deep Clean | C/V | Rotate/flip mattresses
 Car | C | Vacuum Clay’s car
+Pets | C | Wash litter boxes
