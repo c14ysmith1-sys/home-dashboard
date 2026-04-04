@@ -1,6 +1,6 @@
 Saturday
-⛈️ 68°F / 46°F
-Thunderstorm   0.97 %
+🌧️ 68°F / 46°F
+Rain   0.97 %
 Sunday
 ☁️ 50°F / 38°F
 Mostly Cloudy   0 %
@@ -9,9 +9,9 @@ Monday
 Mostly Clear   0 %
 Tuesday
 ☀️ 44°F / 28°F
-Mostly Clear   0 %
+Clear   0 %
 Wednesday
-☁️ 62°F / 32°F
+☁️ 62°F / 33°F
 Mostly Cloudy   0 %
 Thursday
 ☁️ 71°F / 52°F
