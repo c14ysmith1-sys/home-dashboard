@@ -14,17 +14,17 @@ Thursday
 🌧️ 70°F / 53°F
 Rain   0.46 %
 Friday
-🌧️ 66°F / 53°F
-Rain   0.77 %
+🌧️ 66°F / 54°F
+Rain   0.75 %
 Saturday
-🌧️ 64°F / 45°F
-Drizzle   0.56 %
+🌧️ 65°F / 44°F
+Drizzle   0.57 %
 Sunday
-🌧️ 71°F / 54°F
-Drizzle   0.31 %
+🌧️ 74°F / 54°F
+Drizzle   0.34 %
 Monday
-⛈️ 73°F / 61°F
-Thunderstorm   0.34 %
+🌧️ 74°F / 60°F
+Rain   0.38 %
 Tuesday
-⛈️ 66°F / 52°F
-Thunderstorm   0.59 %
+🌧️ 67°F / 40°F
+Rain   0.59 %
