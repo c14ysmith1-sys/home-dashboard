@@ -1,6 +1,6 @@
 Friday
 🌧️ 68°F / 48°F
-Drizzle   0.5 %
+Drizzle   0.38 %
 Saturday
 ☀️ 66°F / 40°F
 Mostly Clear   0 %
@@ -15,7 +15,7 @@ Tuesday
 Windy   0 %
 Wednesday
 🌧️ 73°F / 64°F
-Rain   0.63 %
+Rain   0.65 %
 Thursday
 ☁️ 68°F / 59°F
 Cloudy   0 %
