@@ -1,6 +1,6 @@
 Sunday
 ☁️ 55°F / 35°F
-Partly Cloudy   0 %
+Partly Cloudy   0.4 %
 Monday
 ☀️ 54°F / 33°F
 Clear   0 %
@@ -9,7 +9,7 @@ Tuesday
 Windy   0.18 %
 Wednesday
 ⛈️ 74°F / 56°F
-Thunderstorm   0.48 %
+Thunderstorm   0.47 %
 Thursday
 ☁️ 77°F / 57°F
 Partly Cloudy   0 %
