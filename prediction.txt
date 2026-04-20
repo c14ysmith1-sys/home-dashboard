@@ -2,10 +2,10 @@ Monday
 ☀️ 55°F / 31°F
 Clear   0 %
 Tuesday
-💨 73°F / 42°F
+💨 73°F / 41°F
 Windy   0 %
 Wednesday
-⛈️ 72°F / 57°F
+⛈️ 73°F / 56°F
 Thunderstorm   0.68 %
 Thursday
 ☀️ 77°F / 56°F
@@ -24,7 +24,7 @@ Monday
 Rain   0.78 %
 Tuesday
 🌧️ 62°F / 54°F
-Rain   0.59 %
+Rain   0.61 %
 Wednesday
 ☁️ 60°F / 49°F
 Partly Cloudy   0 %
