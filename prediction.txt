@@ -1,12 +1,12 @@
 Tuesday
-💨 74°F / 44°F
-Windy   0.16 %
+☁️ 73°F / 44°F
+Partly Cloudy   0.15 %
 Wednesday
-🌧️ 73°F / 57°F
-Drizzle   0.54 %
+🌧️ 74°F / 58°F
+Rain   0.55 %
 Thursday
 ☀️ 78°F / 57°F
-Mostly Clear   0 %
+Mostly Clear   0.25 %
 Friday
 🌧️ 73°F / 60°F
 Rain   0.68 %
