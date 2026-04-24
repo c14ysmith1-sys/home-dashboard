@@ -1,6 +1,6 @@
 Friday
-⛈️ 73°F / 59°F
-Thunderstorm   0.93 %
+⛈️ 73°F / 58°F
+Thunderstorm   0.82 %
 Saturday
 ☀️ 72°F / 54°F
 Mostly Clear   0 %
@@ -8,11 +8,11 @@ Sunday
 ☀️ 72°F / 48°F
 Mostly Clear   0 %
 Monday
-🌧️ 80°F / 53°F
-Heavy Rain   0.55 %
+🌧️ 79°F / 53°F
+Heavy Rain   0.54 %
 Tuesday
-🌧️ 73°F / 57°F
-Heavy Rain   0.78 %
+🌧️ 74°F / 58°F
+Heavy Rain   0.77 %
 Wednesday
 🌧️ 67°F / 49°F
 Rain   0.62 %
