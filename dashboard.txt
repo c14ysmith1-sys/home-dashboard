@@ -113,3 +113,4 @@ Deep Clean | C/V | Rotate/flip mattresses
 Car | C | Vacuum Clay’s car
 Pets | C | Wash litter boxes
 Car | C | Vacuum Victoria’s car
+Car | C | Rotate Clay’s car tires
