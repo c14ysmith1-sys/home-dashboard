@@ -1,6 +1,6 @@
 Friday
-🌧️ 53°F / 41°F
-Rain   0.89 %
+🌧️ 53°F / 40°F
+Rain   0.88 %
 Saturday
 ☁️ 52°F / 36°F
 Mostly Cloudy   0 %
@@ -24,7 +24,7 @@ Friday
 Mostly Cloudy   0 %
 Saturday
 ☁️ 61°F / 42°F
-Partly Cloudy   0.36 %
+Partly Cloudy   0.33 %
 Sunday
 🌧️ 66°F / 46°F
-Rain   0.39 %
+Rain   0.37 %
