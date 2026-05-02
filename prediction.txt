@@ -9,7 +9,7 @@ Monday
 Drizzle   0.4 %
 Tuesday
 🌧️ 63°F / 45°F
-Rain   0.87 %
+Rain   0.86 %
 Wednesday
 🌧️ 54°F / 42°F
 Rain   0.78 %
