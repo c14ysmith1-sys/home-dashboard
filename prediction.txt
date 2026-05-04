@@ -1,9 +1,9 @@
 Monday
-⛈️ 71°F / 49°F
-Thunderstorm   0.71 %
+🌧️ 70°F / 49°F
+Drizzle   0.7 %
 Tuesday
 🌧️ 61°F / 46°F
-Rain   0.99 %
+Rain   0.98 %
 Wednesday
 🌧️ 57°F / 42°F
 Rain   0.87 %
@@ -15,13 +15,13 @@ Friday
 Drizzle   0.44 %
 Saturday
 🌧️ 68°F / 48°F
-Drizzle   0.55 %
+Drizzle   0.59 %
 Sunday
 🌧️ 63°F / 51°F
-Rain   0.78 %
+Rain   0.81 %
 Monday
 🌧️ 63°F / 45°F
-Drizzle   0.61 %
+Drizzle   0.62 %
 Tuesday
 ☁️ 60°F / 43°F
 Partly Cloudy   0 %
