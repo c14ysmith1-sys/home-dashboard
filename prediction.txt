@@ -1,17 +1,17 @@
 Tuesday
 ⛈️ 83°F / 66°F
-Thunderstorm   0.85 %
+Thunderstorm   0.82 %
 Wednesday
-⛈️ 69°F / 57°F
-Thunderstorm   0.98 %
+🌧️ 69°F / 57°F
+Rain   0.97 %
 Thursday
-☀️ 69°F / 50°F
+☀️ 69°F / 49°F
 Mostly Clear   0 %
 Friday
-🌧️ 65°F / 51°F
-Rain   0.8 %
+🌧️ 66°F / 51°F
+Rain   0.79 %
 Saturday
-🌧️ 76°F / 62°F
+🌧️ 75°F / 62°F
 Drizzle   0.84 %
 Sunday
 🌧️ 75°F / 59°F
@@ -25,6 +25,3 @@ Drizzle   0.48 %
 Wednesday
 ☁️ 74°F / 60°F
 Mostly Cloudy   0 %
-Thursday
-⛈️ 90°F / 61°F
-Thunderstorm   0.5 %
