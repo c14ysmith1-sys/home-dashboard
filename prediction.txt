@@ -1,18 +1,18 @@
 Monday
-🌧️ 81°F / 70°F
-Rain   0.86 %
+🌧️ 80°F / 70°F
+Drizzle   0.87 %
 Tuesday
 ⛈️ 87°F / 71°F
-Thunderstorm   0.94 %
+Thunderstorm   0.93 %
 Wednesday
 ⛈️ 91°F / 72°F
 Thunderstorm   0.66 %
 Thursday
 ⛈️ 91°F / 75°F
-Thunderstorm   0.53 %
+Thunderstorm   0.52 %
 Friday
 ⛈️ 82°F / 68°F
-Thunderstorm   0.59 %
+Thunderstorm   0.58 %
 Saturday
 ☁️ 84°F / 62°F
 Partly Cloudy   0 %
