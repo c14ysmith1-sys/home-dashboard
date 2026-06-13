@@ -1,9 +1,9 @@
 Saturday
 ☁️ 82°F / 61°F
-Partly Cloudy   0.21 %
+Partly Cloudy   0.26 %
 Sunday
 🌧️ 73°F / 59°F
-Rain   0.8 %
+Rain   0.79 %
 Monday
 ☁️ 73°F / 53°F
 Partly Cloudy   0 %
@@ -12,7 +12,7 @@ Tuesday
 Rain   0.59 %
 Wednesday
 🌧️ 74°F / 58°F
-Heavy Rain   0.69 %
+Heavy Rain   0.7 %
 Thursday
 🌧️ 74°F / 63°F
 Heavy Rain   0.86 %
