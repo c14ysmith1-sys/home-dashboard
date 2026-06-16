@@ -1,9 +1,9 @@
 Tuesday
 🌧️ 74°F / 56°F
-Heavy Rain   0.7 %
+Heavy Rain   0.66 %
 Wednesday
-🌧️ 77°F / 56°F
-Rain   0.79 %
+🌧️ 77°F / 55°F
+Heavy Rain   0.78 %
 Thursday
 🌧️ 75°F / 63°F
 Rain   0.73 %
