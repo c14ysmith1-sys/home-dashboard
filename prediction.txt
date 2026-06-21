@@ -1,11 +1,11 @@
 Sunday
 🌧️ 77°F / 57°F
-Heavy Rain   0.91 %
+Heavy Rain   1 %
 Monday
 🌧️ 70°F / 62°F
-Rain   0.95 %
+Rain   0.94 %
 Tuesday
-☀️ 77°F / 56°F
+☀️ 78°F / 56°F
 Mostly Clear   0 %
 Wednesday
 🌧️ 79°F / 57°F
@@ -17,11 +17,11 @@ Friday
 🌧️ 80°F / 62°F
 Drizzle   0.43 %
 Saturday
-🌧️ 80°F / 64°F
-Rain   0.72 %
+⛈️ 80°F / 64°F
+Thunderstorm   0.72 %
 Sunday
-🌧️ 83°F / 68°F
-Drizzle   0.4 %
+⛈️ 83°F / 68°F
+Thunderstorm   0.4 %
 Monday
 ☁️ 87°F / 69°F
 Partly Cloudy   0.29 %
