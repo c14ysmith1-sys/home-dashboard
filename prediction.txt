@@ -1,9 +1,9 @@
 Monday
 ☀️ 77°F / 55°F
-Mostly Clear   0 %
+Clear   0 %
 Tuesday
 ☀️ 79°F / 54°F
-Mostly Clear   0.29 %
+Mostly Clear   0.28 %
 Wednesday
 🌧️ 81°F / 63°F
 Rain   0.65 %
@@ -11,17 +11,17 @@ Thursday
 🌧️ 77°F / 65°F
 Rain   0.87 %
 Friday
-🌧️ 79°F / 63°F
+🌧️ 80°F / 63°F
 Drizzle   0.51 %
 Saturday
-⛈️ 84°F / 67°F
+⛈️ 85°F / 67°F
 Thunderstorm   0.5 %
 Sunday
 ⛈️ 89°F / 71°F
 Thunderstorm   0.32 %
 Monday
-☀️ 91°F / 75°F
-Mostly Clear   0 %
+☁️ 91°F / 74°F
+Partly Cloudy   0 %
 Tuesday
 🌧️ 91°F / 76°F
 Drizzle   0.32 %
