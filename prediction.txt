@@ -1,12 +1,12 @@
 Friday
 🌧️ 74°F / 66°F
-Rain   0.98 %
+Rain   0.99 %
 Saturday
-🌧️ 80°F / 67°F
-Rain   0.86 %
+🌧️ 79°F / 67°F
+Rain   0.85 %
 Sunday
 ⛈️ 86°F / 66°F
-Thunderstorm   0.46 %
+Thunderstorm   0.47 %
 Monday
 ☁️ 92°F / 73°F
 Partly Cloudy   0 %
