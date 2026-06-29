@@ -8,8 +8,8 @@ Wednesday
 ☀️ 93°F / 75°F
 Clear   0 %
 Thursday
-☀️ 92°F / 75°F
-Mostly Clear   0.28 %
+☀️ 93°F / 75°F
+Mostly Clear   0.27 %
 Friday
 ⛈️ 89°F / 75°F
 Thunderstorm   0.45 %
@@ -20,7 +20,7 @@ Sunday
 ⛈️ 87°F / 74°F
 Thunderstorm   0.38 %
 Monday
-⛈️ 84°F / 70°F
+⛈️ 84°F / 71°F
 Thunderstorm   0.48 %
 Tuesday
 ☀️ 84°F / 70°F
