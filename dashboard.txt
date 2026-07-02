@@ -1,28 +1,3 @@
-Kitchen | V | Wipe fridge handles/doors
-Kitchen | C/V | Fridge: toss old food
-Kitchen | C/V | Restock fridge drinks
-Kitchen | V | Restock snacks
-Kitchen | V | Wipe cabinet handles
-Kitchen | C/V | Clean fridge shelves
-Kitchen | V | Wipe backsplash
-Kitchen | V | Clean garbage disposal
-Kitchen | V | Replace/sanitize sponge
-Laundry | C | Wash Clay clothes
-Laundry | C | Wash towels
-Laundry | C/V | Wash and replace hand towels
-Bathrooms | R | ⤴️ 🧽 🚰  🛁 wipe sink + toothbrush holder
-Bathrooms | R | 🧻 🔁  🚽 replace toilet paper
-Bathrooms | V | Restock soap/shampoo/kids bath
-Bathrooms | V | Wipe bath tub after use
-Floors | C/V | Run robot vacuum
-Pets | R | 👩‍🍳 🐾💧🥣 refill pet water bowls
-Pets | R | 👩‍🍳 🐱 ⛲ fill cat fountain
-Pets | C/V | Refill dog food
-Kids | V | Repack diaper/toddler bag
-Kids | C/V | Trim Clarity nails
-Kids | C/V | Trim Eloise nails
-Kids | R | ⤴️ 🧽 💺 ✍️ wipe kids play table
-Outside | V | Sweep porch/entry
 Laundry | C/V | Run washer self-clean cycle
 Pets | C/V | Dog bath
 Pets | C/V | Trim dog nails
