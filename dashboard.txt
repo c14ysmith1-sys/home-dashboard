@@ -1,12 +1,3 @@
-Laundry | C/V | Run washer self-clean cycle
-Pets | C/V | Dog bath
-Pets | C/V | Trim dog nails
-Kids | C/V | Restock diapers/wipes
-Home | V | Mail: sort + trash
-Home | R | 🗑️ empty small trash
-Planning | C/V | Family check-in + plan week + budget
-Planning | C/V | Add appointments/events to calendar
-Planning | C/V | Update shared shopping list
 Kids Food | V | Prep snacks for tomorrow
 Kids Food | V | Prep kids lunches
 Laundry | V | Wash Clarity clothes
