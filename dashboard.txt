@@ -1,12 +1,3 @@
-Kids Food | V | Prep snacks for tomorrow
-Kids Food | V | Prep kids lunches
-Laundry | V | Wash Clarity clothes
-Laundry | C/V | Put away clean clothes
-Bathrooms | V | Wipe guest sink/mirror/counter
-Bathrooms | V | Wipe master sink/mirror/counter
-Bathrooms | V | Clean shower
-Outside | C | Trash cans to curb
-Planning | V | Check school emails/messages
 Laundry | V | Wash Victoria/Eloise clothes
 Bathrooms | C/V | Clean toilet (bowl + outside)
 Bathrooms | V | Wash bath mats
