@@ -1,12 +1,3 @@
-Laundry | V | Wash Victoria/Eloise clothes
-Bathrooms | C/V | Clean toilet (bowl + outside)
-Bathrooms | V | Wash bath mats
-Floors | V | Vacuum stairs
-Floors | V | Vacuum living room + upstairs
-Floors | V | Vacuum master bedroom
-Floors | V | Vacuum kitchen + dining
-Floors | V | Dust flat surfaces
-Floors | C/V | Vacuum/dust under couches/furniture
 Outside | C | Trash cans back from curb
 Laundry | C/V | Wash living room blankets
 Outside | V | Water indoor plants
