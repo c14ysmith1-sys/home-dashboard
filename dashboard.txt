@@ -1,6 +1,3 @@
-Laundry | C/V | Wash living room blankets
-Outside | V | Water indoor plants
-Outside | V | Water outdoor plants
 Laundry | C/V | Wash bedding (sheets/pillows)
 Laundry | C/V | Wash Clarity bedding
 Bathrooms | V | Clean upstairs tub
