@@ -1,14 +1,14 @@
 Monday
-🌧️ 83°F / 70°F
-Drizzle   0.71 %
+🌧️ 84°F / 70°F
+Drizzle   0.75 %
 Tuesday
-☁️ 85°F / 68°F
+☁️ 84°F / 67°F
 Mostly Cloudy   0 %
 Wednesday
-☁️ 87°F / 65°F
-Mostly Cloudy   0.22 %
+☁️ 86°F / 65°F
+Mostly Cloudy   0.23 %
 Thursday
-🌧️ 88°F / 70°F
+🌧️ 88°F / 69°F
 Rain   0.45 %
 Friday
 🌧️ 85°F / 71°F
@@ -23,7 +23,7 @@ Monday
 ☀️ 91°F / 68°F
 Mostly Clear   0 %
 Tuesday
-☀️ 95°F / 71°F
+☀️ 94°F / 71°F
 Clear   0 %
 Wednesday
 ☀️ 96°F / 74°F
