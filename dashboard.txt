@@ -1,4 +1,3 @@
-Bathrooms | V | Clean upstairs tub
 Floors | V | Mop hard floors
 Floors | V | Spot clean walls/doors
 Deep Clean | C | Change HVAC air filter
