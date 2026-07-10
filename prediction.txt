@@ -1,9 +1,9 @@
 Friday
 ⛈️ 87°F / 71°F
-Thunderstorm   0.89 %
+Thunderstorm   0.9 %
 Saturday
-⛈️ 80°F / 71°F
-Thunderstorm   0.93 %
+🌧️ 80°F / 70°F
+Rain   0.92 %
 Sunday
 🌧️ 84°F / 65°F
 Drizzle   0.5 %
