@@ -8,14 +8,14 @@ Friday
 🌧️ 84°F / 64°F
 Drizzle   0.45 %
 Saturday
-🌧️ 75°F / 67°F
+🌧️ 75°F / 66°F
 Rain   0.86 %
 Sunday
 🌧️ 77°F / 66°F
-Drizzle   0.8 %
+Drizzle   0.79 %
 Monday
 🌧️ 80°F / 66°F
-Rain   0.49 %
+Drizzle   0.48 %
 Tuesday
 🌧️ 82°F / 65°F
 Drizzle   0.34 %
