@@ -1,30 +1,30 @@
 Wednesday
 ☀️ 84°F / 61°F
-Mostly Clear   0.16 %
+Mostly Clear   0.17 %
 Thursday
-🌧️ 80°F / 68°F
-Rain   0.67 %
+🌧️ 79°F / 68°F
+Rain   0.66 %
 Friday
-🌧️ 84°F / 69°F
-Rain   0.63 %
+⛈️ 85°F / 69°F
+Thunderstorm   0.62 %
 Saturday
-🌧️ 83°F / 70°F
-Drizzle   0.5 %
+🌧️ 84°F / 70°F
+Drizzle   0.46 %
 Sunday
-☁️ 87°F / 66°F
+☁️ 88°F / 66°F
 Partly Cloudy   0.19 %
 Monday
-⛈️ 90°F / 72°F
+⛈️ 90°F / 73°F
 Thunderstorm   0.3 %
 Tuesday
-⛈️ 85°F / 72°F
+⛈️ 85°F / 71°F
 Thunderstorm   0.4 %
 Wednesday
-🌧️ 81°F / 67°F
+🌧️ 81°F / 66°F
 Rain   0.63 %
 Thursday
-🌧️ 82°F / 69°F
+🌧️ 81°F / 67°F
 Rain   0.52 %
 Friday
-🌧️ 82°F / 69°F
+🌧️ 81°F / 67°F
 Rain   0.58 %
