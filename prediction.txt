@@ -3,13 +3,13 @@ Tuesday
 Partly Cloudy   0 %
 Wednesday
 🌧️ 78°F / 67°F
-Rain   0.68 %
+Rain   0.69 %
 Thursday
 🌧️ 81°F / 64°F
-Drizzle   0.54 %
+Drizzle   0.51 %
 Friday
 🌧️ 81°F / 62°F
-Rain   0.4 %
+Drizzle   0.39 %
 Saturday
 🌧️ 80°F / 65°F
 Drizzle   0.4 %
