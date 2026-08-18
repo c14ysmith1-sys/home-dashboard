@@ -3,13 +3,13 @@ Tuesday
 Mostly Clear   0 %
 Wednesday
 🌧️ 79°F / 67°F
-Heavy Rain   0.7 %
+Heavy Rain   0.69 %
 Thursday
 🌧️ 80°F / 64°F
 Heavy Rain   0.67 %
 Friday
 🌧️ 81°F / 61°F
-Rain   0.37 %
+Drizzle   0.37 %
 Saturday
 🌧️ 80°F / 65°F
 Drizzle   0.5 %
