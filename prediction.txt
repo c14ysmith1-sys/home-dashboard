@@ -1,9 +1,9 @@
 Wednesday
 🌧️ 82°F / 61°F
-Rain   0.4 %
+Rain   0.37 %
 Thursday
-🌧️ 80°F / 64°F
-Drizzle   0.33 %
+☀️ 80°F / 64°F
+Mostly Clear   0.27 %
 Friday
 ☀️ 79°F / 59°F
 Clear   0 %
