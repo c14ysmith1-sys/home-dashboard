@@ -1,15 +1,15 @@
 Wednesday
 ☀️ 93°F / 75°F
-Clear   0.12 %
+Clear   0 %
 Thursday
-☀️ 92°F / 74°F
-Clear   0.27 %
+☀️ 92°F / 75°F
+Clear   0.28 %
 Friday
 🌧️ 92°F / 75°F
-Drizzle   0.39 %
+Drizzle   0.38 %
 Saturday
 🌧️ 88°F / 73°F
-Rain   0.55 %
+Rain   0.56 %
 Sunday
 ☀️ 82°F / 67°F
 Mostly Clear   0.27 %
