@@ -1,6 +1,6 @@
 Thursday
 ☀️ 93°F / 76°F
-Clear   0.22 %
+Clear   0.23 %
 Friday
 ☀️ 93°F / 74°F
 Clear   0 %
@@ -17,14 +17,14 @@ Tuesday
 ☁️ 87°F / 63°F
 Partly Cloudy   0 %
 Wednesday
-☁️ 89°F / 71°F
+☁️ 90°F / 71°F
 Partly Cloudy   0 %
 Thursday
-☁️ 87°F / 70°F
+☁️ 87°F / 71°F
 Partly Cloudy   0 %
 Friday
-☁️ 78°F / 64°F
-Partly Cloudy   0 %
+☁️ 77°F / 64°F
+Mostly Cloudy   0 %
 Saturday
-🌧️ 77°F / 62°F
+🌧️ 76°F / 62°F
 Drizzle   0.39 %
