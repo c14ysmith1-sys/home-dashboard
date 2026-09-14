@@ -3,13 +3,13 @@ Monday
 Mostly Clear   0 %
 Tuesday
 🌧️ 90°F / 62°F
-Rain   0.37 %
+Rain   0.38 %
 Wednesday
 🌧️ 86°F / 70°F
-Rain   0.72 %
+Rain   0.74 %
 Thursday
 ⛈️ 86°F / 72°F
-Thunderstorm   0.51 %
+Thunderstorm   0.52 %
 Friday
 ⛈️ 81°F / 67°F
 Thunderstorm   0.42 %
