@@ -1,15 +1,15 @@
 Thursday
 🌧️ 91°F / 71°F
-Rain   0.91 %
+Rain   0.92 %
 Friday
-🌧️ 79°F / 67°F
-Rain   0.63 %
+🌧️ 78°F / 67°F
+Rain   0.64 %
 Saturday
-🌧️ 85°F / 62°F
-Drizzle   0.61 %
+🌧️ 84°F / 62°F
+Rain   0.59 %
 Sunday
-🌧️ 78°F / 65°F
-Rain   0.72 %
+🌧️ 79°F / 65°F
+Rain   0.69 %
 Monday
 🌧️ 70°F / 60°F
 Drizzle   0.61 %
