@@ -1,5 +1,5 @@
 Thursday
-☁️ 68°F / 58°F
+☁️ 67°F / 58°F
 Cloudy   0.21 %
 Friday
 ☁️ 68°F / 49°F
@@ -24,7 +24,7 @@ Thursday
 Drizzle   0.65 %
 Friday
 🌧️ 75°F / 67°F
-Rain   0.72 %
+Rain   0.73 %
 Saturday
 🌧️ 76°F / 63°F
 Rain   0.83 %
