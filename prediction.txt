@@ -1,6 +1,3 @@
-Friday
-🌧️ 77°F / 52°F
-Rain   0.98 %
 Saturday
 ☀️ 68°F / 47°F
 Clear   0 %
@@ -8,23 +5,26 @@ Sunday
 ☀️ 72°F / 47°F
 Clear   0 %
 Monday
-☀️ 66°F / 49°F
+☀️ 66°F / 48°F
 Clear   0 %
 Tuesday
-☀️ 67°F / 42°F
+☀️ 68°F / 44°F
 Clear   0 %
 Wednesday
-☀️ 74°F / 47°F
-Clear   0 %
+☀️ 74°F / 48°F
+Mostly Clear   0 %
 Thursday
-☀️ 74°F / 51°F
+☀️ 72°F / 50°F
 Mostly Clear   0 %
 Friday
-☀️ 75°F / 54°F
+☀️ 74°F / 51°F
 Mostly Clear   0 %
 Saturday
-☀️ 81°F / 58°F
+☀️ 78°F / 53°F
 Mostly Clear   0 %
 Sunday
-☁️ 72°F / 63°F
-Mostly Cloudy   0 %
+☀️ 79°F / 55°F
+Mostly Clear   0 %
+Monday
+☁️ 72°F / 56°F
+Partly Cloudy   0.22 %
