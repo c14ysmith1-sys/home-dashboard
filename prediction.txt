@@ -1,5 +1,5 @@
 Sunday
-☀️ 75°F / 46°F
+☀️ 75°F / 45°F
 Clear   0 %
 Monday
 ☀️ 67°F / 48°F
@@ -17,7 +17,7 @@ Friday
 ☀️ 73°F / 48°F
 Mostly Clear   0 %
 Saturday
-☁️ 74°F / 51°F
+☁️ 75°F / 51°F
 Partly Cloudy   0 %
 Sunday
 🌧️ 71°F / 55°F
