@@ -1,14 +1,14 @@
 Tuesday
 ☀️ 87°F / 68°F
-Mostly Clear   0 %
+Mostly Clear   0.23 %
 Wednesday
-🌧️ 76°F / 66°F
-Rain   0.79 %
+🌧️ 77°F / 66°F
+Rain   0.8 %
 Thursday
-🌧️ 72°F / 62°F
-Rain   0.81 %
+🌧️ 72°F / 61°F
+Rain   0.8 %
 Friday
-🌧️ 68°F / 48°F
+🌧️ 68°F / 47°F
 Rain   0.78 %
 Saturday
 ☀️ 58°F / 39°F
@@ -17,8 +17,8 @@ Sunday
 ☀️ 65°F / 40°F
 Clear   0 %
 Monday
-☁️ 67°F / 47°F
-Partly Cloudy   0 %
+☀️ 68°F / 47°F
+Mostly Clear   0 %
 Tuesday
 🌧️ 69°F / 49°F
 Drizzle   0.32 %
