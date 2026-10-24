@@ -1,2 +1,2 @@
-42°
-Feels like: 42°
+44°
+Feels like: 48°
