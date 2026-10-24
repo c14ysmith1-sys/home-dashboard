@@ -1,5 +1,5 @@
 Saturday
-☁️ 69°F / 41°F
+☁️ 70°F / 41°F
 Partly Cloudy   0 %
 Sunday
 ☁️ 71°F / 44°F
@@ -9,7 +9,7 @@ Monday
 Mostly Cloudy   0 %
 Tuesday
 ☁️ 69°F / 49°F
-Cloudy   0 %
+Mostly Cloudy   0 %
 Wednesday
 ☀️ 72°F / 50°F
 Mostly Clear   0 %
