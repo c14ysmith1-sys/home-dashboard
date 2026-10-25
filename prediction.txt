@@ -6,25 +6,25 @@ Monday
 Mostly Cloudy   0 %
 Tuesday
 ☁️ 70°F / 48°F
-Mostly Cloudy   0 %
+Cloudy   0 %
 Wednesday
-☁️ 72°F / 50°F
+☁️ 71°F / 51°F
 Partly Cloudy   0 %
 Thursday
-☀️ 74°F / 50°F
+☀️ 74°F / 49°F
 Mostly Clear   0 %
 Friday
 ☁️ 73°F / 53°F
 Mostly Cloudy   0.29 %
 Saturday
-☁️ 70°F / 56°F
-Cloudy   0 %
+🌧️ 69°F / 55°F
+Drizzle   0.3 %
 Sunday
-🌧️ 62°F / 55°F
-Drizzle   0.82 %
+🌧️ 64°F / 55°F
+Rain   0.85 %
 Monday
-☁️ 65°F / 53°F
-Cloudy   0 %
+🌧️ 65°F / 51°F
+Drizzle   0.36 %
 Tuesday
-☁️ 57°F / 47°F
-Cloudy   0.2 %
+☁️ 59°F / 46°F
+Mostly Cloudy   0 %
