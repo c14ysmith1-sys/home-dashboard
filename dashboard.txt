@@ -1,4 +1,3 @@
-Car | C | Rotate Clay’s car tires
 Pets | V | Annual vet appointment (Chester + cats)
 Kitchen | C/V | Load dishwasher
 Kitchen | V | Clean microwave
