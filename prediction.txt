@@ -1,18 +1,18 @@
 Monday
 🌧️ 60°F / 54°F
-Drizzle   0.81 %
+Drizzle   0.8 %
 Tuesday
 🌧️ 73°F / 56°F
-Drizzle   0.37 %
+Drizzle   0.38 %
 Wednesday
 🌧️ 67°F / 55°F
-Rain   0.84 %
+Rain   0.86 %
 Thursday
 ☁️ 62°F / 51°F
 Partly Cloudy   0 %
 Friday
 🌧️ 55°F / 46°F
-Drizzle   0.52 %
+Drizzle   0.53 %
 Saturday
 ☁️ 52°F / 43°F
 Mostly Cloudy   0.34 %
