@@ -1,6 +1,6 @@
 Friday
-🌧️ 44°F / 35°F
-Drizzle   0.87 %
+🌧️ 45°F / 35°F
+Drizzle   0.86 %
 Saturday
 ☁️ 45°F / 32°F
 Mostly Cloudy   0 %
@@ -8,7 +8,7 @@ Sunday
 ☁️ 48°F / 35°F
 Mostly Cloudy   0 %
 Monday
-☁️ 49°F / 35°F
+☁️ 49°F / 34°F
 Partly Cloudy   0 %
 Tuesday
 ☀️ 52°F / 33°F
