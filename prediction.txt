@@ -1,6 +1,6 @@
 Thursday
-☀️ 68°F / 35°F
-Mostly Clear   0 %
+☀️ 67°F / 35°F
+Clear   0 %
 Friday
 ☀️ 66°F / 39°F
 Clear   0 %
@@ -8,13 +8,13 @@ Saturday
 ☀️ 65°F / 39°F
 Clear   0 %
 Sunday
-🌧️ 62°F / 45°F
+🌧️ 64°F / 45°F
 Rain   0.66 %
 Monday
 ☀️ 46°F / 32°F
 Mostly Clear   0 %
 Tuesday
-☁️ 41°F / 30°F
+☁️ 41°F / 29°F
 Mostly Cloudy   0 %
 Wednesday
 ☁️ 38°F / 28°F
