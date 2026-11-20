@@ -1,5 +1,5 @@
 Friday
-☀️ 67°F / 37°F
+☀️ 68°F / 37°F
 Clear   0 %
 Saturday
 ☀️ 68°F / 39°F
@@ -14,13 +14,13 @@ Tuesday
 ☁️ 41°F / 28°F
 Mostly Cloudy   0 %
 Wednesday
-❄️ 41°F / 29°F
+❄️ 43°F / 29°F
 Snow   0.52 %
 Thursday
-🌧️ 42°F / 31°F
+🌧️ 44°F / 29°F
 Drizzle   0.71 %
 Friday
-☁️ 45°F / 34°F
+☁️ 44°F / 32°F
 Cloudy   0.13 %
 Saturday
 ☁️ 48°F / 35°F
