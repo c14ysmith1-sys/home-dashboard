@@ -1,18 +1,18 @@
 Monday
-☀️ 45°F / 29°F
-Clear   0 %
+☀️ 44°F / 30°F
+Mostly Clear   0 %
 Tuesday
 ☁️ 41°F / 27°F
 Mostly Cloudy   0 %
 Wednesday
-☁️ 45°F / 26°F
+☁️ 44°F / 26°F
 Cloudy   0 %
 Thursday
-🌧️ 45°F / 36°F
-Rain   0.97 %
+🌧️ 45°F / 35°F
+Rain   0.98 %
 Friday
-🌧️ 43°F / 33°F
-Drizzle   0.83 %
+🌧️ 41°F / 33°F
+Drizzle   0.82 %
 Saturday
 ☁️ 50°F / 33°F
 Partly Cloudy   0 %
